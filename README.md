@@ -23,9 +23,3 @@ print(w_graph1)
 ```
 
 ![plot of chunk r2](figure/r2-1.png)
-
-```r
-print(w_graph1)
-```
-
-![plot of chunk r3](figure/r3-1.png)
