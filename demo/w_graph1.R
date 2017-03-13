@@ -10,7 +10,8 @@ f<-fHT(y0,Obs)
 vf<-varfHT(y0,Obs)
 
 library(ggplot2)
-ggplot(data.frame(y0=y0,f=f,lb=f-qnorm(.975)*sqrt(vf),ub=f+qnorm(.975)*sqrt(vf)),aes(x=y0,y=f))+
+w_graph1<-
+  ggplot(data.frame(y0=y0,f=f,lb=f-qnorm(.975)*sqrt(vf),ub=f+qnorm(.975)*sqrt(vf)),aes(x=y0,y=f))+
   geom_line(color="blue")+
   stat_function(fun = function(y){(y>1)*theta/((y+(y==1))^(theta+1))})+
   geom_ribbon(aes(ymin=lb, ymax=ub, x=y0), alpha = 0.3)+ 
