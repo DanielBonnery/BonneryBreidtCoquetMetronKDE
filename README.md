@@ -16,45 +16,4 @@ Note that this package depends on different packages we developped, that will be
 ### 2.2. Execution
 
 
-```r
-library("pubBonneryBreidtCoquet2017")
-demo(table1,package = "pubBonneryBreidtCoquet2017")
-```
-
-```
-FALSE 
-FALSE 
-FALSE 	demo(table1)
-FALSE 	---- ~~~~~~
-FALSE 
-FALSE > set.seed(1)#NB: the seed was not set for the table in the publication
-FALSE 
-FALSE > popmodelfunction = model.Pareto.bernstrat
-FALSE 
-FALSE > theta=2;
-FALSE 
-FALSE > xi=1;
-FALSE 
-FALSE > conditionalto=list(N=100000,sampleparam=list(tauh=c(0.01,0.1)))
-FALSE 
-FALSE > model<-popmodelfunction(theta,xi,conditionalto)
-FALSE 
-FALSE > Obs<-generate.observations(model)
-FALSE 
-FALSE > y0<-1/((1-seq(0,1,length.out=1000))^(1/theta))[-c(1,800:1000)];
-FALSE 
-FALSE > f<-fHT(y0,Obs)
-FALSE 
-FALSE > vf<-varfHT(y0,Obs)
-FALSE 
-FALSE > library(ggplot2)
-FALSE 
-FALSE > ggplot(data.frame(y0=y0,f=f,lb=f-qnorm(.975)*sqrt(vf),ub=f+qnorm(.975)*sqrt(vf)),aes(x=y0,y=f))+
-FALSE +   geom_line(color="blue")+
-FALSE +   stat_function(fun = function(y){(y>1)*theta/((y+(y==1))^(theta+1))})+
-FALSE +   geom_ribbon(aes(ymin=lb, ymax=ub, x=y0), alpha = 0.3)+ 
-FALSE +   ggtitle("One estimation, band based on HT variance estimation, Pareto")
-```
-
-![plot of chunk r2](figure/r2-1.png)
 
