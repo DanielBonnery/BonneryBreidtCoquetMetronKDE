@@ -28,13 +28,41 @@ Execution:
 
 
 ```r
-library("pubBonneryBreidtCoquet2017")
+load(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017/datanotpushed/w_graph1.rda"));
+load(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017/datanotpushed/w_graph2.rda"));
+```
+
+
+
+
+```r
 demo(w_graph1,package = "pubBonneryBreidtCoquet2017")
+```
+
+
+```r
 print(w_graph1)
 ```
 
-![plot of chunk r2](figure/r2-1.png)
+![plot of chunk r2g](figure/r2g-1.png)
+
+
 #### 2.2.2 Working graph 2
 
 Same thing, we generate 1000 simulations.
 
+```r
+demo(w_graph2,package = "pubBonneryBreidtCoquet2017")
+```
+
+
+```r
+print(w_graph2)
+```
+
+![plot of chunk r3g1](figure/r3g1-1.png)
+
+
+```r
+print(w_graph2.1)
+```
