@@ -55,7 +55,7 @@ Same thing, we generate 1000 simulations.
 demo(w_graph2,package = "pubBonneryBreidtCoquet2017")
 ```
 In black, we see the kde for each of the 1000 simulations.
-In red, the real population pdf, in blue,  
+In red, the real population pdf, in blue, the average of the lines. 
 
 
 ```r
@@ -63,6 +63,11 @@ print(w_graph2)
 ```
 
 ![plot of chunk r3g1](figure/r3g1-1.png)
+
+
+In black, the variance estimates of the kde for the 1000 simulations.
+red: empirical variance from previous graph
+blue: average of the black lines
 
 
 ```r
