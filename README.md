@@ -66,3 +66,5 @@ print(w_graph2)
 ```r
 print(w_graph2.1)
 ```
+
+![plot of chunk r3g2](figure/r3g2-1.png)
