@@ -22,9 +22,10 @@ avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,2],2,mean))
 library(ggplot2)
 w_graph2 <- ggplot(AA, aes(x=y0, y=f, group=rep)) +
   geom_line(size=0.2, alpha=0.1)+ 
-  ggtitle("1000 replications")+  
-  stat_function(fun = function(y){(y>1)*theta/((y+(y==1))^(theta+1))},size=.1,color="red")
-
+  ggtitle("1000 replications")+    
+  geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,1],2,mean)),aes(x=y0,y=f,group=NULL),size=.2,color="blue")  
+  stat_function(fun = function(y){(y>1)*theta/((y+(y==1))^(theta+1))},size=.1,color="red")+
+  
 w_graph2.1 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
   geom_line(size=0.2, alpha=0.1)+
   ggtitle("1000 replications")+  

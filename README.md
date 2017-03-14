@@ -54,6 +54,8 @@ Same thing, we generate 1000 simulations.
 ```r
 demo(w_graph2,package = "pubBonneryBreidtCoquet2017")
 ```
+In black, we see the kde for each of the 1000 simulations.
+In red, the real population pdf, in blue,  
 
 
 ```r
