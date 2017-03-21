@@ -15,6 +15,7 @@ library(reshape2)
 A<-reshape2::melt(ff)
 AA<-reshape2::dcast(A,i+rep~f,value.var="value")
 AA<-merge(AA,data.frame(i=2:799,y0=y0))
+if(dir.exists("datanotpushed")){save(AA,file="datanotpushed/w_graph2data")}
 
 empvar=data.frame(y0=y0,Vf=plyr::aaply(ff[,,1],2,var))
 avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,2],2,mean))
