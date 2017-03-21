@@ -17,5 +17,5 @@ w_graph1<-
   geom_ribbon(aes(ymin=lb, ymax=ub, x=y0), alpha = 0.3)+ 
   ggtitle("One estimation, band based on HT variance estimation, Pareto")
 
-if(dir.exists("figure")){save(w_graph1,file="figure/w_graph1")}
+if(dir.exists("datanotpushed")){save(w_graph1,file="datanotpushed/w_graph1")}
 

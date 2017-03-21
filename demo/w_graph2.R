@@ -32,4 +32,4 @@ w_graph2.1 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
   geom_line(data=empvar,aes(x=y0,y=Vf,group=NULL), color="red")+
   geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL), color="blue")
   
-  save(w_graph2,w_graph2.1,file="figure/w_graph2")
+if(dir.exists("datanotpushed")){save(w_graph2,w_graph2.1,file="datanotpushed/w_graph2")}

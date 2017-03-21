@@ -30,6 +30,8 @@ Execution:
 ```r
 load(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017/datanotpushed/w_graph1.rda"));
 load(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017/datanotpushed/w_graph2.rda"));
+load(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017/datanotpushed/w_graph3.rda"));
+load(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017/datanotpushed/w_graph4.rda"));
 ```
 
 
@@ -40,19 +42,94 @@ demo(w_graph1,package = "pubBonneryBreidtCoquet2017")
 ```
 
 
+```r
+print(w_graph1)
+```
+
+![plot of chunk r2g](figure/r2g-1.png)
+
+
+#### 2.1.2 Working graph 2
+
+Same thing, we generate 1000 simulations.
+
+```r
+demo(w_graph2,package = "pubBonneryBreidtCoquet2017")
+```
+In black, we see the kde for each of the 1000 simulations.
+In red, the real population pdf, in blue, the average of the lines. 
+
+
+```r
+print(w_graph2)
+```
+
+![plot of chunk r3g1](figure/r3g1-1.png)
+
+
+In black, the variance estimates of the kde for the 1000 simulations.
+red: empirical variance from previous graph
+blue: average of the black lines
+
+
+```r
+print(w_graph2.1)
+```
+
+![plot of chunk r3g2](figure/r3g2-1.png)
+### 2.2. Population/design model 2
+Y follows a Normal (θ, 1) distribution.
+Z| Y follows a Normal  (ξ Y,σ2) distribution.
+Stratification based on Z. simple random sampling within each strata.
+
+#### 2.2.1 Working graph 3
+
+We generate one population, one sample.
+We estimate in all 1/1000 quantiles of Pareto(4) distribution the HT kde and the associated variance.
+Band upper and lower bounds are based on a normality assumption.
+Black line is Pareto(4) pdf.
+
+Execution: 
 
 
 
+```r
+demo(w_graph3,package = "pubBonneryBreidtCoquet2017")
+```
 
 
+```r
+print(w_graph3)
+```
+
+![plot of chunk r4g](figure/r4g-1.png)
 
 
+#### 2.2.2 Working graph 4
+
+Same thing, we generate 1000 simulations.
+
+```r
+demo(w_graph4,package = "pubBonneryBreidtCoquet2017")
+```
+In black, we see the kde for each of the 1000 simulations.
+In red, the real population pdf, in blue, the average of the lines. 
 
 
+```r
+print(w_graph4)
+```
+
+![plot of chunk r5g1](figure/r5g1-1.png)
 
 
+In black, the variance estimates of the kde for the 1000 simulations.
+red: empirical variance from previous graph
+blue: average of the black lines
 
 
+```r
+print(w_graph4.1)
+```
 
-
-
+![plot of chunk r5g2](figure/r5g2-1.png)

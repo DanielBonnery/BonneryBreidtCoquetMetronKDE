@@ -19,5 +19,5 @@ w_graph3<-
   geom_ribbon(aes(ymin=lb, ymax=ub, x=y0), alpha = 0.3)+ 
   ggtitle("One estimation, band based on HT variance estimation, Normal")
 
-if(dir.exists("figure")){save(w_graph3,file="figure/w_graph3")}
+if(dir.exists("datanotpushed")){save(w_graph3,file="datanotpushed/w_graph3.rda")}
 
