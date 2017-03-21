@@ -17,7 +17,7 @@ $Y$ follows a Pareto(4) distribution.
 $Z_k\mid Y_k$ follows a Bernoulli ($Y_k^{-1}$) distribution.
 $I_k\mid Z_k=0$ (resp. $I_k\mid Z_k=1$)follows a Bernoulli (0.01) (resp. Bernoulli(0.1)) distribution.
 
-#### 2.2.1 Working graph 1
+#### 2.1.1 Working graph 1
 
 We generate one population, one sample.
 We estimate in all 1/1000 quantiles of Pareto(4) distribution the HT kde and the associated variance.
@@ -40,38 +40,19 @@ demo(w_graph1,package = "pubBonneryBreidtCoquet2017")
 ```
 
 
-```r
-print(w_graph1)
-```
-
-![plot of chunk r2g](figure/r2g-1.png)
 
 
-#### 2.2.2 Working graph 2
-
-Same thing, we generate 1000 simulations.
-
-```r
-demo(w_graph2,package = "pubBonneryBreidtCoquet2017")
-```
-In black, we see the kde for each of the 1000 simulations.
-In red, the real population pdf, in blue, the average of the lines. 
 
 
-```r
-print(w_graph2)
-```
-
-![plot of chunk r3g1](figure/r3g1-1.png)
 
 
-In black, the variance estimates of the kde for the 1000 simulations.
-red: empirical variance from previous graph
-blue: average of the black lines
 
 
-```r
-print(w_graph2.1)
-```
 
-![plot of chunk r3g2](figure/r3g2-1.png)
+
+
+
+
+
+
+
