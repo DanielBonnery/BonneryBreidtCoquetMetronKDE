@@ -27,12 +27,6 @@ Black line is Pareto(4) pdf.
 Execution: 
 
 
-```r
-load(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017/datanotpushed/w_graph1.rda"));
-load(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017/datanotpushed/w_graph2.rda"));
-load(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017/datanotpushed/w_graph3.rda"));
-load(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017/datanotpushed/w_graph4.rda"));
-```
 
 
 
