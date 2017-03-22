@@ -10,7 +10,7 @@ ff<-plyr::raply(nrep,(function(){Obs<-generate.observations(model);cbind(f=fHT(y
 dim(ff)
 dimnames(ff)<-list(1:nrep,2:799,c("f","Vf"))
 names(dimnames(ff))<-c("rep","i","f")
-if(dir.exists("datanotpushed")){save(ff,file="datanotpushed/w_graph2data")}
+if(dir.exists("datanotpushed")){save(ff,file="datanotpushed/w_graph2data");load("datanotpushed/w_graph2data")}
 
 library(reshape2)
 A<-reshape2::melt(ff)
