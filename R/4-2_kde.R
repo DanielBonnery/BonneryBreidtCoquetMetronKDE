@@ -20,7 +20,7 @@ p0  <-function(y0,Obs,ker=ker,model,N){sum(ker$K((Obs$y-y0)/b(N)))/(b(N)*length(
 #' fHT(1,Obs)
 
 fHT<-function(y0,Obs,ker=kergaus,yfun=function(obs){obs$y},pifun=function(obs){obs$pik},h=ks::hpi(x=yfun(Obs))){
-  apply(ker$K(outer(fun(Obs),y0,"-")/h)/pifun(Obs),2,sum)/(h*sum(1/pifun(Obs)))}
+  apply(ker$K(outer(yfun(Obs),y0,"-")/h)/pifun(Obs),2,sum)/(h*sum(1/pifun(Obs)))}
 
 #' @example
 #' popmodelfunction = model.Pareto.bernstrat
