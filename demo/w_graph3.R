@@ -8,8 +8,8 @@ model<-popmodelfunction(theta,xi,conditionalto)
 yfun<-function(obs){obs$y[,2]}
 Obs<-generate.observations(model)
 y0<-seq(min(yfun(Obs)),max(yfun(Obs)),length.out=1000)
-f<-fHT(y0,Obs,fun=yfun)
-vf<-varfHT(y0,Obs,fun=yfun)
+f<-fHT(y0,Obs,yfun=yfun)
+vf<-varfHT(y0,Obs,yfun=yfun)
 h=ks::hpi(x=yfun(Obs))
 library(ggplot2)
 w_graph3<-

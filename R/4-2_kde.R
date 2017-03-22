@@ -14,30 +14,23 @@ p0  <-function(y0,Obs,ker=ker,model,N){sum(ker$K((Obs$y-y0)/b(N)))/(b(N)*length(
 #' @example
 #' popmodelfunction = model.Pareto.bernstrat
 #' theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
-#' model<-popmodelfunction(theta,xi,conditionalto);y0=1.5
-#' .Obs<-generate.observations(model);
-#' fHT0(y0,Obs)
+#' model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
+#' Obs<-generate.observations(model);
+#' fHT(y0,Obs)
+#' fHT(1,Obs)
 
-fHT0<-function(y0,.Obs,.ker=kergaus,.fun=function(obs){obs$y},.h=ks::hpi(x=.fun(.Obs))){
-  sum(.ker$K((.Obs$y-y0)/.h)/.Obs$pik)/
-    (.h*sum(1/.Obs$pik))}
+fHT<-function(y0,Obs,ker=kergaus,yfun=function(obs){obs$y},pifun=function(obs){obs$pik},h=ks::hpi(x=yfun(Obs))){
+  apply(ker$K(outer(fun(Obs),y0,"-")/h)/pifun(Obs),2,sum)/(h*sum(1/pifun(Obs)))}
+
 #' @example
-#' popmodelfunction = model.Pareto.bernstrat
-#' theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
-#' model<-popmodelfunction(theta,xi,conditionalto);y0<-1/((1-seq(0,1,length.out=1000))^(1/theta));
-#' .Obs<-generate.observations(model);
-#' f<-fHT(y0,Obs)
-
-fHT <-function(Y0, Obs, ker=kergaus,fun=function(obs){obs$y}, h=ks::hpi(x= fun(Obs))){
-  sapply(Y0,FUN=fHT0,.Obs=Obs,.ker=ker,.fun=fun,.h=h)}
 #' popmodelfunction = model.Pareto.bernstrat
 #' theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
 #' model<-popmodelfunction(theta,xi,conditionalto);y0=1.5
 #' .Obs<-generate.observations(model);
 #'varfHT0(y0,Obs)
 #'
-varfHT0<-function(y0,.Obs,.ker=kergaus,.fun=function(obs){obs$y},.h=ks::hpi(x=fun(.Obs))){
-  Y<-cbind(.ker$K((.fun(.Obs)-y0)/.h)/.Obs$pik,.h/.Obs$pik)
+varfHT0<-function(y0,.Obs,.ker=kergaus,.yfun=function(obs){obs$y},.h=ks::hpi(x=.yfun(.Obs))){
+  Y<-cbind(.ker$K((.yfun(.Obs)-y0)/.h)/.Obs$pik,.h/.Obs$pik)
   LL <-(function(x){c(1/x[2],-x[1]/(x[2]^2))})(apply(Y,2,sum))
   eps<-Y%*%LL
   sum((1-.Obs$pik)*(eps^2))
@@ -48,8 +41,8 @@ varfHT0<-function(y0,.Obs,.ker=kergaus,.fun=function(obs){obs$y},.h=ks::hpi(x=fu
 #' model<-popmodelfunction(theta,xi,conditionalto);y0<-1/((1-seq(0,1,length.out=1000))^(1/theta));
 #' .Obs<-generate.observations(model);
 #' varfHT(y0,Obs)
-varfHT <-function(Y0, Obs, ker=kergaus,fun=function(obs){obs$y}, h=ks::hpi(x= fun(Obs))){
-  sapply(Y0,FUN=varfHT0,.Obs=Obs,.ker=ker,.fun=fun,.h=h)}
+varfHT <-function(Y0, Obs, ker=kergaus,yfun=function(obs){obs$y}, h=ks::hpi(x= yfun(Obs))){
+  sapply(Y0,FUN=varfHT0,.Obs=Obs,.ker=ker,.yfun=yfun,.h=h)}
 
 p   <-function(y0,Obs,b,ker=ker,model,N){sapply(y0,p0,Obs=Obs,b=b,ker=ker,model=model)}
 p2  <-function(y0,Obs,b,ker=ker,model,N){as.vector(kde(Obs$y,hpi(x=Obs$y)/2,eval.points=y0)$estimate)}
