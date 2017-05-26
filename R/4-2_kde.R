@@ -1,4 +1,3 @@
-##Chapitre 4. Kernel density estimation  
 ##4.1. Definitions
 # Kernels
 kergaus<-list(K=dnorm,intK2=(1/(2*sqrt(pi))));
@@ -10,7 +9,14 @@ varp<-function(y0,b,ker=ker,model=model,N){(model$dloi(y0)/(N*b(N)))*(model$vinf
 varpsr<-function(y0,b,ker=ker,model=model,N){varp(y0,b,ker=ker,model=model,N)/((model$rho(y0))^2)}
 
 # Kernel density estimators definition of kde
-p0  <-function(y0,Obs,ker=ker,model,N){sum(ker$K((Obs$y-y0)/b(N)))/(b(N)*length(Obs$y))}
+p0  <-function(y0,Obs,ker=ker,model=NULL,N){sum(ker$K((Obs$y-y0)/b(N)))/(b(N)*length(Obs$y))}
+#' Simulate observations and return kernel density estimates
+#' @param y0: 
+#' @param Obs: 
+#' @param ker
+#' @param yfun
+#' @param pifun
+#' @param h
 #' @example
 #' popmodelfunction = model.Pareto.bernstrat
 #' theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
@@ -21,6 +27,54 @@ p0  <-function(y0,Obs,ker=ker,model,N){sum(ker$K((Obs$y-y0)/b(N)))/(b(N)*length(
 
 fHT<-function(y0,Obs,ker=kergaus,yfun=function(obs){obs$y},pifun=function(obs){obs$pik},h=ks::hpi(x=yfun(Obs))){
   apply(ker$K(outer(yfun(Obs),y0,"-")/h)/pifun(Obs),2,sum)/(h*sum(1/pifun(Obs)))}
+
+
+#' @param Obs: 
+#' @example
+pifun0<-function(Obs){Obs$pik}
+
+
+#' @param xihat: a function of obs  
+#' @param eta: a function of obs and xi
+#' @example
+#' popmodelfunction = model.Pareto.bernstrat
+#' theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
+#' model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
+#' eta<-function(obs,xi){conditionalto$sampleparam$tauh[1]+(conditionalto$sampleparam$tauh[2]-conditionalto$sampleparam$tauh[1])*obs$y^(-xi)}
+#' xihat<-model$xihat
+#' Obs<-generate.observations(model);
+#' fHT(y0,Obs)
+#' #1. kde for rho*f in the numerator, known pi with known xi in the denominator. (infeasible)
+#' fHT(y0,Obs,pifun=hatetafunf(xihat=function(obs){xi},eta=eta))
+#' #2. kde for rho*f in the numerator, known pi  with design-weighted estimates of xi in the denominator. (sometimes feasible)
+#' fHT(y0,Obs,pifun=hatetafunf(xihat=xihat,eta=eta))
+hatetafunf<-function(xihat=function(Obs){1},eta=function(Obs,xi){Obs$pik}){function(obs){eta(obs,xihat(obs))}}
+
+#' @param xihat: a function of obs  
+#' @param eta: a function of obs and xi
+#' @example
+#' popmodelfunction = model.Pareto.bernstrat
+#' theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
+#' model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
+#' eta<-function(obs,xi){conditionalto$sampleparam$tauh[1]+(conditionalto$sampleparam$tauh[2]-conditionalto$sampleparam$tauh[1])*obs$y^(-xi)}
+#' xihat<-model$xihat
+#' Obs<-generate.observations(model);
+
+#' #3. kde for rho*f in the numerator, unknown pi estimated via design-weighted parametric methods in the denominator. (feasible)
+#' fHT(y0,Obs,pifun=hatetafunf2)
+#' #4. kde for rho*f in the numerator, unknown pi estimated via design-weighted nonparametric methods in the denominator. 
+#' # (This is equivalent to Hajek if we use design-weighted Nadaraya-Watson estimator of pi in denominator. )
+#' fHT(y0,Obs)
+hatetafunf2<-function(obs){predict.lm(object=lm(obs$pi~obs$y,weights = 1/obs$pi))}
+
+#' # We could also consider the following product-type alternatives, again normalizing at the end to get a density, if needed: 
+#' # kde for rho*f multiplied by estimator of (1/ pi) estimated via design-weighted parametric methods, regressing 1/pi on y
+
+#' # kde for rho*f multiplied by estimator of (1/ pi) estimated via design-weighted nonparametric methods 
+#' # (design-weighted Nadaraya-Watson estimate of 1/pi)
+
+
+
 
 #' @example
 #' popmodelfunction = model.Pareto.bernstrat
@@ -35,6 +89,7 @@ varfHT0<-function(y0,.Obs,.ker=kergaus,.yfun=function(obs){obs$y},.h=ks::hpi(x=.
   eps<-Y%*%LL
   sum((1-.Obs$pik)*(eps^2))
   }
+
 #' @example
 #' popmodelfunction = model.Pareto.bernstrat
 #' theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))

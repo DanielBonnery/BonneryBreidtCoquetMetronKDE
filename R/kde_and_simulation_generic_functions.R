@@ -1,3 +1,5 @@
+#library(pubBonneryBreidtCoquet2017)
+
 #' Simulate observations and return kernel density estimates
 #' @param model: a model object
 #' @param N: integer, for population size
@@ -73,7 +75,11 @@ simulekde2<-function(model,y0,nbreps=300){
                          S <- model$Scheme$S(Z)
                          Pik <- model$Scheme$Pik(Z)
                          Obs=list(y = as.matrix(Y)[S, ], z = as.matrix(Z)[S, ], pik = Pik[S])
-                         return(list(f=fHT0(y0,Obs),Vf=varfHT0(y0,Obs)))})(),
+                         return(list(f=fHT0(y0,Obs),
+                                     f1=fHT(y0,Obs,pifun=hatetafunf(xihat=function(obs){xi},eta=model$eta)),
+                                     f2=fHT(y0,Obs,pifun=hatetafunf(xihat=model$xihat,eta=model$eta)),
+                                     f3=fHT(y0,Obs,pifun=hatetafunf2),
+                                     Vf=varfHT0(y0,Obs)))})(),
                        .progress = "text")
   
   noms<-names(Estim[[1]])
