@@ -99,10 +99,11 @@ print(w_graph2.3)
 
 
 
+
 ### 2.2. Population/design model 2
-Y follows a Normal (θ, 1) distribution.
-Z| Y follows a Normal  (ξ Y,σ2) distribution.
-Stratification based on Z. simple random sampling within each strata.
+$Y$ follows a Normal $(\theta, 1)$ distribution.
+$Z| Y$ follows a Normal  $(\xi Y,\sigma^2)$ distribution.
+Stratification based on $Z$. simple random sampling within each strata.
 
 #### 2.2.1 Working graph 3
 

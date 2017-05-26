@@ -55,14 +55,14 @@ w_graph2.1 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
 w_graph2.2 <- ggplot(empvar, aes(x=y0, y=value, color=variable)) +
   geom_line()+ 
   ggtitle(paste0("Empirical variance for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
 
 
 
 w_graph2.3 <- ggplot(empmse, aes(x=y0, y=value, color=variable)) +
   geom_line()+ 
   ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
 
 
   
