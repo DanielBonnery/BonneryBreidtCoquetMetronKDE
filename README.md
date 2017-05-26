@@ -80,6 +80,25 @@ print(w_graph2.1)
 ```
 
 ![plot of chunk r3g2](figure/r3g2-1.png)
+
+Here we plot the empirical variance of the different estimators:
+
+```r
+print(w_graph2.2)
+```
+
+![plot of chunk r3g3](figure/r3g3-1.png)
+
+Here we plot the empirical  mse of the different estimators:
+
+```r
+print(w_graph2.3)
+```
+
+![plot of chunk r3g4](figure/r3g4-1.png)
+
+
+
 ### 2.2. Population/design model 2
 Y follows a Normal (θ, 1) distribution.
 Z| Y follows a Normal  (ξ Y,σ2) distribution.
