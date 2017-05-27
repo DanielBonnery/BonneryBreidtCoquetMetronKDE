@@ -156,3 +156,20 @@ print(w_graph4.1)
 ```
 
 ![plot of chunk r5g2](figure/r5g2-1.png)
+
+
+Here we plot the empirical variance of the different estimators:
+
+```r
+print(w_graph4.2)
+```
+
+![plot of chunk r5g3](figure/r5g3-1.png)
+
+Here we plot the empirical  mse of the different estimators:
+
+```r
+print(w_graph4.3)
+```
+
+![plot of chunk r5g4](figure/r5g4-1.png)

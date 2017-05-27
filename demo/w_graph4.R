@@ -9,31 +9,78 @@
   Obs<-generate.observations(model)
   y0<-seq(min(yfun(Obs)),max(yfun(Obs)),length.out=1000)
   nrep=1000
-  ff<-plyr::raply(nrep,(function(){Obs<-generate.observations(model);cbind(f=fHT(y0,Obs,yfun=yfun),Vf=varfHT(y0,Obs,yfun=yfun))})(),.progress="text")
+  ff<-plyr::raply(nrep,(function(){Obs<-generate.observations(model);
+  cbind(f=fHT(y0,Obs,yfun=yfun),
+        f1=fHT(y0,Obs,yfun=yfun,pifun=hatetafunf(xihat=function(obs){xi},eta=model$eta)),
+        f2=fHT(y0,Obs,yfun=yfun,pifun=hatetafunf(xihat=model$xihat,eta=model$eta)),
+        f3=fHT(y0,Obs,yfun=yfun,pifun=hatetafunf2),
+        Vf=varfHT(y0,Obs,yfun=yfun))})(),.progress="text")
   dim(ff)
-  dimnames(ff)<-list(1:nrep,1:(dim(ff)[2]),c("f","Vf"))
+  dimnames(ff)<-list(1:nrep,1:(dim(ff)[2]),c("f","known xi","estimated xi","hat eta","Vf"))
   names(dimnames(ff))<-c("rep","i","f")
   if(dir.exists("datanotpushed")){save(ff,file="datanotpushed/w_graph4data.rda");load("datanotpushed/w_graph4data.rda")}
+
+  true.density=function(x){dnorm(x,mean=theta[1],sd=theta[3])}
   
+
+  
+  
+
+    
   library(reshape2)
   A<-reshape2::melt(ff)
   AA<-reshape2::dcast(A,i+rep~f,value.var="value")
   AA<-merge(AA,data.frame(i=1:(dim(ff)[2]),y0=y0))
+
+  empvarA=plyr::aaply(ff[,,1:4],2:3,var)
+  empbias2A=(plyr::aaply(ff[,,1:4],2:3,mean)-true.density(y0))^2
   
-  empvar=data.frame(y0=y0,Vf=plyr::aaply(ff[,,1],2,var))
-  avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,2],2,mean))
+  empvar=melt(data.frame(y0=y0,empvarA),id="y0")
+  empmse=melt(data.frame(y0=y0,empvarA+empbias2A),id="y0")
+  avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,5],2,mean))
+
+  #  empvar=data.frame(y0=y0,Vf=plyr::aaply(ff[,,1],2,var))
+  #avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,2],2,mean))
   
   library(ggplot2)
   w_graph4 <- ggplot(AA, aes(x=y0, y=f, group=rep)) +
     geom_line(size=0.2, alpha=0.1)+ 
     ggtitle("1000 replications")+    
-    geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,1],2,mean)),aes(x=y0,y=f,group=NULL),size=.4,color="blue")  +
-    stat_function(fun = function(x){dnorm(x,mean=theta[1],sd=theta[3])},size=.4,color="red")
+    geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,1],2,mean)),aes(x=y0,y=f,group=NULL),size=.2,color="blue")  +
+    stat_function(fun = true.density,size=.4,color="red")+
+    theme(legend.justification = c(1, 1), legend.position = c(1, 1))
+  
+  
     
   w_graph4.1 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
     geom_line(size=0.2, alpha=0.1)+
     ggtitle("1000 replications")+  
-    geom_line(data=empvar,aes(x=y0,y=Vf,group=NULL), color="red")+
-    geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL), color="blue")
-    
-  if(dir.exists("datanotpushed")){save(w_graph4,w_graph4.1,file="datanotpushed/w_graph4.rda")}
+    geom_line(data=empvar[empvar$variable=="f",],aes(x=y0,y=value,group=NULL), color="red")+
+    geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL), color="blue")+
+    theme(legend.justification = c(1, 1), legend.position = c(1, 1))
+  
+  
+  w_graph4.2 <- ggplot(empvar, aes(x=y0, y=value, color=variable)) +
+    geom_line()+ 
+    ggtitle(paste0("Empirical variance for ",nrep, " replications"))+
+    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
+  
+  
+  
+  w_graph4.3 <- ggplot(empmse, aes(x=y0, y=value, color=variable)) +
+    geom_line()+ 
+    ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
+    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
+  
+      
+  if(dir.exists("datanotpushed")){save(w_graph4,w_graph4.1,w_graph4.2,w_graph4.3,file="datanotpushed/w_graph4.rda")}
+
+  
+
+  
+  
+  
+  
+  
+  
+  
