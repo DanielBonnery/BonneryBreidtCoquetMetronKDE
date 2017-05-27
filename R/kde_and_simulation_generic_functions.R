@@ -76,7 +76,7 @@ simulekde2<-function(model,y0,nbreps=300){
                          Pik <- model$Scheme$Pik(Z)
                          Obs=list(y = as.matrix(Y)[S, ], z = as.matrix(Z)[S, ], pik = Pik[S])
                          return(list(f=fHT0(y0,Obs),
-                                     f1=fHT(y0,Obs,pifun=hatetafunf(xihat=function(obs){xi},eta=model$eta)),
+                                     f1=fHT(y0,Obs,pifun=hatetafunf(xihat=function(Obs){xi},eta=model$eta)),
                                      f2=fHT(y0,Obs,pifun=hatetafunf(xihat=model$xihat,eta=model$eta)),
                                      f3=fHT(y0,Obs,pifun=hatetafunf2),
                                      Vf=varfHT0(y0,Obs)))})(),
