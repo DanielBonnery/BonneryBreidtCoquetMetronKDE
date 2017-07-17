@@ -28,6 +28,10 @@ p0  <-function(y0,Obs,ker=ker,model=NULL,N){sum(ker$K((Obs$y-y0)/b(N)))/(b(N)*le
 fHT<-function(y0,Obs,ker=kergaus,yfun=function(obs){obs$y},pifun=function(obs){obs$pik},h=ks::hpi(x=yfun(Obs))){
   apply(ker$K(outer(yfun(Obs),y0,"-")/h)/pifun(Obs),2,sum)/(h*sum(1/pifun(Obs)))}
 
+rhohat<-function(y0,Obs,.rhohatfun=rhohatfun){}
+
+
+
 
 #' @param Obs: 
 #' @example
