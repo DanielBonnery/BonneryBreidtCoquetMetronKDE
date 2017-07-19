@@ -15,7 +15,7 @@ model<-popmodelfunction(theta,xi,conditionalto)
 yfun<-function(obs){obs$y}
 Obs<-generate.observations(model)
 y0<-seq(min(yfun(Obs)),max(yfun(Obs)),length.out=1000)
-nrep=1000
+nrep=10
 ff<-plyr::raply(nrep,(function(){Obs<-generate.observations(model);
 cbind(f=fHT(y0,Obs,yfun=yfun),
       f1=fHT(y0,Obs,yfun=yfun,pifun=hatetafunf(xihat=function(obs){xi},eta=model$eta)),
@@ -25,7 +25,7 @@ cbind(f=fHT(y0,Obs,yfun=yfun),
 dim(ff)
 dimnames(ff)<-list(1:nrep,1:(dim(ff)[2]),c("f","known xi","estimated xi","hat eta","Vf"))
 names(dimnames(ff))<-c("rep","i","f")
-save(ff,file=file.path(folder,"w_graph4data.rda"));load(file.path(folder,"w_graph4data.rda"))
+save(ff,file=file.path(folder,"w_graph5data.rda"));load(file.path(folder,"w_graph5data.rda"))
 
 true.density=function(x){dnorm(x,mean=theta[1],sd=theta[3])}
 
@@ -50,7 +50,7 @@ avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,5],2,mean))
 #avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,2],2,mean))
 
 library(ggplot2)
-w_graph4 <- ggplot(AA, aes(x=y0, y=f, group=rep)) +
+w_graph5 <- ggplot(AA, aes(x=y0, y=f, group=rep)) +
   geom_line(size=0.2, alpha=0.1)+ 
   ggtitle("1000 replications")+    
   geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,1],2,mean)),aes(x=y0,y=f,group=NULL),size=.2,color="blue")  +
@@ -59,7 +59,7 @@ w_graph4 <- ggplot(AA, aes(x=y0, y=f, group=rep)) +
 
 
 
-w_graph4.1 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
+w_graph5.1 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
   geom_line(size=0.2, alpha=0.1)+
   ggtitle("1000 replications")+  
   geom_line(data=empvar[empvar$variable=="f",],aes(x=y0,y=value,group=NULL), color="red")+
@@ -67,20 +67,20 @@ w_graph4.1 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1))
 
 
-w_graph4.2 <- ggplot(empvar, aes(x=y0, y=value, color=variable)) +
+w_graph5.2 <- ggplot(empvar, aes(x=y0, y=value, color=variable)) +
   geom_line()+ 
   ggtitle(paste0("Empirical variance for ",nrep, " replications"))+
   theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
 
 
 
-w_graph4.3 <- ggplot(empmse, aes(x=y0, y=value, color=variable)) +
+w_graph5.3 <- ggplot(empmse, aes(x=y0, y=value, color=variable)) +
   geom_line()+ 
   ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
   theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
 
 
-save(w_graph4,w_graph4.1,w_graph4.2,w_graph4.3,file=file.path(folder,"w_graph4.rda"))
+save(w_graph5,w_graph5.1,w_graph5.2,w_graph5.3,file=file.path(folder,"w_graph5.rda"))
 
 
 

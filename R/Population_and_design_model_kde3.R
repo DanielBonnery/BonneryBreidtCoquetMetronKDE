@@ -6,8 +6,9 @@ model.proptosize<-function(
   suppressMessages(attach(conditionalto))
   suppressMessages(attach(sampleparam))
   ## objects related to population generation
-  rloiy <- function(.conditionalto=conditionalto,.theta=theta){rchisq(conditionalto$N,.theta)}
-  rloiz=function(y){z=y+rnorm(y,sd=xi);z=z*(z>0)}
+  rloiy <- function(.conditionalto=conditionalto,.theta=theta){
+    rchisq(conditionalto$N,.theta)}
+  rloiz=function(y,.xi=xi){y+rchisq(y,.xi)}
   ## objects related to sampling frame and sample
   Scheme<- SWRPPS(sampleparam)
   En    <- function(N){tau*N}#Global sampling rate (will be returned)
@@ -15,7 +16,7 @@ model.proptosize<-function(
   dloitheta=function(y,theta=conditionalto$theta){dchisq(y,theta)}
   #Population generation function
   #Computation of rho function (function of y,theta,xi)
-  rhothetaxi=function(y,theta,xi){(1-(1-(y+xi^2)/(conditionalto$N*(theta+xi^2)))^(tau*conditionalto$N))/tau}
+  rhothetaxi=function(y,theta,xi){(y+xi)/(theta+xi)}
   #Computation of rho function (function of y)
   rho=function(y){return(rhothetaxi(y,theta,xi))}
   rhoxthetaxi=function(...){1};
@@ -43,4 +44,4 @@ model.proptosize<-function(
     thetaht=thetaht,
     thetaniais=thetaniais,
     eta=function(Obs,.xi=xi,.conditionalto=conditionalto, .theta=theta){
-      (1-(1-(y+.xi^2)/(.conditionalto$N*(.theta+.xi^2)))^(tau*.conditionalto$N))}))}
+      (1-(1-(Obs$y+.xi^2)/(.conditionalto$N*(.theta+.xi^2)))^(tau*.conditionalto$N))}))}

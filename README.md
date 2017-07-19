@@ -168,8 +168,12 @@ print(w_graph4.2)
 
 Here we plot the empirical  mse of the different estimators:
 
-```r
-print(w_graph4.3)
-```
 
-![plot of chunk r5g4](figure/r5g4-1.png)
+
+
+
+
+
+
+
+
