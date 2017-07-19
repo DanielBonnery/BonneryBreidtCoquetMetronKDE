@@ -1,3 +1,4 @@
+rm(list=ls())
 set.seed(1)#NB: the seed was not set for the table in the publication
 popmodelfunction = model.Pareto.bernstrat
 theta=2;
@@ -20,7 +21,8 @@ true.density=function(y){(y>1)*theta/((y+(y==1))^(theta+1))}
 
 dimnames(ff)<-list(1:nrep,2:799,c("f","known xi","estimated xi","hat eta","Vf"))
 names(dimnames(ff))<-c("rep","i","f")
-if(dir.exists("datanotpushed")){save(ff,file="datanotpushed/w_graph2data");load("datanotpushed/w_graph2data")}
+if(dir.exists("datanotpushed")){save(ff,file="datanotpushed/w_graph2data");
+  load("datanotpushed/w_graph2data")}
 
 library(reshape2)
 A<-reshape2::melt(ff)
@@ -29,12 +31,13 @@ AA<-merge(AA,data.frame(i=2:799,y0=y0))
 
 empvarA=plyr::aaply(ff[,,1:4],2:3,var)
 empbias2A=(plyr::aaply(ff[,,1:4],2:3,mean)-true.density(y0))^2
+coefvarA=sqrt(empbias2A+empvarA)/true.density(y0)
 
 
 empvar=melt(data.frame(y0=y0,empvarA),id="y0")
 empmse=melt(data.frame(y0=y0,empvarA+empbias2A),id="y0")
 avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,5],2,mean))
-
+coefvar=melt(data.frame(y0=y0,coefvarA),id="y0")
 library(ggplot2)
 w_graph2 <- ggplot(AA, aes(x=y0, y=f, group=rep)) +
   geom_line(size=0.2, alpha=0.1)+ 
@@ -65,5 +68,12 @@ w_graph2.3 <- ggplot(empmse, aes(x=y0, y=value, color=variable)) +
   theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
 
 
+w_graph2.4 <- ggplot(coefvar, aes(x=y0, y=value, color=variable)) +
+  geom_line()+ 
+  ggtitle(paste0("Coefficient of var (sqrt(MSE)/f) for ",nrep, " replications"))+
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
+
+
+
   
-if(dir.exists("datanotpushed")){save(w_graph2,w_graph2.1,w_graph2.2,w_graph2.3,file="datanotpushed/w_graph2.rda")}
+if(dir.exists("datanotpushed")){save(w_graph2,w_graph2.1,w_graph2.2,w_graph2.3,w_graph2.4,file="datanotpushed/w_graph2.rda")}

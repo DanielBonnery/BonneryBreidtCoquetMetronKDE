@@ -97,6 +97,13 @@ print(w_graph2.3)
 
 ![plot of chunk r3g4](figure/r3g4-1.png)
 
+Here we plot the sart of the empirical  mse/ true value for the different estimators:
+
+```r
+print(w_graph2.4)
+```
+
+![plot of chunk r3g5](figure/r3g5-1.png)
 
 
 

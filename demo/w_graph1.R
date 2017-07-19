@@ -1,3 +1,4 @@
+rm(list=ls())
 set.seed(1)#NB: the seed was not set for the table in the publication
 popmodelfunction = model.Pareto.bernstrat
 theta=2;
