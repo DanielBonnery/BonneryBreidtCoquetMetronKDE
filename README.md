@@ -175,13 +175,50 @@ print(w_graph4.2)
 
 Here we plot the empirical  mse of the different estimators:
 
+```r
+#print(w_graph4.3)
+```
+
+#### 2.2.2 Working graph 5
+
+Here we look at the example selection proportional to size with replacement.
 
 
+Same thing, we generate 1000 simulations.
+
+```r
+demo(w_graph5,package = "pubBonneryBreidtCoquet2017")
+```
+In black, we see the kde for each of the 1000 simulations.
+In red, the real population pdf, in blue, the average of the lines. 
 
 
+```r
+print(w_graph5)
+```
+
+![plot of chunk r6g1](figure/r6g1-1.png)
 
 
+In black, the variance estimates of the kde for the 1000 simulations.
+red: empirical variance from previous graph
+blue: average of the black lines
 
 
+```r
+print(w_graph5.1)
+```
 
+![plot of chunk r6g2](figure/r6g2-1.png)
+
+
+Here we plot the empirical variance of the different estimators:
+
+```r
+print(w_graph5.2)
+```
+
+![plot of chunk r6g3](figure/r6g3-1.png)
+
+Here we plot the empirical  mse of the different estimators:
 
