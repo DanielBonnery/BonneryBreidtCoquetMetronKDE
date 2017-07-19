@@ -222,3 +222,6 @@ print(w_graph5.2)
 
 Here we plot the empirical  mse of the different estimators:
 
+```r
+#print(w_graph5.3)
+```
