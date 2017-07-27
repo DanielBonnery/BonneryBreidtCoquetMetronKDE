@@ -1,79 +1,57 @@
-rm(list=ls())
 set.seed(1)#NB: the seed was not set for the table in the publication
 popmodelfunction = model.Pareto.bernstrat
-theta=2;
-xi=1;
-nrep=1000
-conditionalto=list(N=100000,sampleparam=list(tauh=c(0.01,0.1)))
+theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
 model<-popmodelfunction(theta,xi,conditionalto)
-y0<-1/((1-seq(0,1,length.out=1000))^(1/theta))[-c(1,800:1000)];
-ff<-plyr::raply(nrep,(function(){
-  Obs<-generate.observations(model);
-  cbind(f=fHT(y0,Obs),
-       f1=fHT(y0,Obs,pifun=hatetafunf(xihat=function(obs){xi},eta=model$eta)),
-       f2=fHT(y0,Obs,pifun=hatetafunf(xihat=model$xihat,eta=model$eta)),
-       f3=fHT(y0,Obs,pifun=hatetafunf2),
-       Vf=varfHT(y0,Obs))})(),.progress="text")
-dim(ff)
-
-true.density=function(y){(y>1)*theta/((y+(y==1))^(theta+1))}
-
-
-dimnames(ff)<-list(1:nrep,2:799,c("f","known xi","estimated xi","hat eta","Vf"))
-names(dimnames(ff))<-c("rep","i","f")
-if(dir.exists("datanotpushed")){save(ff,file="datanotpushed/w_graph2data");
-  load("datanotpushed/w_graph2data")}
-
-library(reshape2)
-A<-reshape2::melt(ff)
-AA<-reshape2::dcast(A,i+rep~f,value.var="value")
-AA<-merge(AA,data.frame(i=2:799,y0=y0))
-
-empvarA=plyr::aaply(ff[,,1:4],2:3,var)
-empbias2A=(plyr::aaply(ff[,,1:4],2:3,mean)-true.density(y0))^2
-coefvarA=sqrt(empbias2A+empvarA)/true.density(y0)
-
-
-empvar=melt(data.frame(y0=y0,empvarA),id="y0")
-empmse=melt(data.frame(y0=y0,empvarA+empbias2A),id="y0")
-avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,5],2,mean))
-coefvar=melt(data.frame(y0=y0,coefvarA),id="y0")
+yfun<-function(obs){obs$y}
+Obs<-generate.observations(model)
+y0<-seq(min(yfun(Obs)),max(yfun(Obs)),length.out=200)
+nrep=300
+dd=Simuletout(model,y0,nrep)
+if(dir.exists("datanotpushed")){save(dd,file="datanotpushed/graphdata/model.Pareto.bernstrat.rda");load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")}
 library(ggplot2)
-w_graph2 <- ggplot(AA, aes(x=y0, y=f, group=rep)) +
-  geom_line(size=0.2, alpha=0.1)+ 
-  ggtitle("1000 replications")+    
-  geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,1],2,mean)),aes(x=y0,y=f,group=NULL),size=.2,color="blue")  +
-  stat_function(fun = true.density,size=.1,color="red")+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))
-
-  
-w_graph2.1 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
-  geom_line(size=0.2, alpha=0.1)+
-  ggtitle("1000 replications")+  
-  geom_line(data=empvar[empvar$variable=="f",],aes(x=y0,y=value,group=NULL), color="red")+
-  geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL), color="blue")+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))
+pp<-allplots(dd)
+if(dir.exists("datanotpushed/graphs/rda")){save(pp,file="datanotpushed/graphs/rda/model_Pareto_bernstrat.rda")}
 
 
-w_graph2.2 <- ggplot(empvar, aes(x=y0, y=value, color=variable)) +
-  geom_line()+ 
-  ggtitle(paste0("Empirical variance for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
+##################
+set.seed(1)#NB: the seed was not set for the table in the publication
+popmodelfunction = model.proptosize
+set.seed(1)#NB: the seed was not set for the table in the publication
+conditionalto=list(N=50000,sampleparam=list(tau=.2))
+theta=c(3)
+xi=.5
+model<-popmodelfunction(theta,xi,conditionalto)
+yfun<-function(obs){obs$y}
+Obs<-generate.observations(model)
+y0<-seq(min(yfun(Obs)),max(yfun(Obs)),length.out=250)
 
 
-
-w_graph2.3 <- ggplot(empmse, aes(x=y0, y=value, color=variable)) +
-  geom_line()+ 
-  ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-
-
-w_graph2.4 <- ggplot(coefvar, aes(x=y0, y=value, color=variable)) +
-  geom_line()+ 
-  ggtitle(paste0("Coefficient of var (sqrt(MSE)/f) for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
+dd=Simuletout(model,y0,nrep=300)
+if(dir.exists("datanotpushed")){save(dd,file="datanotpushed/graphdata/modelproptosize.rda");load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")}
+library(ggplot2)
+pp<-allplots(dd)
+if(dir.exists("datanotpushed/graphs/rda")){save(pp,file="datanotpushed/graphs/rda/modelproptosize.rda")}
 
 
 
-  
-if(dir.exists("datanotpushed")){save(w_graph2,w_graph2.1,w_graph2.2,w_graph2.3,w_graph2.4,file="datanotpushed/w_graph2.rda")}
+###############################
+
+set.seed(1)#NB: the seed was not set for the table in the publication
+popmodelfunction = model.dep.strat2
+set.seed(1)#NB: the seed was not set for the table in the publication
+conditionalto=list(N=50000,sigma=1 ,EX=1,SX=1,sampleparam=list(proph=c(.7,.3),tauh=c(1/70,2/15)))
+theta=c(.5,0,2)
+xi=2
+model<-popmodelfunction(theta,xi,conditionalto)
+yfun<-function(obs){obs$y[,2]}
+Obs<-generate.observations(model)
+y0<-seq(min(yfun(Obs)),max(yfun(Obs)),length.out=300)
+
+true.density=function(x){dnorm(x,mean=theta[1],sd=theta[3])}
+
+dd=Simuletout(model,y0,nrep=300,yfun=yfun,true.density=true.density)
+if(dir.exists("datanotpushed")){save(dd,file="datanotpushed/graphdata/modelproptosize.rda");load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")}
+library(ggplot2)
+pp<-allplots(dd)
+if(dir.exists("datanotpushed/graphs/rda")){save(pp,file="datanotpushed/graphs/rda/modelproptosize.rda")}
+

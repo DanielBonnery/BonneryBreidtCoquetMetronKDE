@@ -32,6 +32,8 @@ model.dep.strat2<-function(
         rhorho1<-rhorho1+(tauh[h]-tauh[h+1])*pnorm((zetah[h]-xi*as.matrix(y)[,2]                    )/ sigma);
         rhorho2<-rhorho2+(tauh[h]-tauh[h+1])*pnorm((zetah[h]-xi*(theta[1]+theta[2]*as.matrix(y)[,1]))/sqrt(sigma^2+xi^2*theta[3]^2));}
       return(rhorho1/rhorho2)}
+  eta=function(y,xi){
+1}
   #Computation of rho function (function of y)
   rho=function(y){return(rhothetaxi(y,theta,xi))}
   rhoxthetaxi=function(y,theta,xi){
@@ -75,4 +77,5 @@ model.dep.strat2<-function(
     xihatfunc2=xihatfunc2,
     xihatfuncdim=2,
     thetaht=thetaht,
+    eta=eta,
     thetaniais=thetaniais))}

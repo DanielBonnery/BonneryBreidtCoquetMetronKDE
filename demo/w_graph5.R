@@ -17,6 +17,8 @@ Obs<-generate.observations(model)
 y0<-seq(min(yfun(Obs)),max(yfun(Obs)),length.out=1000)
 nrep=10
 ff<-plyr::raply(nrep,(function(){Obs<-generate.observations(model);
+
+
 cbind(f=fHT(y0,Obs,yfun=yfun),
       f1=fHT(y0,Obs,yfun=yfun,pifun=hatetafunf(xihat=function(obs){xi},eta=model$eta)),
       f2=fHT(y0,Obs,yfun=yfun,pifun=hatetafunf(xihat=model$xihat,eta=model$eta)),
@@ -27,7 +29,7 @@ dimnames(ff)<-list(1:nrep,1:(dim(ff)[2]),c("f","known xi","estimated xi","hat et
 names(dimnames(ff))<-c("rep","i","f")
 save(ff,file=file.path(folder,"w_graph5data.rda"));load(file.path(folder,"w_graph5data.rda"))
 
-true.density=function(x){dnorm(x,mean=theta[1],sd=theta[3])}
+true.density=function(x){dchisq(x,theta)}
 
 
 
@@ -41,10 +43,12 @@ AA<-merge(AA,data.frame(i=1:(dim(ff)[2]),y0=y0))
 
 empvarA=plyr::aaply(ff[,,1:4],2:3,var)
 empbias2A=(plyr::aaply(ff[,,1:4],2:3,mean)-true.density(y0))^2
+coefvarA=sqrt(empbias2A+empvarA)/true.density(y0)
 
 empvar=melt(data.frame(y0=y0,empvarA),id="y0")
 empmse=melt(data.frame(y0=y0,empvarA+empbias2A),id="y0")
 avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,5],2,mean))
+coefvar=melt(data.frame(y0=y0,coefvarA),id="y0")
 
 #  empvar=data.frame(y0=y0,Vf=plyr::aaply(ff[,,1],2,var))
 #avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,2],2,mean))
@@ -78,6 +82,17 @@ w_graph5.3 <- ggplot(empmse, aes(x=y0, y=value, color=variable)) +
   geom_line()+ 
   ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
   theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
+
+
+
+
+w_graph5.4 <- ggplot(coefvar, aes(x=y0, y=value, color=variable)) +
+  geom_line()+ 
+  ggtitle(paste0("Coefficient of var (sqrt(MSE)/f) for ",nrep, " replications"))+
+  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
+
+
+
 
 
 save(w_graph5,w_graph5.1,w_graph5.2,w_graph5.3,file=file.path(folder,"w_graph5.rda"))

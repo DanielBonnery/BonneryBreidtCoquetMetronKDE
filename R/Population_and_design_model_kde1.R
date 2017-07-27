@@ -53,7 +53,7 @@ model.Pareto.bernstrat<-function(theta=1,xi=1,conditionalto=list(N=1000,samplepa
                    return(sapply(y,pploi))},
   ploilim=function(y){1-1/pgamma(y,3/2,2)},
   rloiz=rloiz,
-  dloi=function(y){theta/(y^(theta+1))},
+  dloi=function(y){(y>1)*theta/((y+(y==1))^(theta+1))},
   dloitheta=function(y,theta){theta/(y^(theta+1))},
   Scheme=StratBern(sampleparam),
   calculsintermediairespourjac=function(y){},

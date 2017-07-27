@@ -31,197 +31,41 @@ Execution:
 
 
 
-```r
-demo(w_graph1,package = "pubBonneryBreidtCoquet2017")
-```
 
 
-```r
-print(w_graph1)
-```
 
-![plot of chunk r2g](figure/r2g-1.png)
 
 
-The following graph shows different estimators
 
-```r
-print(w_graph1.1)
-```
 
-![plot of chunk r2g1](figure/r2g1-1.png)
 
 
-#### 2.1.2 Working graph 2
 
-Same thing, we generate 1000 simulations.
 
-```r
-demo(w_graph2,package = "pubBonneryBreidtCoquet2017")
-```
-In black, we see the kde for each of the 1000 simulations.
-In red, the real population pdf, in blue, the average of the lines. 
 
 
-```r
-print(w_graph2)
-```
 
-![plot of chunk r3g1](figure/r3g1-1.png)
 
 
-In black, the variance estimates of the kde for the 1000 simulations.
-red: empirical variance from previous graph
-blue: average of the black lines
 
 
-```r
-print(w_graph2.1)
-```
 
-![plot of chunk r3g2](figure/r3g2-1.png)
 
-Here we plot the empirical variance of the different estimators:
 
-```r
-print(w_graph2.2)
-```
 
-![plot of chunk r3g3](figure/r3g3-1.png)
 
-Here we plot the empirical  mse of the different estimators:
 
-```r
-print(w_graph2.3)
-```
 
-![plot of chunk r3g4](figure/r3g4-1.png)
 
-Here we plot the sart of the empirical  mse/ true value for the different estimators:
 
-```r
-print(w_graph2.4)
-```
 
-![plot of chunk r3g5](figure/r3g5-1.png)
 
 
 
-### 2.2. Population/design model 2
-$Y$ follows a Normal $(\theta, 1)$ distribution.
-$Z| Y$ follows a Normal  $(\xi Y,\sigma^2)$ distribution.
-Stratification based on $Z$. simple random sampling within each strata.
 
-#### 2.2.1 Working graph 3
 
-We generate one population, one sample.
-We estimate in all 1/1000 quantiles of Pareto(4) distribution the HT kde and the associated variance.
-Band upper and lower bounds are based on a normality assumption.
-Black line is Pareto(4) pdf.
 
-Execution: 
 
 
 
-```r
-demo(w_graph3,package = "pubBonneryBreidtCoquet2017")
-```
 
-
-```r
-print(w_graph3)
-```
-
-![plot of chunk r4g](figure/r4g-1.png)
-
-
-#### 2.2.2 Working graph 4
-
-Same thing, we generate 1000 simulations.
-
-```r
-demo(w_graph4,package = "pubBonneryBreidtCoquet2017")
-```
-In black, we see the kde for each of the 1000 simulations.
-In red, the real population pdf, in blue, the average of the lines. 
-
-
-```r
-print(w_graph4)
-```
-
-![plot of chunk r5g1](figure/r5g1-1.png)
-
-
-In black, the variance estimates of the kde for the 1000 simulations.
-red: empirical variance from previous graph
-blue: average of the black lines
-
-
-```r
-print(w_graph4.1)
-```
-
-![plot of chunk r5g2](figure/r5g2-1.png)
-
-
-Here we plot the empirical variance of the different estimators:
-
-```r
-print(w_graph4.2)
-```
-
-![plot of chunk r5g3](figure/r5g3-1.png)
-
-Here we plot the empirical  mse of the different estimators:
-
-```r
-#print(w_graph4.3)
-```
-
-#### 2.2.2 Working graph 5
-
-Here we look at the example selection proportional to size with replacement.
-
-
-Same thing, we generate 1000 simulations.
-
-```r
-demo(w_graph5,package = "pubBonneryBreidtCoquet2017")
-```
-In black, we see the kde for each of the 1000 simulations.
-In red, the real population pdf, in blue, the average of the lines. 
-
-
-```r
-print(w_graph5)
-```
-
-![plot of chunk r6g1](figure/r6g1-1.png)
-
-
-In black, the variance estimates of the kde for the 1000 simulations.
-red: empirical variance from previous graph
-blue: average of the black lines
-
-
-```r
-print(w_graph5.1)
-```
-
-![plot of chunk r6g2](figure/r6g2-1.png)
-
-
-Here we plot the empirical variance of the different estimators:
-
-```r
-print(w_graph5.2)
-```
-
-![plot of chunk r6g3](figure/r6g3-1.png)
-
-Here we plot the empirical  mse of the different estimators:
-
-```r
-#print(w_graph5.3)
-```

@@ -239,8 +239,8 @@ Allestimates<-function(y0,
   mu0_14=mftheo(model)(y0,Obs)
   Ctilde18=Ctildef(mus_22,pik,Nhat)
   
-  mus_23bad=mfroughreg(yfun=yfun)(ys,Obs)
-  mu0_15bad=mfroughreg(yfun=yfun)(y0,Obs)
+  mus_23bad=mfroughreg()(ys,Obs)
+  mu0_15bad=mfroughreg()(y0,Obs)
   Ctilde19bad=Ctildef(mus_23bad,pik,Nhat)
   
   transpi<-(function(x){log(x/(1-x))})(pik)
@@ -258,9 +258,9 @@ Allestimates<-function(y0,
   
   #naive
   f4=SK0/length(Obs$y)
-  if(FALSE){kde.outerK0mus(K0,rep(1,length(Obs$y)))-f4}
+  
   #intersect
-  f12<-kde.outerK0mus(K0,pik)
+  f12<-kde.outerK0mus(K0,pi)
   
   #Compute inner
   f21<-kde.outerK0mus(K0,mus_21)         
@@ -283,7 +283,7 @@ Allestimates<-function(y0,
   f18=kde.innerf4Cmu0(f4,Ctilde18,mu0_14)
   f19=kde.innerf4Cmu0(f4,Ctilde19,mu0_15)
   f19bad=kde.innerf4Cmu0(f4,Ctilde19bad,mu0_15bad)
-  Vf=varkde.outer(y0,Obs,yfun=yfun)
+  Vf=varkde.outer(y0,Obs)
 
   cbind(f4=f4,
       f12=f12,
@@ -299,7 +299,6 @@ Allestimates<-function(y0,
       f17=f17,
       f18=f18,
       f19=f19,
-      f19bad=f19bad,
       Vf=Vf)
 }
 
@@ -320,29 +319,29 @@ Allestimates<-function(y0,
 #' Simuletout(model,Obs,model)
 
 
-Simuletout<-function(model, y0,nrep=1000,true.density=model$dloi,yfun=function(obs){obs$y}){
+Simuletout<-function(model, y0,nrep=1000,true.density=model$dloi){
 ff<-plyr::raply(nrep,(function(){
   Obs<-generate.observations(model);
-  Allestimates(y0,Obs,model,yfun=yfun)
+  Allestimates(y0,Obs,model)
 })(),.progress="text")
 dim(ff)
 
-dimnames(ff)<-list(1:nrep,1:length(y0),c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","f19bad","Vf"))
-names(dimnames(ff))<-c("rep","i","variable")
+dimnames(ff)<-list(1:nrep,1:length(y0),c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","Vf"))
+names(dimnames(ff))<-c("rep","i","f")
 
-aux<-data.frame(variable=c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","f19bad","Vf"),
-                type=c("naive","both","inner","inner","inner","inner","inner","outer","outer","outer","outer","outer","outer","outer","outer","Variance"),
-                mu=c("1","pi","true","xihat","muhat","muhatbad","w","true","xihat","muhat","muhatbad","true","xihat","muhat","muhatbad","Variance"),
-                C=c("NA","NA","NA","NA","NA","NA","NA","hat","hat","hat","hat","tilde","tilde","tilde","tilde","Variance"))
-aux$muC=paste(aux$mu,aux$C)
+aux<-data.frame(f=c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","Vf"),
+                type=c("naive","both","outer","outer","outer","outer","outer","inner","inner","inner","inner","inner","inner","inner","Variance"),
+                mu=c("1","pi","true","xihat","muhat","muhatbad","w","true","xihat","muhat","muhatbad","w","","","Variance"),
+                C=c("NA","NA","NA","NA","NA","NA","NA","NA","NA","outer","outer","outer","outer","outer","Variance"))
+
 
 library(reshape2)
 A<-reshape2::melt(ff)
-AA<-reshape2::dcast(A,i+rep~variable,value.var="value")
-AAA<-reshape2::dcast(A,i+rep+variable~1,value.var="value")
-AA<-merge(AA,data.frame(i=1:length(y0),y0=y0,ftheta=true.density(y0)))
-AAA<-merge(AAA,data.frame(i=1:length(y0),y0=y0,ftheta=true.density(y0)))
-AAA<-merge(AAA,aux,by="variable",all.x=TRUE)
+AA<-reshape2::dcast(A,i+rep~f,value.var="value")
+AAA<-reshape2::dcast(A,i+rep+f~1,value.var="value")
+AA<-merge(AA,data.frame(i=1:length(y0),y0=y0))
+AAA<-merge(AAA,data.frame(i=1:length(y0),y0=y0))
+AAA<-merge(AAA,aux,by="f",all.x=TRUE)
 names(AAA)[names(AAA)==1]<-"value"
 
 empvarA=plyr::aaply(ff[,,],2:3,var)
@@ -350,112 +349,19 @@ empbias2A=(plyr::aaply(ff[,,],2:3,mean)-true.density(y0))^2
 coefvarA=sqrt(empbias2A+empvarA)/true.density(y0)
 
 
-empvar=merge(melt(data.frame(y0=y0,empvarA),id="y0"),aux, by="variable", all.x=TRUE)
-empmse=merge(melt(data.frame(y0=y0,empvarA+empbias2A),id="y0"),aux, by="variable", all.x=TRUE)
-avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,"Vf"],2,mean))
-coefvar=merge(melt(data.frame(y0=y0,coefvarA),id="y0"),aux, by="variable", all.x=TRUE)
+empvar=melt(data.frame(y0=y0,empvarA),id="y0")
+empmse=melt(data.frame(y0=y0,empvarA+empbias2A),id="y0")
+avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,5],2,mean))
+coefvar=melt(data.frame(y0=y0,coefvarA),id="y0")
 
-return(list(true.density=true.density,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
+return(list(AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
 }
 
 
 
 
-allplots<-function(dd){
-attach(dd)
-
-w_graph1 <- ggplot(AA, aes(x=y0, y=f12, group=rep)) +
-  theme_bw()+
-  geom_line(size=0.2, alpha=0.1)+ 
-  ggtitle(paste0("KDE, ",nrep, "replications"))+    
-  geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,"f12"],2,mean)),aes(x=y0,y=f,group=NULL),size=.8,linetype="dashed")  +
-  stat_function(fun = true.density,size=.8)+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))
-
-w_graph2 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
-  geom_line(size=0.2, alpha=0.1)+
-  ggtitle(paste0("Empirical variance and variance estimates,",nrep, "replications"))+  
-  geom_line(data=empvar[empvar$variable=="f12",],aes(x=y0,y=value,group=NULL), size=.8)+
-  geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL),size=.8,linetype="dashed")+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))
 
 
-
-
-
-
-
-w_graph_var <- ggplot(empvar[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19")),], 
-                      aes(x=y0, y=value, linetype=mu,color=type)) +
-  theme_bw()+
-  geom_line()+ 
-  ggtitle(paste0("Empirical variance for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-
-
-w_graph_vardetailed <- ggplot(empvar[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","f19bad")),], 
-                      aes(x=y0, y=value, linetype=variable)) +
-  theme_bw()+
-  geom_line()+ 
-  ggtitle(paste0("Empirical variance for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-
-
-
-w_graph_mse_tildevshat <- ggplot(empmse[empvar$type=="outer",], 
-                      aes(x=y0, y=value, color=mu,linetype=C)) +
-  theme_bw()+
-  geom_line()+ 
-  ggtitle(paste0("Empirical MSE, tilde vs hat, for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-
-
-w_graph_mse_innervsouter <- ggplot(empmse[is.element(empvar$type,c("outer","inner"))&is.element(empvar$C,c("NA","tilde")),], 
-                                 aes(x=y0, y=value, color=mu,linetype=type)) +
-  theme_bw()+
-  geom_line()+ 
-  ggtitle(paste0("Empirical MSE, inner versus outer, for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-
-
-
-w_graph_mse_tildevshat2 <- ggplot(empmse[empvar$type=="outer"&is.element(empvar$mu,c("true","xihat")),], 
-                                 aes(x=y0, y=value, color=mu,linetype=C)) +
-  theme_bw()+
-  geom_line()+ 
-  ggtitle(paste0("Empirical MSE, tilde vs hat (2) for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-
-
-
-w_graph_mse <- ggplot(empmse[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","f19bad")),], 
-                      aes(x=y0, y=value, linetype=muC,shade=type)) +
-  theme_bw()+
-  geom_line()+ 
-  ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-
-
-w_graph_msedetailed <- ggplot(empmse[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19")),], 
-                      aes(x=y0, y=value, linetype=variable))+
-  geom_line()+ 
-  ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-
-
-w_graph_mse_final <- ggplot(empmse[is.element(empvar$C,c("NA","tilde")),], 
-                      aes(x=y0, y=value, linetype=mu,shade=type)) +
-  theme_bw()+
-  geom_line()+ 
-  ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-
-
-return(list(w_graph1=w_graph1,w_graph2=w_graph2,w_graph_var=w_graph_var,w_graph_vardetailed=w_graph_vardetailed,
-            w_graph_mse_tildevshat=w_graph_mse_tildevshat,w_graph_mse_innervsouter=w_graph_mse_innervsouter,
-            w_graph_mse_tildevshat2=w_graph_mse_tildevshat2,w_graph_mse=w_graph_mse,
-            w_graph_msedetailed=w_graph_msedetailed,w_graph_mse_final=w_graph_mse_final))
-}
 
 
 
