@@ -88,13 +88,35 @@ model<-popmodelfunction(theta,xi,conditionalto)
 model$name="Model 4"
 Obs<-generate.observations(model)
 dd=Simuletout(model,y0=seq(min(model$yfun(Obs)),max(model$yfun(Obs)),length.out=30),nrep=30)
-save(dd,file="datanotpushed/graphdata/model.birthweight1.rda");
-load("datanotpushed/graphdata/model.birthweight1.rda")
+save(dd,file="datanotpushed/graphdata/modelbirthweight1.rda");
+load("datanotpushed/graphdata/modelbirthweight1.rda")
 ee=analysetout(dd)
-save(ee,file="datanotpushed/graphdata/model.birthweight1_sum.rda");
-load("datanotpushed/graphdata/model.birthweight1_sum.rda")
+save(ee,file="datanotpushed/graphdata/modelbirthweight1_sum.rda");
+load("datanotpushed/graphdata/modelbirthweight1_sum.rda")
 pp<-allplots(ee)
-save(pp,file="datanotpushed/graphs/rda/model.birthweight1.rda")
+save(pp,file="datanotpushed/graphs/rda/modelbirthweight1.rda")
+
+
+###############################
+graphics.off();rm(list=ls());gc();
+
+set.seed(1)#NB: the seed was not set for the table in the publication
+popmodelfunction = model.birthweight2
+set.seed(1)#NB: the seed was not set for the table in the publication
+theta=c(mu=39.853,sigma2=16.723)
+conditionalto=list(N=15000,sampleparam=list(n=90))
+xi=c(xi=.175,xi0=-log(conditionalto$sampleparam$n/conditionalto$N)+.087^2/2-.175*theta[1]+.175^2*theta[2]/2,tau2=.087)
+model<-popmodelfunction(theta,xi,conditionalto)
+model$name="Model 5"
+Obs<-generate.observations(model)
+dd=Simuletout(model,y0=seq(min(model$yfun(Obs)),max(model$yfun(Obs)),length.out=30),nrep=30)
+save(dd,file="datanotpushed/graphdata/modelbirthweight2.rda");
+load("datanotpushed/graphdata/modelbirthweight2.rda")
+ee=analysetout(dd)
+save(ee,file="datanotpushed/graphdata/modelbirthweight2_sum.rda");
+load("datanotpushed/graphdata/modelbirthweight2_sum.rda")
+pp<-allplots(ee)
+save(pp,file="datanotpushed/graphs/rda/modelbirthweight2.rda")
 
 
 
