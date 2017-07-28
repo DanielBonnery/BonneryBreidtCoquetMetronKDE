@@ -43,7 +43,7 @@ model.Pareto.bernstrat<-function(theta=1,xi=1,conditionalto=list(N=1000,samplepa
   rloiz=function(y){rbinom(length(y),size=1,prob=1/y^xi)}
   
   
-  qloi.y=function(p){rmutil::qpareto(y,m = 1,k=conditionalto$theta)}
+  qloi.y=function(p){rmutil::qpareto(p,m = 1,k=theta)}
   
   return(
   list(

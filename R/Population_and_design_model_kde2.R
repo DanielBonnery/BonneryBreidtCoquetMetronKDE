@@ -17,10 +17,10 @@ model.dep.strat2<-function(
   zetah <- sqrt(xi^2*theta[2]^2*SX^2+ xi^2*theta[3]^2+sigma^2)*Zetah+xi*theta[1]+xi*theta[2]*EX
   En    <- function(N){tau*N}#Global sampling rate (will be returned)
   # objects related to population and sample distribution
-  dloitheta=function(y,theta=conditionalto$theta){dnorm(as.matrix(y)[,2],mean=theta[1]+theta[2]*as.matrix(y)[,1],sd=theta[3])}
-  dloi.y=function(y,theta=conditionalto$theta){dnorm(y,mean=theta[1]+theta[2]*EX,sd=sqrt(theta[3]^2+SX^2))}
-  qloi.y=function(y,theta=conditionalto$theta){qnorm(y,mean=theta[1]+theta[2]*EX,sd=sqrt(theta[3]^2+SX^2))}
-  dloi=function(y,theta=conditionalto$theta){dnorm(y,mean=theta[1]+theta[2]*EX,sd=sqrt(theta[3]^2+SX^2))}
+  dloitheta=function(y,.theta=theta){dnorm(as.matrix(y)[,2],mean=theta[1]+theta[2]*as.matrix(y)[,1],sd=theta[3])}
+  dloi.y=function(y,.theta=theta){dnorm(y,mean=.theta[1]+.theta[2]*EX,sd=sqrt(.theta[3]^2+SX^2))}
+  qloi.y=function(y,.theta=theta){qnorm(y,mean=.theta[1]+.theta[2]*EX,sd=sqrt(.theta[3]^2+SX^2))}
+  dloi=function(y,.theta=theta){dnorm(y,mean=.theta[1]+.theta[2]*EX,sd=sqrt(.theta[3]^2+SX^2))}
   #Population generation function
   #Computation of rho function (function of y,theta,xi)
   rhothetaxi=function(y,theta,xi){

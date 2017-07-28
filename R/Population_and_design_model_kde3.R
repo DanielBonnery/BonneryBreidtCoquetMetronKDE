@@ -12,7 +12,7 @@ model.proptosize<-function(
   Scheme<- SWRPPS(sampleparam)
   En    <- function(N){tau*N}#Global sampling rate (will be returned)
   # objects related to population and sample distribution
-  dloitheta=function(y,theta=conditionalto$theta){dchisq(y,theta)}
+  dloitheta=function(y,.theta=theta){dchisq(y,.theta)}
   qloi.y=function(y){qchisq(y,theta)}
   #Population generation function
   #Computation of rho function (function of y,theta,xi)

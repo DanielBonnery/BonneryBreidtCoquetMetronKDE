@@ -338,8 +338,8 @@ names(dimnames(ff))<-c("rep","i","variable")
 list(ff=ff,model=model,y0=y0,nrep=nrep)
 }
 
-analysetout<-function(simulations){
-attach(simulations)  
+analysetout<-function(dd){
+attach(dd)  
 aux<-data.frame(variable=c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","f19bad","Vf"),
                 type=c("naive","both","inner","inner","inner","inner","inner","outer","outer","outer","outer","outer","outer","outer","outer","Variance"),
                 mu=c("1","pi","true","xihat","muhat","muhatbad","w","true","xihat","muhat","muhatbad","true","xihat","muhat","muhatbad","Variance"),
