@@ -43,6 +43,8 @@ model.Pareto.bernstrat<-function(theta=1,xi=1,conditionalto=list(N=1000,samplepa
   rloiz=function(y){rbinom(length(y),size=1,prob=1/y^xi)}
   
   
+  qloi.y=function(p){rmutil::qpareto(y,m = 1,k=conditionalto$theta)}
+  
   return(
   list(
    theta=theta,
@@ -56,7 +58,7 @@ model.Pareto.bernstrat<-function(theta=1,xi=1,conditionalto=list(N=1000,samplepa
   dloi=function(y){(y>1)*theta/((y+(y==1))^(theta+1))},
   dloi.y=function(y,theta){theta/(y^(theta+1))},
   dloitheta=function(y,theta){(y>1)*theta/((y+(y==1))^(theta+1))},
-  qloi.y=qloitheta.y,
+  qloi.y=qloi.y,
   
   Scheme=StratBern(sampleparam),
   calculsintermediairespourjac=function(y){},

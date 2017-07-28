@@ -12,7 +12,8 @@ Imports: ggplot2,
 	Hmisc,
 	MASS,
 	filehash,
-	plyr
+	plyr,
+	rmutil
 Suggests: 
 Description: Data
 Remotes: DanielBonnery/pubBonneryBreidtCoquet2016
