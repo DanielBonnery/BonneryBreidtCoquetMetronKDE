@@ -3,7 +3,7 @@ unloadNamespace("pubBonneryBreidtCoquet2017")
     library(pubBonneryBreidtCoquet2017)
   setwd(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017"))
   demo(w_graph2,package="pubBonneryBreidtCoquet2017")
-  
+  demo()
   }
 
 ##################
@@ -14,7 +14,7 @@ theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
 model<-popmodelfunction(theta,xi,conditionalto)
 yfun<-function(obs){obs$y}
 Obs<-generate.observations(model)
-dd=Simuletout(model,y0=seq(min(yfun(Obs)),max(yfun(Obs)),length.out=200),nrep=30)
+dd=Simuletout(model,y0=seq(min(yfun(Obs)),max(yfun(Obs)),length.out=100),nrep=30)
 if(dir.exists("datanotpushed")){save(dd,file="datanotpushed/graphdata/model.Pareto.bernstrat.rda");
   load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")
   }
@@ -36,10 +36,9 @@ xi=.5
 model<-popmodelfunction(theta,xi,conditionalto)
 yfun<-function(obs){obs$y}
 Obs<-generate.observations(model)
-y0<-seq(min(yfun(Obs)),max(yfun(Obs)),length.out=250)
-
-
-dd=Simuletout(model,y0,nrep=30)
+dd=Simuletout(model,
+              y0=seq(min(yfun(Obs)),max(yfun(Obs)),length.out=25),
+              nrep=30)
 if(dir.exists("datanotpushed")){save(dd,file="datanotpushed/graphdata/modelproptosize.rda");load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")}
 library(ggplot2)
 pp<-allplots(dd)
@@ -58,11 +57,8 @@ xi=2
 model<-popmodelfunction(theta,xi,conditionalto)
 yfun<-function(obs){obs$y[,2]}
 Obs<-generate.observations(model)
-y0<-seq(min(yfun(Obs)),max(yfun(Obs)),length.out=300)
-
 true.density=function(x){dnorm(x,mean=theta[1],sd=theta[3])}
-
-dd=Simuletout(model,y0,nrep=300,yfun=yfun,true.density=true.density)
+dd=Simuletout(model,y0=seq(min(yfun(Obs)),max(yfun(Obs)),length.out=300),nrep=300,yfun=yfun,true.density=true.density)
 if(dir.exists("datanotpushed")){save(dd,file="datanotpushed/graphdata/modelproptosize.rda");load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")}
 library(ggplot2)
 pp<-allplots(dd)
