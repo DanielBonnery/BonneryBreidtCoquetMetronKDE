@@ -9,6 +9,9 @@ if(FALSE){
  Obs<-generate.observations(model);
  h=ks::hpi(x=yfun(Obs))
  pifun=function(obs){obs$pik}
+ setwd(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017"))
+ load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")
+ attach(dd)
 }
 
 ##4.1. Definitions
@@ -352,8 +355,13 @@ empvarA=plyr::aaply(ff[,,],2:3,var)
 empbias2A=(plyr::aaply(ff[,,],2:3,mean)-true.density(y0))^2
 coefvarA=sqrt(empbias2A+empvarA)/true.density(y0)
 
-meanempMSE=sum((empvarA+empbias2A))
+meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*true.density(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
+meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
 
+quantiles
+
+meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*true.density(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
+meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
 
 
 empvar=merge(melt(data.frame(y0=y0,empvarA),id="y0"),aux, by="variable", all.x=TRUE)
@@ -369,9 +377,9 @@ return(list(true.density=true.density,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,
 
 allplots<-function(dd){
 attach(dd)
-
+theme_set(theme_bw())
 w_graph1 <- ggplot(AA, aes(x=y0, y=f12, group=rep)) +
-  theme_bw()+
+  scale_colour_grey()+ 
   geom_line(size=0.2, alpha=0.1)+ 
   ggtitle(paste0("KDE, ",nrep, "replications"))+    
   geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,"f12"],2,mean)),aes(x=y0,y=f,group=NULL),size=.8,linetype="dashed")  +

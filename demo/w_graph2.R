@@ -1,19 +1,32 @@
+if(FALSE){
+unloadNamespace("pubBonneryBreidtCoquet2017")
+    library(pubBonneryBreidtCoquet2017)
+  setwd(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017"))
+  demo(w_graph2,package="pubBonneryBreidtCoquet2017")
+  
+  }
+
+##################
+rm(list=ls());gc()
 set.seed(1)#NB: the seed was not set for the table in the publication
 popmodelfunction = model.Pareto.bernstrat
 theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
 model<-popmodelfunction(theta,xi,conditionalto)
 yfun<-function(obs){obs$y}
 Obs<-generate.observations(model)
-y0<-seq(min(yfun(Obs)),max(yfun(Obs)),length.out=200)
-nrep=300
-dd=Simuletout(model,y0,nrep)
-if(dir.exists("datanotpushed")){save(dd,file="datanotpushed/graphdata/model.Pareto.bernstrat.rda");load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")}
+dd=Simuletout(model,y0=seq(min(yfun(Obs)),max(yfun(Obs)),length.out=200),nrep=30)
+if(dir.exists("datanotpushed")){save(dd,file="datanotpushed/graphdata/model.Pareto.bernstrat.rda");
+  load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")
+  }
 library(ggplot2)
 pp<-allplots(dd)
 if(dir.exists("datanotpushed/graphs/rda")){save(pp,file="datanotpushed/graphs/rda/model_Pareto_bernstrat.rda")}
+print(pp)
 
 
 ##################
+
+rm(list=ls());gc()
 set.seed(1)#NB: the seed was not set for the table in the publication
 popmodelfunction = model.proptosize
 set.seed(1)#NB: the seed was not set for the table in the publication
@@ -26,13 +39,13 @@ Obs<-generate.observations(model)
 y0<-seq(min(yfun(Obs)),max(yfun(Obs)),length.out=250)
 
 
-dd=Simuletout(model,y0,nrep=300)
+dd=Simuletout(model,y0,nrep=30)
 if(dir.exists("datanotpushed")){save(dd,file="datanotpushed/graphdata/modelproptosize.rda");load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")}
 library(ggplot2)
 pp<-allplots(dd)
 if(dir.exists("datanotpushed/graphs/rda")){save(pp,file="datanotpushed/graphs/rda/modelproptosize.rda")}
 
-
+print(pp)
 
 ###############################
 
