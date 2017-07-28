@@ -1,5 +1,6 @@
 if(FALSE){
  library(pubBonneryBreidtCoquet2017)
+  library(ggplot2)
  ker=kergaus
  yfun=function(obs){obs$y}
  pifun=function(obs){obs$pik}
@@ -374,12 +375,16 @@ allplots<-function(dd){
 attach(dd)
 theme_set(theme_bw())
 w_graph1 <- ggplot(AA, aes(x=y0, y=f12, group=rep)) +
-  scale_colour_grey()+ 
-  geom_line(size=0.2, alpha=0.1)+ 
+  scale_colour_grey("")+
+  xlab("$y_0$")+ylab("")+
+  geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{f}_{nonpar}$",size=.2))+ 
   ggtitle(paste0("KDE, ",nrep, "replications"))+    
-  geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,"f12"],2,mean)),aes(x=y0,y=f,group=NULL),size=.8,linetype="dashed")  +
-  stat_function(fun = true.density,size=.8)+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1))
+  geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,"f12"],2,mean)),aes(x=y0,y=f,group=NULL,linetype="$\\hat{f}_{nonpar}$, averaged"),size=.8)  +
+  stat_function(fun = true.density,size=.8,aes(size=.8,linetype="$f$"))+
+  scale_linetype_manual("",values = c("solid",  "solid","dashed")) +
+  scale_size_manual(values = c(0.2, .8,.8))+
+  theme(legend.position = "bottom")+
+  guides(size=FALSE, linetype=guide_legend(override.aes=list(size=c(.2,.8,.8))))
 
 w_graph2 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
   geom_line(size=0.2, alpha=0.1)+
@@ -396,6 +401,7 @@ w_graph2 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
 
 w_graph_var <- ggplot(empvar[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19")),], 
                       aes(x=y0, y=value, linetype=mu,color=type)) +
+  scale_colour_grey()+ 
   theme_bw()+
   geom_line()+ 
   ggtitle(paste0("Empirical variance for ",nrep, " replications"))+
@@ -404,6 +410,7 @@ w_graph_var <- ggplot(empvar[is.element(empvar$variable,c("f4","f12","f21","f23"
 
 w_graph_vardetailed <- ggplot(empvar[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","f19bad")),], 
                       aes(x=y0, y=value, linetype=variable)) +
+  scale_colour_grey()+ 
   theme_bw()+
   geom_line()+ 
   ggtitle(paste0("Empirical variance for ",nrep, " replications"))+
@@ -413,6 +420,7 @@ w_graph_vardetailed <- ggplot(empvar[is.element(empvar$variable,c("f4","f12","f2
 
 w_graph_mse_tildevshat <- ggplot(empmse[empvar$type=="outer",], 
                       aes(x=y0, y=value, color=mu,linetype=C)) +
+  scale_colour_grey()+ 
   theme_bw()+
   geom_line()+ 
   ggtitle(paste0("Empirical MSE, tilde vs hat, for ",nrep, " replications"))+
@@ -421,6 +429,7 @@ w_graph_mse_tildevshat <- ggplot(empmse[empvar$type=="outer",],
 
 w_graph_mse_innervsouter <- ggplot(empmse[is.element(empvar$type,c("outer","inner"))&is.element(empvar$C,c("NA","tilde")),], 
                                  aes(x=y0, y=value, color=mu,linetype=type)) +
+  scale_colour_grey()+ 
   theme_bw()+
   geom_line()+ 
   ggtitle(paste0("Empirical MSE, inner versus outer, for ",nrep, " replications"))+
@@ -431,6 +440,7 @@ w_graph_mse_innervsouter <- ggplot(empmse[is.element(empvar$type,c("outer","inne
 w_graph_mse_tildevshat2 <- ggplot(empmse[empvar$type=="outer"&is.element(empvar$mu,c("true","xihat")),], 
                                  aes(x=y0, y=value, color=mu,linetype=C)) +
   theme_bw()+
+  scale_colour_grey()+ 
   geom_line()+ 
   ggtitle(paste0("Empirical MSE, tilde vs hat (2) for ",nrep, " replications"))+
   theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
@@ -440,6 +450,7 @@ w_graph_mse_tildevshat2 <- ggplot(empmse[empvar$type=="outer"&is.element(empvar$
 w_graph_mse <- ggplot(empmse[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","f19bad")),], 
                       aes(x=y0, y=value, linetype=muC,shade=type)) +
   theme_bw()+
+  scale_colour_grey()+ 
   geom_line()+ 
   ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
   theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
@@ -447,6 +458,7 @@ w_graph_mse <- ggplot(empmse[is.element(empvar$variable,c("f4","f12","f21","f23"
 
 w_graph_msedetailed <- ggplot(empmse[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19")),], 
                       aes(x=y0, y=value, linetype=variable))+
+  scale_colour_grey()+ 
   geom_line()+ 
   ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
   theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
@@ -454,6 +466,7 @@ w_graph_msedetailed <- ggplot(empmse[is.element(empvar$variable,c("f4","f12","f2
 
 w_graph_mse_final <- ggplot(empmse[is.element(empvar$C,c("NA","tilde")),], 
                       aes(x=y0, y=value, linetype=mu,color=type)) +
+  scale_colour_grey()+ 
   theme_bw()+
   geom_line()+ 
   ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
