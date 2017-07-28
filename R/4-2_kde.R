@@ -358,7 +358,7 @@ coefvarA=sqrt(empbias2A+empvarA)/true.density(y0)
 meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*true.density(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
 meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
 
-quantiles
+
 
 meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*true.density(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
 meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
