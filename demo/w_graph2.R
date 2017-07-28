@@ -16,12 +16,14 @@ model<-popmodelfunction(theta,xi,conditionalto)
 model$name="Model 1"
 Obs<-generate.observations(model)
 dd=Simuletout(model,y0=seq(min(model$yfun(Obs)),max(model$yfun(Obs)),length.out=100),nrep=30)
-if(dir.exists("datanotpushed")){
   save(dd,file="datanotpushed/graphdata/model.Pareto.bernstrat.rda");
   load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")
-  }
+ee=analysetout(dd)
+save(dd,file="datanotpushed/graphdata/model.Pareto.bernstrat_sum.rda");
+load("datanotpushed/graphdata/model.Pareto.bernstrat_sum.rda")
+
 library(ggplot2)
-pp<-allplots(dd)
+pp<-allplots(ee)
 if(dir.exists("datanotpushed/graphs/rda")){save(pp,file="datanotpushed/graphs/rda/model_Pareto_bernstrat.rda")}
 print(pp)
 
@@ -44,7 +46,12 @@ dd=Simuletout(model,
               nrep=30)
 save(dd,file="datanotpushed/graphdata/modelproptosize.rda");
 load("datanotpushed/graphdata/modelproptosize.rda")
-pp<-allplots(dd)
+ee=analysetout(dd)
+save(dd,file="datanotpushed/graphdata/modelproptosize_sum.rda");
+load("datanotpushed/graphdata/modelproptosize_sum.rda")
+
+library(ggplot2)
+pp<-allplots(ee)
 save(pp,file="datanotpushed/graphs/rda/modelproptosize.rda")
 
 print(pp)
@@ -64,7 +71,12 @@ Obs<-generate.observations(model)
 dd=Simuletout(model,y0=seq(min(model$yfun(Obs)),max(model$yfun(Obs)),length.out=30),nrep=30)
   save(dd,file="datanotpushed/graphdata/modeldepstrat2.rda");
   load("datanotpushed/graphdata/modeldepstrat2.rda")
-library(ggplot2)
+ee=analysetout(dd)
+  save(ee,file="datanotpushed/graphdata/modeldepstrat2_sum.rda");
+  load("datanotpushed/graphdata/modeldepstrat2_sum.rda")
+  library(ggplot2)
+  pp<-allplots(ee)
+  library(ggplot2)
 pp<-allplots(dd)
 save(pp,file="datanotpushed/graphs/rda/modeldepstrat2.rda")
 
