@@ -2,13 +2,13 @@ if(FALSE){
  library(pubBonneryBreidtCoquet2017)
   library(ggplot2)
  ker=kergaus
- yfun=function(obs){obs$y}
+ 
  pifun=function(obs){obs$pik}
  popmodelfunction = model.Pareto.bernstrat
  theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
  model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
  Obs<-generate.observations(model);
- h=ks::hpi(x=yfun(Obs))
+ h=ks::hpi(x=model$yfun(Obs))
  pifun=function(obs){obs$pik}
  setwd(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017"))
  load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")
@@ -183,8 +183,8 @@ kde.outerK0mus<-function(K0,mus){apply(K0/mus,2,sum)/(sum(1/mus))}
 kde.inner<-function(y0,
               Obs,
               ker=kergaus,
-              yfun=function(obs){obs$y},
-              h=ks::hpi(x=yfun(Obs)),
+              model,
+              h=ks::hpi(x=model$yfun(Obs)),
               .rhohatfun=rhohatfun()){
   kde.outer(y0,Obs,pifun=function(obs){1},h=h)/.rhohatfun(y0,Obs)}
 #' Compute Pfeffermann like kernel density estimators 
@@ -222,17 +222,16 @@ Allestimates<-function(y0,
                        Obs,
                        model,
                        ker=kergaus,
-                       yfun=function(obs){obs$y},
-                       h=ks::hpi(x=yfun(Obs)),
+                       h=ks::hpi(x=model$yfun(Obs)),
                        pifun=function(obs){obs$pik}){
 
   
-  K0=ker$K(outer(yfun(Obs),y0,"-")/h)/h
-  Ks=ker$K(outer(yfun(Obs),yfun(Obs),"-")/h)/h
+  K0=ker$K(outer(model$yfun(Obs),y0,"-")/h)/h
+  Ks=ker$K(outer(model$yfun(Obs),model$yfun(Obs),"-")/h)/h
   SK0=apply(K0,2,sum)
   SKs=apply(Ks,2,sum)
   pik=pifun(Obs)
-  ys=yfun(Obs)
+  ys=model$yfun(Obs)
   Nhat=sum(1/pik)
   
   mus_20=mftheo(model)(ys,Obs)
@@ -246,8 +245,8 @@ Allestimates<-function(y0,
   mu0_14=mftheo(model)(y0,Obs)
   Ctilde18=Ctildef(mus_22,pik,Nhat)
   
-  mus_23bad=mfroughreg(yfun=yfun)(ys,Obs)
-  mu0_15bad=mfroughreg(yfun=yfun)(y0,Obs)
+  mus_23bad=mfroughreg(yfun=model$yfun)(ys,Obs)
+  mu0_15bad=mfroughreg(yfun=model$yfun)(y0,Obs)
   Ctilde19bad=Ctildef(mus_23bad,pik,Nhat)
   
   transpi<-(function(x){log(x/(1-x))})(pik)
@@ -290,7 +289,7 @@ Allestimates<-function(y0,
   f18=kde.innerf4Cmu0(f4,Ctilde18,mu0_14)
   f19=kde.innerf4Cmu0(f4,Ctilde19,mu0_15)
   f19bad=kde.innerf4Cmu0(f4,Ctilde19bad,mu0_15bad)
-  Vf=varkde.outer(y0,Obs,yfun=yfun)
+  Vf=varkde.outer(y0,Obs,yfun=model$yfun)
 
   cbind(f4=f4,
       f12=f12,
@@ -327,10 +326,10 @@ Allestimates<-function(y0,
 #' Simuletout(model,Obs,model)
 
 
-Simuletout<-function(model, y0,nrep=1000,true.density=model$dloi,yfun=function(obs){obs$y}){
+Simuletout<-function(model, y0,nrep=1000){
 ff<-plyr::raply(nrep,(function(){
   Obs<-generate.observations(model);
-  Allestimates(y0,Obs,model,yfun=model$yfun)
+  Allestimates(y0,Obs,model)
 })(),.progress="text")
 dim(ff)
 
@@ -347,14 +346,14 @@ library(reshape2)
 A<-reshape2::melt(ff)
 AA<-reshape2::dcast(A,i+rep~variable,value.var="value")
 AAA<-reshape2::dcast(A,i+rep+variable~1,value.var="value")
-AA<-merge(AA,data.frame(i=1:length(y0),y0=y0,ftheta=true.density(y0)))
-AAA<-merge(AAA,data.frame(i=1:length(y0),y0=y0,ftheta=true.density(y0)))
+AA<-merge(AA,data.frame(i=1:length(y0),y0=y0,ftheta=model$dloi.y(y0)))
+AAA<-merge(AAA,data.frame(i=1:length(y0),y0=y0,ftheta=model$dloi.y(y0)))
 AAA<-merge(AAA,aux,by="variable",all.x=TRUE)
 names(AAA)[names(AAA)==1]<-"value"
 
 empvarA=plyr::aaply(ff[,,],2:3,var)
-empbias2A=(plyr::aaply(ff[,,],2:3,mean)-true.density(y0))^2
-coefvarA=sqrt(empbias2A+empvarA)/true.density(y0)
+empbias2A=(plyr::aaply(ff[,,],2:3,mean)-model$dloi.y(y0))^2
+coefvarA=sqrt(empbias2A+empvarA)/model$dloi.y(y0)
 
 
 
@@ -362,10 +361,10 @@ empvar=merge(melt(data.frame(y0=y0,empvarA),id="y0"),aux, by="variable", all.x=T
 empmse=merge(melt(data.frame(y0=y0,empvarA+empbias2A),id="y0"),aux, by="variable", all.x=TRUE)
 avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,"Vf"],2,mean))
 coefvar=merge(melt(data.frame(y0=y0,coefvarA),id="y0"),aux, by="variable", all.x=TRUE)
-meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*true.density(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
+meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*model$dloi.y(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
 meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
 
-return(list(model=model,meanempMSE=meanempMSE,true.density=true.density,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
+return(list(model=model,meanempMSE=meanempMSE,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
 }
 
 
@@ -380,7 +379,7 @@ w_graph1 <- ggplot(AA, aes(x=y0, y=f12, group=rep)) +
   geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{f}_{nonpar}$",size=.2))+ 
   labs(title="", caption=paste0("Simulations for ",model$name," , obtained with ",nrep, " replications"))+    
   geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,"f12"],2,mean)),aes(x=y0,y=f,group=NULL,linetype="$\\hat{f}_{nonpar}$, averaged"),size=1)  +
-  stat_function(fun = true.density,size=.4,aes(size=.4,linetype="$f$"))+
+  stat_function(fun = model$dloi.y,size=.4,aes(size=.4,linetype="$f$"))+
   scale_linetype_manual("",values = c("solid",  "solid","dashed")) +
   scale_size_manual(values = c(0.4, .2,1))+
   theme(legend.position = "bottom")+ 
