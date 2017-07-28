@@ -4,7 +4,7 @@ if(FALSE){
   setwd(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017"))
   demo(w_graph2,package="pubBonneryBreidtCoquet2017",ask=FALSE)
   demo(Create_all_tex_codes,package="pubBonneryBreidtCoquet2017",ask=FALSE)
-  .rs.restartR()
+  graphics.off();rm(list=ls());gc(reset=TRUE);.rs.restartR()
   }
 
 ##################
@@ -22,7 +22,6 @@ ee=analysetout(dd)
 save(dd,file="datanotpushed/graphdata/model.Pareto.bernstrat_sum.rda");
 load("datanotpushed/graphdata/model.Pareto.bernstrat_sum.rda")
 
-library(ggplot2)
 pp<-allplots(ee)
 if(dir.exists("datanotpushed/graphs/rda")){save(pp,file="datanotpushed/graphs/rda/model_Pareto_bernstrat.rda")}
 print(pp)
@@ -46,10 +45,9 @@ dd=Simuletout(model,
 save(dd,file="datanotpushed/graphdata/modelproptosize.rda");
 load("datanotpushed/graphdata/modelproptosize.rda")
 ee=analysetout(dd)
-save(dd,file="datanotpushed/graphdata/modelproptosize_sum.rda");
+save(ee,file="datanotpushed/graphdata/modelproptosize_sum.rda");
 load("datanotpushed/graphdata/modelproptosize_sum.rda")
 
-library(ggplot2)
 pp<-allplots(ee)
 save(pp,file="datanotpushed/graphs/rda/modelproptosize.rda")
 
@@ -73,9 +71,30 @@ dd=Simuletout(model,y0=seq(min(model$yfun(Obs)),max(model$yfun(Obs)),length.out=
 ee=analysetout(dd)
   save(ee,file="datanotpushed/graphdata/modeldepstrat2_sum.rda");
   load("datanotpushed/graphdata/modeldepstrat2_sum.rda")
-  library(ggplot2)
   pp<-allplots(ee)
-  library(ggplot2)
-pp<-allplots(dd)
 save(pp,file="datanotpushed/graphs/rda/modeldepstrat2.rda")
+
+
+###############################
+graphics.off();rm(list=ls());gc();
+
+set.seed(1)#NB: the seed was not set for the table in the publication
+popmodelfunction = model.birthweight1
+set.seed(1)#NB: the seed was not set for the table in the publication
+theta=c(mu=39.853,sigma2=16.723)
+conditionalto=list(N=15000,sampleparam=list(n=90))
+xi=c(xi=.175,xi0=-log(conditionalto$sampleparam$n/conditionalto$N)+.087^2/2-.175*theta[1]+.175^2*theta[2]/2,tau2=.087)
+model<-popmodelfunction(theta,xi,conditionalto)
+model$name="Model 4"
+Obs<-generate.observations(model)
+dd=Simuletout(model,y0=seq(min(model$yfun(Obs)),max(model$yfun(Obs)),length.out=30),nrep=30)
+save(dd,file="datanotpushed/graphdata/model.birthweight1.rda");
+load("datanotpushed/graphdata/model.birthweight1.rda")
+ee=analysetout(dd)
+save(ee,file="datanotpushed/graphdata/model.birthweight1_sum.rda");
+load("datanotpushed/graphdata/model.birthweight1_sum.rda")
+pp<-allplots(ee)
+save(pp,file="datanotpushed/graphs/rda/model.birthweight1.rda")
+
+
 

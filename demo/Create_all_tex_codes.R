@@ -25,13 +25,10 @@ try(system(paste0("mv ",prefix,"_yihui.pdf datanotpushed/graphs/pdfyihui/")))
 Y=get(y)
 attach(Y)
 sapply(names(Y),function(z){
-  try(graphtikzcode(texte = paste0("print(",z,")"),createtexfileinto=file.path("datanotpushed/graphs/tex",prefix,z)))
-
-  png(paste0(prefix,z,".png"))
+  png(paste0("datanotpushed/graphs/png/",prefix,z,".png"))
   try(eval(parse(text=paste0("print(",z,")"))))
   dev.off()
-  try(system(paste0("mv ",prefix,z,".png datanotpushed/graphs/png/")))
-  
+
   tikz(paste0("datanotpushed/graphs/texyihui/",prefix,z,"_yihui.tex"),standAlone = FALSE)
   try(eval(parse(text=paste0("print(",z,")"))))
   dev.off()

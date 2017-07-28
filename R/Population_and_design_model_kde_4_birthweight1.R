@@ -7,25 +7,25 @@ model.birthweight1<-function(
   suppressMessages(attach(sampleparam))
   ## objects related to population generation
   rloiy <- function(.conditionalto=conditionalto,.theta=theta){
-    rnrom(.conditionalto$N,.theta["mu"],sqrt(.theta["sigma2"]))}
-  rloiz=function(y,.xi=xi){cbind(y=y, w=exp(.xi["xi0"]+.xi["xi"]*y+rnorm(y,sd=sqrt(tau2))))}
+    rnorm(.conditionalto$N,.theta["mu"],sqrt(.theta["sigma2"]))}
+  rloiz=function(y,.xi=xi){exp(.xi[2]+.xi[1]*y+rnorm(length(y),sd=sqrt(xi[3])))}
   ## objects related to sampling frame and sample
   Scheme<- birthweightsampledesign1(sampleparam)
   tau=conditionalto$sampleparam$n/conditionalto$N
   #En    <- function(N){tau*N}#Global sampling rate (will be returned)
   # objects related to population and sample distribution
-  dloitheta=function(y,theta=conditionalto$theta){dnrom(y,theta["mu"],sqrt(theta["sigma2"]))}
-  qloi.y=function(y,theta=conditionalto$theta){qnrom(y,theta["mu"],sqrt(theta["sigma2"]))}
-  ploi=function(y,theta=conditionalto$theta){pnrom(y,theta["mu"],sqrt(theta["sigma2"]))}
+  dloitheta=function(y,theta=conditionalto$theta){dnorm(y,theta["mu"],sqrt(theta["sigma2"]))}
+  qloi.y=function(y,theta=conditionalto$theta){qnorm(y,theta["mu"],sqrt(theta["sigma2"]))}
+  ploi=function(y,theta=conditionalto$theta){pnorm(y,theta["mu"],sqrt(theta["sigma2"]))}
   #Population generation function
   #Computation of rho function (function of y,theta,xi)
-  rhothetaxi=function(y,theta,xi){(y+xi)/(theta+xi)}
+  rhothetaxi=function(y,theta,xi){exp(xi[2]*(theta[1]-y)+xi[2]^2*theta[2]^2/2)}
   #Computation of rho function (function of y)
   rho=function(y){return(rhothetaxi(y,theta,xi))}
   rhoxthetaxi=function(...){1};
   #Computation of rho function (function of y)
   # objects related to estimation
-  xihat=function(Obs){(sum(Obs$w*log(Obs$w)*Obs$y)-(sum(Obs$w*ln(Obs$w)))*(sum(Obs$w*Obs$y))/sum(Obs$w))/(sum(Obs$w*Obs$y^2)-(sum(Obs$w*Obs$y))^2/(sum(Obs$w)))}
+  xihat=function(Obs){(sum(Obs$z*log(Obs$z)*Obs$y)-(sum(Obs$z*log(Obs$z)))*(sum(Obs$z*Obs$y))/sum(Obs$z))/(sum(Obs$z*Obs$y^2)-(sum(Obs$z*Obs$y))^2/(sum(Obs$z)))}
   thetaht=function(Obs){sum(Obs$y/Obs$pik)/sum(1/Obs$pik)}
   thetaniais=function(Obs){mean(Obs$y)}
   # Final result
