@@ -4,6 +4,7 @@ unloadNamespace("pubBonneryBreidtCoquet2017")
   setwd(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017"))
   demo(w_graph2,package="pubBonneryBreidtCoquet2017",ask=FALSE)
   demo(Create_all_tex_codes,package="pubBonneryBreidtCoquet2017",ask=FALSE)
+  .rs.restart()
   }
 
 ##################
@@ -27,7 +28,7 @@ print(pp)
 
 ##################
 
-rm(list=ls());gc();.rs.restartR()
+rm(list=ls());gc();
 set.seed(1)#NB: the seed was not set for the table in the publication
 popmodelfunction = model.proptosize
 set.seed(1)#NB: the seed was not set for the table in the publication
