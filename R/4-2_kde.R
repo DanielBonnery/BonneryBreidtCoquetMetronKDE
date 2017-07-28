@@ -365,7 +365,7 @@ coefvar=merge(melt(data.frame(y0=y0,coefvarA),id="y0"),aux, by="variable", all.x
 meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*true.density(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
 meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
 
-return(list(meanempMSE=meanempMSE,true.density=true.density,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
+return(list(model=model,meanempMSE=meanempMSE,true.density=true.density,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
 }
 
 
@@ -378,13 +378,15 @@ w_graph1 <- ggplot(AA, aes(x=y0, y=f12, group=rep)) +
   scale_colour_grey("")+
   xlab("$y_0$")+ylab("")+
   geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{f}_{nonpar}$",size=.2))+ 
-  ggtitle(paste0("KDE, ",nrep, "replications"))+    
-  geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,"f12"],2,mean)),aes(x=y0,y=f,group=NULL,linetype="$\\hat{f}_{nonpar}$, averaged"),size=.8)  +
-  stat_function(fun = true.density,size=.8,aes(size=.8,linetype="$f$"))+
+  labs(title="", caption=paste0("Simulations for ",model$name," , obtained with ",nrep, " replications"))+    
+  geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,"f12"],2,mean)),aes(x=y0,y=f,group=NULL,linetype="$\\hat{f}_{nonpar}$, averaged"),size=1)  +
+  stat_function(fun = true.density,size=.4,aes(size=.4,linetype="$f$"))+
   scale_linetype_manual("",values = c("solid",  "solid","dashed")) +
-  scale_size_manual(values = c(0.2, .8,.8))+
-  theme(legend.position = "bottom")+
-  guides(size=FALSE, linetype=guide_legend(override.aes=list(size=c(.2,.8,.8))))
+  scale_size_manual(values = c(0.4, .2,1))+
+  theme(legend.position = "bottom")+ 
+  theme(legend.key.size = unit(2,"line"))+
+  guides(size=FALSE, linetype=guide_legend(override.aes=list(size=c(.4,.2,1),alpha=c(1,.1,1))))
+    
 
 w_graph2 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
   geom_line(size=0.2, alpha=0.1)+
