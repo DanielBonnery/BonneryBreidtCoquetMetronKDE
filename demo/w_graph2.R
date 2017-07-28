@@ -61,8 +61,7 @@ xi=2
 model<-popmodelfunction(theta,xi,conditionalto)
 model$name="Model 3"
 Obs<-generate.observations(model)
-true.density=function(x){dnorm(x,mean=theta[1],sd=theta[3])}
-dd=Simuletout(model,y0=seq(min(model$yfun(Obs)),max(model$yfun(Obs)),length.out=30),nrep=30,true.density=true.density)
+dd=Simuletout(model,y0=seq(min(model$yfun(Obs)),max(model$yfun(Obs)),length.out=30),nrep=30)
   save(dd,file="datanotpushed/graphdata/modeldepstrat2.rda");
   load("datanotpushed/graphdata/modeldepstrat2.rda")
 library(ggplot2)

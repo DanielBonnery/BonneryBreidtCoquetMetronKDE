@@ -5,7 +5,6 @@ model.proptosize<-function(
   #for simplicity of notation
   suppressMessages(attach(conditionalto))
   suppressMessages(attach(sampleparam))
-  ## objects related to population generation
   rloiy <- function(.conditionalto=conditionalto,.theta=theta){
     rchisq(conditionalto$N,.theta)}
   rloiz=function(y,.xi=xi){y+rchisq(y,.xi)}
