@@ -7,7 +7,7 @@ unloadNamespace("pubBonneryBreidtCoquet2017")
   }
 
 ##################
-rm(list=ls());gc();graphics.off()
+rm(list=ls());gc();graphics.off();
 set.seed(1)#NB: the seed was not set for the table in the publication
 popmodelfunction = model.Pareto.bernstrat
 theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
@@ -27,7 +27,7 @@ print(pp)
 
 ##################
 
-rm(list=ls());gc()
+rm(list=ls());gc();.rs.restartR()
 set.seed(1)#NB: the seed was not set for the table in the publication
 popmodelfunction = model.proptosize
 set.seed(1)#NB: the seed was not set for the table in the publication
@@ -49,7 +49,7 @@ save(pp,file="datanotpushed/graphs/rda/modelproptosize.rda")
 print(pp)
 
 ###############################
-graphics.off();rm(list=ls());gc();
+graphics.off();rm(list=ls());gc();.rs.restartR()
 
 set.seed(1)#NB: the seed was not set for the table in the publication
 popmodelfunction = model.dep.strat2
