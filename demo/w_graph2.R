@@ -4,7 +4,7 @@ unloadNamespace("pubBonneryBreidtCoquet2017")
   setwd(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017"))
   demo(w_graph2,package="pubBonneryBreidtCoquet2017",ask=FALSE)
   demo(Create_all_tex_codes,package="pubBonneryBreidtCoquet2017",ask=FALSE)
-  .rs.restart()
+  .rs.restartR()
   }
 
 ##################
