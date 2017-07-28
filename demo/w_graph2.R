@@ -15,7 +15,8 @@ model<-popmodelfunction(theta,xi,conditionalto)
 yfun<-function(obs){obs$y}
 Obs<-generate.observations(model)
 dd=Simuletout(model,y0=seq(min(yfun(Obs)),max(yfun(Obs)),length.out=100),nrep=30)
-if(dir.exists("datanotpushed")){save(dd,file="datanotpushed/graphdata/model.Pareto.bernstrat.rda");
+if(dir.exists("datanotpushed")){
+  save(dd,file="datanotpushed/graphdata/model.Pareto.bernstrat.rda");
   load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")
   }
 library(ggplot2)
