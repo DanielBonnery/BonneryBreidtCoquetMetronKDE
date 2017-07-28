@@ -1,16 +1,15 @@
-#' @example
-#' library(pubBonneryBreidtCoquet2017)
-#' ker=kergaus
-#' yfun=function(obs){obs$y}
-#' pifun=function(obs){obs$pik}
-#' popmodelfunction = model.Pareto.bernstrat
-#' theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
-#' model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
-#' Obs<-generate.observations(model);
-
-#' h=ks::hpi(x=yfun(Obs))
-#' pifun=function(obs){obs$pik}
-
+if(FALSE){
+ library(pubBonneryBreidtCoquet2017)
+ ker=kergaus
+ yfun=function(obs){obs$y}
+ pifun=function(obs){obs$pik}
+ popmodelfunction = model.Pareto.bernstrat
+ theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
+ model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
+ Obs<-generate.observations(model);
+ h=ks::hpi(x=yfun(Obs))
+ pifun=function(obs){obs$pik}
+}
 
 ##4.1. Definitions
 # Kernels
@@ -231,6 +230,10 @@ Allestimates<-function(y0,
   pik=pifun(Obs)
   ys=yfun(Obs)
   Nhat=sum(1/pik)
+  
+  mus_20=mftheo(model)(ys,Obs)
+  
+  
   mus_21=mftheo(model)(ys,Obs)
   mu0_13=mftheo(model)(y0,Obs)
   Ctilde17=Ctildef(mus_21,pik,Nhat)
@@ -349,6 +352,9 @@ empvarA=plyr::aaply(ff[,,],2:3,var)
 empbias2A=(plyr::aaply(ff[,,],2:3,mean)-true.density(y0))^2
 coefvarA=sqrt(empbias2A+empvarA)/true.density(y0)
 
+meanempMSE=sum((empvarA+empbias2A))
+
+
 
 empvar=merge(melt(data.frame(y0=y0,empvarA),id="y0"),aux, by="variable", all.x=TRUE)
 empmse=merge(melt(data.frame(y0=y0,empvarA+empbias2A),id="y0"),aux, by="variable", all.x=TRUE)
@@ -444,7 +450,7 @@ w_graph_msedetailed <- ggplot(empmse[is.element(empvar$variable,c("f4","f12","f2
 
 
 w_graph_mse_final <- ggplot(empmse[is.element(empvar$C,c("NA","tilde")),], 
-                      aes(x=y0, y=value, linetype=mu,shade=type)) +
+                      aes(x=y0, y=value, linetype=mu,color=type)) +
   theme_bw()+
   geom_line()+ 
   ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
