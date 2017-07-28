@@ -51,3 +51,4 @@ model.birthweight1<-function(
     yfun=function(obs){obs$y},
     thetaniais=thetaniais,
     eta=function(Obs,.xi=xi,.conditionalto=conditionalto, .theta=theta){exp(-.xi[2]-.xi[1]*Obs$y+.xi[3]/2)}
+}
