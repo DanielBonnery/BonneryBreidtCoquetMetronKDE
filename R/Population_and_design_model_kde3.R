@@ -14,6 +14,7 @@ model.proptosize<-function(
   En    <- function(N){tau*N}#Global sampling rate (will be returned)
   # objects related to population and sample distribution
   dloitheta=function(y,theta=conditionalto$theta){dchisq(y,theta)}
+  qloi.y=function(y,theta=conditionalto$theta){qchisq(y,theta)}
   #Population generation function
   #Computation of rho function (function of y,theta,xi)
   rhothetaxi=function(y,theta,xi){(y+xi)/(theta+xi)}
@@ -31,6 +32,8 @@ model.proptosize<-function(
     rloiy=rloiy,
     ploi=function(y){pchisq(y,theta)},
     dloitheta=dloitheta,
+    dloi.y=dloitheta,
+    qloi.y=qloi.y,
     rloiz=rloiz,
     dloilim=function(y){rho(y)*dchisq(y,theta)},
     Scheme=Scheme,
@@ -41,7 +44,8 @@ model.proptosize<-function(
     En=En,
     tau=tau,
     xihat=xihat,
-    thetaht=thetaht,
+    thetaht=thetaht,  
+    yfun=function(obs){obs$y},
     thetaniais=thetaniais,
     eta=function(Obs,.xi=xi,.conditionalto=conditionalto, .theta=theta){
       (1-(1-(Obs$y+.xi^2)/(.conditionalto$N*(.theta+.xi^2)))^(tau*.conditionalto$N))}))}

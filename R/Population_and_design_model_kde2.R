@@ -18,6 +18,9 @@ model.dep.strat2<-function(
   En    <- function(N){tau*N}#Global sampling rate (will be returned)
   # objects related to population and sample distribution
   dloitheta=function(y,theta=conditionalto$theta){dnorm(as.matrix(y)[,2],mean=theta[1]+theta[2]*as.matrix(y)[,1],sd=theta[3])}
+  dloi.y=function(y,theta=conditionalto$theta){dnorm(y,mean=theta[1]+theta[2]*EX,sd=sqrt(theta[3]^2+SX^2)}
+  qloi.y=function(y,theta=conditionalto$theta){qnorm(y,mean=theta[1]+theta[2]*EX,sd=sqrt(theta[3]^2+SX^2)}
+  dloi=function(y,theta=conditionalto$theta){dnorm(y,mean=theta[1]+theta[2]*EX,sd=sqrt(theta[3]^2+SX^2)}
   #Population generation function
   #Computation of rho function (function of y,theta,xi)
   rhothetaxi=function(y,theta,xi){
@@ -62,6 +65,8 @@ model.dep.strat2<-function(
     rloiy=rloiy,
     ploi=function(y){pnorm(y[,2],mean=theta[1]+theta[2]*y[,1],sd=theta[3])},
     dloitheta=dloitheta,
+    dloitheta.y=dloitheta.y,
+    qloitheta.y=qloitheta.y,
     rloiz=rloiz,
     dloilim=function(y){return(rho(y)*dnorm(y[,2],theta[1]+theta[2]*y[,1],theta[3]))},
     Scheme=Scheme,
@@ -78,4 +83,5 @@ model.dep.strat2<-function(
     xihatfuncdim=2,
     thetaht=thetaht,
     eta=eta,
+    yfun=function(obs){obs$y[,2]},
     thetaniais=thetaniais))}

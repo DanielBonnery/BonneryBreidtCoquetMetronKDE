@@ -54,7 +54,10 @@ model.Pareto.bernstrat<-function(theta=1,xi=1,conditionalto=list(N=1000,samplepa
   ploilim=function(y){1-1/pgamma(y,3/2,2)},
   rloiz=rloiz,
   dloi=function(y){(y>1)*theta/((y+(y==1))^(theta+1))},
-  dloitheta=function(y,theta){theta/(y^(theta+1))},
+  dloi.y=function(y,theta){theta/(y^(theta+1))},
+  dloitheta=function(y,theta){(y>1)*theta/((y+(y==1))^(theta+1))},
+  qloi.y=qloitheta.y,
+  
   Scheme=StratBern(sampleparam),
   calculsintermediairespourjac=function(y){},
   Jacobiane=function(listeqtes,theta,xi,n){},
@@ -66,6 +69,7 @@ model.Pareto.bernstrat<-function(theta=1,xi=1,conditionalto=list(N=1000,samplepa
   rho=function(y){ as.vector(((sampleparam$tauh%*%rbind(xi/(xi+theta),theta/(xi+theta)))^{-1})[1,1]*
                                     (sampleparam$tauh%*%rbind(1-1/(as.vector(y)^xi),1/(as.vector(y)^xi))))},
   tau=tau,
+  yfun=function(obs){obs$y},
   #logl1prime=logl1prime,
   xihat=function(Obs){
     HT_y<-sum(Obs$y/Obs$pik)

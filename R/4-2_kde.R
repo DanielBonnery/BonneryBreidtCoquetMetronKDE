@@ -330,7 +330,7 @@ Allestimates<-function(y0,
 Simuletout<-function(model, y0,nrep=1000,true.density=model$dloi,yfun=function(obs){obs$y}){
 ff<-plyr::raply(nrep,(function(){
   Obs<-generate.observations(model);
-  Allestimates(y0,Obs,model,yfun=yfun)
+  Allestimates(y0,Obs,model,yfun=model$yfun)
 })(),.progress="text")
 dim(ff)
 
