@@ -8,7 +8,7 @@ model.birthweight1<-function(
   ## objects related to population generation
   rloiy <- function(.conditionalto=conditionalto,.theta=theta){
     rnrom(.conditionalto$N,.theta["mu"],sqrt(.theta["sigma2"]))}
-  rloiz=function(y,.xi=xi){list(y=y, w=exp(.xi["xi0"]+.xi["xi"]*y+rnorm(y,sd=sqrt(tau2))}
+  rloiz=function(y,.xi=xi){list(y=y, w=exp(.xi["xi0"]+.xi["xi"]*y+rnorm(y,sd=sqrt(tau2))))}
   ## objects related to sampling frame and sample
   Scheme<- birthweightsampledesign1(sampleparam)
   #En    <- function(N){tau*N}#Global sampling rate (will be returned)
