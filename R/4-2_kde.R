@@ -234,8 +234,8 @@ Allestimates<-function(y0,
   ys=model$yfun(Obs)
   Nhat=sum(1/pik)
   
-  mus_20=mf(pifun=function(Obs){1/Obs$pik})(ys,Obs)/mf(pifun=function(Obs){1})(ys,Obs)
-  mu0_for20=mf(pifun=function(Obs){1/Obs$pik})(y0,Obs)/mf(pifun=function(Obs){1})(y0,Obs)
+  mus_20=apply(Ks/(pifun(Obs)),2,sum)/apply(Ks,2,sum)
+  mu0for20=mf(pifun=function(Obs){1/Obs$pik})(y0,Obs)/mf(pifun=function(Obs){1})(y0,Obs)
   Ctildefor20=Ctildef(mus_20,pik,Nhat)
   
   mus_21=mftheo(model)(ys,Obs)
@@ -243,7 +243,7 @@ Allestimates<-function(y0,
   Ctilde17=Ctildef(mus_21,pik,Nhat)
   
   mus_22=mfhattheo(model)(ys,Obs)
-  mu0_14=mftheo(model)(y0,Obs)
+  mu0_14=mfhattheo(model)(y0,Obs)
   Ctilde18=Ctildef(mus_22,pik,Nhat)
   
   mus_23bad=mfroughreg(yfun=model$yfun)(ys,Obs)
@@ -255,7 +255,9 @@ Allestimates<-function(y0,
   mu0_15=(function(y){exp(y)/(1+exp(y))})(predict.lm(lm(transpi~ys,weights=1/pik),newdata=data.frame(ys=y0)))
   Ctilde19=Ctildef(mus_23,pik,Nhat)
   
-  mus_25=apply(Ks/(pifun(Obs)^2),2,sum)/apply(Ks/(pifun(Obs)^2),2,sum)
+  mus_25=apply(Ks/(pifun(Obs)^2),2,sum)/apply(Ks/pifun(Obs),2,sum)
+  mu0for25=apply(K0/(pifun(Obs)^2),2,sum)/apply(K0/pifun(Obs),2,sum)
+  Ctildefor26=Ctildef(mus_20,pik,Nhat)
   
   transpi2<-(function(x){log(1/x)-1})(pik)
   mus_26=(function(x){exp(-(x+1))})(predict.lm(lm(transpi2~ys,weights=1/pik)))
@@ -271,6 +273,7 @@ Allestimates<-function(y0,
   
   #Compute inner
   
+  f20<-kde.outerK0mus(K0,mus_20)         
   f21<-kde.outerK0mus(K0,mus_21)         
   f22<-kde.outerK0mus(K0,mus_22)         
   f23bad<-kde.outerK0mus(K0,mus_23bad)         
@@ -279,14 +282,15 @@ Allestimates<-function(y0,
   f26<-kde.outerK0mus(K0,mus_26)         
   
   #Compute outer
-  Nhat<-sum(1/pik)
   Chat<-length(ys)/Nhat
-  m21<-mftheo(model)(ys,Obs)
-  f13=f4*Chat/mu0_13
-  f14=f4*Chat/mu0_14
-  f15bad=SK0*Chat/mu0_15bad
-  f15=f4*Chat/mu0_15
   
+  fhat20=f4*Chat/mu0for20
+  f13   =f4*Chat/mu0_13
+  f14   =f4*Chat/mu0_14
+  f15bad=f4*Chat/mu0_15bad
+  f15   =f4*Chat/mu0_15
+  
+  ftilde20=kde.innerf4Cmu0(f4,Ctildefor20,mu0for20)
   f17=kde.innerf4Cmu0(f4,Ctilde17,mu0_13)
   f18=kde.innerf4Cmu0(f4,Ctilde18,mu0_14)
   f19=kde.innerf4Cmu0(f4,Ctilde19,mu0_15)
@@ -295,15 +299,18 @@ Allestimates<-function(y0,
   
   cbind(f4=f4,
         f12=f12,
+        f20=f20,
         f21=f21,
         f23=f23,
         f23bad=f23bad,
         f25=f25,
         f26=f26,
+        fhat20=fhat20,
         f13=f13,
         f14=f14,
         f15=f15,
         f15bad=f15bad,
+        ftilde20=ftilde20,
         f17=f17,
         f18=f18,
         f19=f19,
@@ -335,7 +342,9 @@ Simuletout<-function(model, y0,nrep=1000){
   })(),.progress="text")
   dim(ff)
   
-  dimnames(ff)<-list(1:nrep,1:length(y0),c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","f19bad","Vf"))
+  dimnames(ff)<-list(1:nrep,1:length(y0),c("f4","f12",     "f20","f21","f23","f23bad","f25","f26",
+                                           "fhat20",  "f13","f14","f15","f15bad",
+                                           "ftilde20","f17","f18","f19","f19bad","Vf"))
   names(dimnames(ff))<-c("rep","i","variable")
   list(ff=ff,model=model,y0=y0,nrep=nrep)
 }
