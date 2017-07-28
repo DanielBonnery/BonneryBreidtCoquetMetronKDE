@@ -355,21 +355,16 @@ empvarA=plyr::aaply(ff[,,],2:3,var)
 empbias2A=(plyr::aaply(ff[,,],2:3,mean)-true.density(y0))^2
 coefvarA=sqrt(empbias2A+empvarA)/true.density(y0)
 
-meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*true.density(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
-meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
-
-
-
-meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*true.density(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
-meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
 
 
 empvar=merge(melt(data.frame(y0=y0,empvarA),id="y0"),aux, by="variable", all.x=TRUE)
 empmse=merge(melt(data.frame(y0=y0,empvarA+empbias2A),id="y0"),aux, by="variable", all.x=TRUE)
 avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,"Vf"],2,mean))
 coefvar=merge(melt(data.frame(y0=y0,coefvarA),id="y0"),aux, by="variable", all.x=TRUE)
+meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*true.density(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
+meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
 
-return(list(true.density=true.density,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
+return(list(meanempMSE=meanempMSE,true.density=true.density,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
 }
 
 
