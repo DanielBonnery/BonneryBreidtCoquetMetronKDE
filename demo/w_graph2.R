@@ -1,6 +1,6 @@
 if(FALSE){
-unloadNamespace("pubBonneryBreidtCoquet2017")
-    library(pubBonneryBreidtCoquet2017)
+  unloadNamespace("pubBonneryBreidtCoquet2017")
+  library(pubBonneryBreidtCoquet2017)
   setwd(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017"))
   demo(w_graph2,package="pubBonneryBreidtCoquet2017",ask=FALSE)
   demo(Create_all_tex_codes,package="pubBonneryBreidtCoquet2017",ask=FALSE)
@@ -39,7 +39,6 @@ theta=c(3)
 xi=.5
 model<-popmodelfunction(theta,xi,conditionalto)
 model$name="Model 2"
-yfun<-function(obs){obs$y}
 Obs<-generate.observations(model)
 dd=Simuletout(model,
               y0=seq(min(yfun(Obs)),max(yfun(Obs)),length.out=25),
@@ -57,7 +56,7 @@ save(pp,file="datanotpushed/graphs/rda/modelproptosize.rda")
 print(pp)
 
 ###############################
-graphics.off();rm(list=ls());gc();.rs.restartR()
+graphics.off();rm(list=ls());gc();
 
 set.seed(1)#NB: the seed was not set for the table in the publication
 popmodelfunction = model.dep.strat2
