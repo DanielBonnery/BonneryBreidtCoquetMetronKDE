@@ -1,6 +1,6 @@
 model.birthweight1<-function(
   theta=c(mu=39.853,sigma2=16.723),
-  xi=c(xi=.175,xi0=1,tau2=.087)
+  xi=c(xi=.175,xi0=1,tau2=.087),
   conditionalto=list(N=15000,sampleparam=list(n=90))){
   #for simplicity of notation
   suppressMessages(attach(conditionalto))
