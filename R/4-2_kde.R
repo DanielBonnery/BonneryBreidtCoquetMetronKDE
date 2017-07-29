@@ -2,7 +2,6 @@ if(FALSE){
   library(pubBonneryBreidtCoquet2017)
   library(ggplot2)
   ker=kergaus
-  
   pifun=function(obs){obs$pik}
   popmodelfunction = model.Pareto.bernstrat
   theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
@@ -235,8 +234,8 @@ Allestimates<-function(y0,
   Nhat=sum(1/pik)
   
   mus_20=apply(Ks/(pifun(Obs)),2,sum)/apply(Ks,2,sum)
-  mu0for20=mf(pifun=function(Obs){1/Obs$pik})(y0,Obs)/mf(pifun=function(Obs){1})(y0,Obs)
-  Ctildefor20=Ctildef(mus_20,pik,Nhat)
+  mu0_12=mf(pifun=function(Obs){1/Obs$pik})(y0,Obs)/mf(pifun=function(Obs){1})(y0,Obs)
+  Ctilde16=Ctildef(mus_20,pik,Nhat)
   
   mus_21=mftheo(model)(ys,Obs)
   mu0_13=mftheo(model)(y0,Obs)
@@ -257,11 +256,12 @@ Allestimates<-function(y0,
   
   mus_25=apply(Ks/(pifun(Obs)^2),2,sum)/apply(Ks/pifun(Obs),2,sum)
   mu0for25=apply(K0/(pifun(Obs)^2),2,sum)/apply(K0/pifun(Obs),2,sum)
-  Ctildefor26=Ctildef(mus_20,pik,Nhat)
+  Ctildefor25=Ctildef(mus_25,pik,Nhat)
   
   transpi2<-(function(x){log(1/x)-1})(pik)
   mus_26=(function(x){exp(-(x+1))})(predict.lm(lm(transpi2~ys,weights=1/pik)))
-  
+  mu0for26=(function(x){exp(-(x+1))})(predict.lm(lm(transpi2~ys,weights=1/pik),newdata=data.frame(ys=y0)))
+  Ctildefor26=Ctildef(mus_26,pik,Nhat)
   
   
   
@@ -284,37 +284,45 @@ Allestimates<-function(y0,
   #Compute outer
   Chat<-length(ys)/Nhat
   
-  fhat20=f4*Chat/mu0for20
   f13   =f4*Chat/mu0_13
   f14   =f4*Chat/mu0_14
   f15bad=f4*Chat/mu0_15bad
   f15   =f4*Chat/mu0_15
+  fhat25   =f4*Chat/mu0for25
+  fhat26   =f4*Chat/mu0for26
   
-  ftilde20=kde.innerf4Cmu0(f4,Ctildefor20,mu0for20)
+  f16=kde.innerf4Cmu0(f4,Ctilde16,mu0_12)
   f17=kde.innerf4Cmu0(f4,Ctilde17,mu0_13)
   f18=kde.innerf4Cmu0(f4,Ctilde18,mu0_14)
   f19=kde.innerf4Cmu0(f4,Ctilde19,mu0_15)
   f19bad=kde.innerf4Cmu0(f4,Ctilde19bad,mu0_15bad)
-  Vf=varkde.outer(y0,Obs,yfun=model$yfun)
+  ftilde25=kde.innerf4Cmu0(f4,Ctildefor25,mu0for25)
+  ftilde26=kde.innerf4Cmu0(f4,Ctildefor26,mu0for26)
+  
+    Vf=varkde.outer(y0,Obs,yfun=model$yfun)
   
   cbind(f4=f4,
         f12=f12,
-        f20=f20,
-        f21=f21,
-        f23=f23,
-        f23bad=f23bad,
-        f25=f25,
-        f26=f26,
-        fhat20=fhat20,
         f13=f13,
         f14=f14,
         f15=f15,
         f15bad=f15bad,
-        ftilde20=ftilde20,
+        fhat25=fhat25,
+        fhat26=fhat26,
+        f16=f16,
         f17=f17,
         f18=f18,
         f19=f19,
         f19bad=f19bad,
+        ftilde25=ftilde25,
+        ftilde26=ftilde26,
+        f20=f20,
+        f21=f21,
+        f22=f22,
+        f23=f23,
+        f23bad=f23bad,
+        f25=f25,
+        f26=f26,
         Vf=Vf)
 }
 
@@ -334,28 +342,42 @@ Allestimates<-function(y0,
 #' Obs<-generate.observations(model);
 #' Simuletout(model,Obs,model)
 
+quoi=c("f4",
+       "f12","f13","f14","f15","f15bad","fhat25",  "fhat26",
+       "f16","f17","f18","f19","f19bad","ftilde25","ftilde26",
+       "f20","f21","f22","f23","f23bad","f25",     "f26",
+       "Vf")
+joliquoi=c("$p$",paste0("$",
+  rep(c("\\hat{f}","\\tilde{f}","f^\\dagger"),times=7),
+  "_{",
+  rep(c("\\hat\\mu,\\rm{nonpar}","\\mu,\\xi","\\mu,\\hat\\xi","\\hat\\mu,\\rm{par}","\\hat\\mu,\\rm{par(rough)}","\\hat\\omega,\\rm{nonpar}","\\hat\\omega,\\rm{par}"),each=3),
+  "}$"),"$\\hat{V}$")
+  
+  
+  aux<-data.frame(variable=quoi,
+                  jolivariable=joliquoi,
+                  type=c("$p$",rep(c("$\\hat{f}$","$\\tilde{f}$","$f^\\dagger$"),times=7),"$\\hat{V}$"),
+                  mu=c("1",rep(c("$\\hat\\mu,\\rm{nonpar}$","$\\mu,\\xi$","$\\mu,\\hat\\xi$","$\\hat\\mu,\\rm{par}$","$\\hat\\mu,\\rm{par(rough)}$","$\\hat\\omega,\\rm{nonpar}$","$\\hat\\omega,\\rm{par}$"),each=3),"\\hat{V}"))
 
+  
+  
+  
 Simuletout<-function(model, y0,nrep=1000){
   ff<-plyr::raply(nrep,(function(){
     Obs<-generate.observations(model);
     Allestimates(y0,Obs,model)
   })(),.progress="text")
-  dim(ff)
   
-  dimnames(ff)<-list(1:nrep,1:length(y0),c("f4","f12",     "f20","f21","f23","f23bad","f25","f26",
-                                           "fhat20",  "f13","f14","f15","f15bad",
-                                           "ftilde20","f17","f18","f19","f19bad","Vf"))
+  
+  dimnames(ff)<-list(1:nrep,1:length(y0),quoi)
   names(dimnames(ff))<-c("rep","i","variable")
   list(ff=ff,model=model,y0=y0,nrep=nrep)
 }
 
+
+
 analysetout<-function(dd){
   attach(dd)  
-  aux<-data.frame(variable=c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","f19bad","Vf"),
-                  type=c("naive","both","inner","inner","inner","inner","inner","outer","outer","outer","outer","outer","outer","outer","outer","Variance"),
-                  mu=c("1","pi","true","xihat","muhat","muhatbad","w","true","xihat","muhat","muhatbad","true","xihat","muhat","muhatbad","Variance"),
-                  C=c("NA","NA","NA","NA","NA","NA","NA","hat","hat","hat","hat","tilde","tilde","tilde","tilde","Variance"))
-  aux$muC=paste(aux$mu,aux$C)
   
   library(reshape2)
   A<-reshape2::melt(ff)
@@ -379,21 +401,99 @@ analysetout<-function(dd){
   meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*model$dloi.y(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
   meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
   
-  return(list(model=model,meanempMSE=meanempMSE,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
+  empmse$class<-cut(empmse$y0,breaks = model$qloi.y(c(0,.25,.5,.75,1)))
+  meanempMSEq=merge(plyr::ddply(.data = empmse,.variables = ~variable+class,
+                                .fun=function(d){data.frame(IntegratedMSE=sum(d$value*model$dloi.y(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
+  meanempMSEq$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
+  
+  
+  return(list(model=model,meanempMSE=meanempMSE,meanempMSEq=meanempMSEq,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
 }
 
 
 
 
-allplots<-function(dd){
-  attach(dd)
+allplots<-function(ee){
+  attach(ee)
+  
+
   theme_set(theme_bw())
-  w_graph1 <- ggplot(AA, aes(x=y0, y=f12, group=rep)) +
+  
+  w_graph_0<-ggplot(AAA[is.element(AAA$variable,quoi[-c(1,23)])&AAA$rep==2,], 
+                   aes(x=y0, y=value, linetype=mu,color=type)) +
+    xlab("$y_0$")+ylab("")+
+    scale_colour_grey()+ 
+    theme_bw()+
+    geom_line()+ 
+    labs(title="", caption=paste0(model$name,':  estimators of $f$'))+
+    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+
+    stat_function(fun = model$dloi.y,size=.8,aes(size=.8,color="$f$",linetype="$f$"))+
+    theme(legend.position = "right",legend.box = "vertical") + 
+    theme(legend.key.size = unit(2,"line"))+ 
+    guides(linetype=guide_legend(""),color=guide_legend(""))
+  
+  
+  
+  
+  w_graph_0_vsf <- function(x,variab="mu",variab2="type"){
+    tab=AAA[is.element(AAA$variable,quoi[-c(1,23)])&AAA$rep==2,]
+    tab$tretre=tab[[variab]]
+    tab$trotro=tab[[variab2]]
+    ggplot(tab[levels(tab$tretre)[tab$tretre]==x,], 
+           aes(x=y0, y=value,linetype=trotro)) +
+      scale_colour_grey()+ 
+      xlab("$y_0$")+ylab("")+
+      theme_bw()+
+      geom_line()+ 
+      stat_function(fun = model$dloi.y,size=.8,aes(size=.8,color="$f$",linetype="$f$"))+
+      labs(title="", caption=paste0(model$name,': "',x,'"-type estimators of $f$'))+
+      scale_y_log10()+
+      theme(legend.position = "right",legend.box = "vertical") + 
+      theme(legend.key.size = unit(2,"line"))+ 
+      guides(linetype=guide_legend(""),color=guide_legend(""))
+      }
+  w_graph_0_vsmu1<-w_graph_0_vsf(levels(empmse$mu)[1])
+  w_graph_0_vsmu2<-w_graph_0_vsf(levels(empmse$mu)[2])
+  w_graph_0_vsmu3<-w_graph_0_vsf(levels(empmse$mu)[3])
+  w_graph_0_vsmu4<-w_graph_0_vsf(levels(empmse$mu)[4])
+  w_graph_0_vsmu5<-w_graph_0_vsf(levels(empmse$mu)[5])
+  w_graph_0_vsmu6<-w_graph_0_vsf(levels(empmse$mu)[6])
+  w_graph_0_vsmu7<-w_graph_0_vsf(levels(empmse$mu)[7])
+  w_graph_0_vstype1<-w_graph_0_vsf(levels(empmse$type)[2],"type","mu")
+  w_graph_0_vstype2<-w_graph_0_vsf(levels(empmse$type)[3],"type","mu")
+  w_graph_0_vstype3<-w_graph_0_vsf(levels(empmse$type)[4],"type","mu")
+  
+
+  dff2<-reshape2::dcast(
+    AAA[is.element(AAA$variable,c("f12","Vf"))&AAA$rep==1,]
+    ,i+y0+ftheta~variable,value.var="value")
+  dff2$lb=dff2$f12-qnorm(.975)*sqrt(dff2$Vf)
+  dff2$ub=dff2$f12+qnorm(.975)*sqrt(dff2$Vf)
+  
+  w_graph_0.1<-ggplot(dff2, 
+                   aes(x=y0, y=f12,linetype="$\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$")) +
+    xlab("$y_0$")+ylab("")+
+    scale_colour_grey()+ 
+    theme_bw()+
+    geom_line()+ 
+    stat_function(fun = model$dloi.y,size=.8,aes(size=.8,linetype="$f$"))+
+    geom_ribbon(aes(ymin=lb, ymax=ub, x=y0,fill="$\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$"), alpha = 0.3, colour=NA,show.legend=F)+ 
+    labs(title="", caption=paste0(model$name,':  Confidence interval for $\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$'))+
+    theme(legend.position = "right",legend.box = "vertical") + 
+    theme(legend.key.size = unit(2,"line"))+
+    guides(linetype=guide_legend(""),color=guide_legend(""))
+  
+  
+  
+  w_graph_0.1+scale_fill_manual("",values=c("gray",NA,"gray"))
+  
+  
+  w_graph1 <- ggplot(AA[1:min(100,dim(AA)[1]),], aes(x=y0, y=f12, group=rep)) +
     scale_colour_grey("")+
     xlab("$y_0$")+ylab("")+
-    geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{f}_{nonpar}$",size=.2))+ 
-    labs(title="", caption=paste0("Simulations for ",model$name," , obtained with ",nrep, " replications"))+    
-    geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,"f12"],2,mean)),aes(x=y0,y=f,group=NULL,linetype="$\\hat{f}_{nonpar}$, averaged"),size=1)  +
+    geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$",size=.2))+ 
+    labs(title="", caption=paste0("Simulations for ",model$name,", obtained with ",nrep, " replications"))+    
+    geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,"f12"],2,mean)),aes(x=y0,y=f,group=NULL,linetype="$\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$, averaged"),size=1)  +
     stat_function(fun = model$dloi.y,size=.4,aes(size=.4,linetype="$f$"))+
     scale_linetype_manual("",values = c("solid",  "solid","dashed")) +
     scale_size_manual(values = c(0.4, .2,1))+
@@ -402,12 +502,17 @@ allplots<-function(dd){
     guides(size=FALSE, linetype=guide_legend(override.aes=list(size=c(.4,.2,1),alpha=c(1,.1,1))))
   
   
-  w_graph2 <- ggplot(AA, aes(x=y0, y=Vf, group=rep)) +
-    geom_line(size=0.2, alpha=0.1)+
-    ggtitle(paste0("Empirical variance and variance estimates,",nrep, "replications"))+  
-    geom_line(data=empvar[empvar$variable=="f12",],aes(x=y0,y=value,group=NULL), size=.8)+
-    geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL),size=.8,linetype="dashed")+
-    theme(legend.justification = c(1, 1), legend.position = c(1, 1))
+  w_graph2 <- ggplot(AA[1:min(100,dim(AA)[1]),], aes(x=y0, y=Vf, group=rep)) +
+  xlab("$y_0$")+ylab("")+
+    geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{V}$"))+
+    labs(title="", caption=paste0("Empirical variance and variance estimates, simulations for ",model$name,", obtained with ",nrep, " replications"))+  
+    geom_line(data=empvar[empvar$variable=="f12",],aes(x=y0,y=value,group=NULL,linetype="Empirical variance"), size=.8)+
+    geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL,linetype="$\\hat{V}$, averaged"),size=.8)+
+    scale_linetype_manual("",values = c("solid",  "solid","dashed")) +
+    scale_size_manual(values = c(0.4, .2,1))+
+    theme(legend.position = "bottom")+ 
+    theme(legend.key.size = unit(2,"line"))+
+    guides(size=FALSE, linetype=guide_legend(override.aes=list(size=c(.4,.2,1),alpha=c(1,.1,1))))
   
   
   
@@ -415,69 +520,45 @@ allplots<-function(dd){
   
   
   
-  w_graph_var <- ggplot(empvar[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19")),], 
+  w_graph_var <- ggplot(empvar[is.element(empvar$variable,quoi[-c(1,23)]),], 
                         aes(x=y0, y=value, linetype=mu,color=type)) +
+    xlab("$y_0$")+ylab("")+
     scale_colour_grey()+ 
     theme_bw()+
     geom_line()+ 
-    ggtitle(paste0("Empirical variance for ",nrep, " replications"))+
-    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
+    labs(title="", caption=paste0("Empirical variance, simulations for ",model$name,", obtained for ",nrep," replications"))+
+    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()+
+    theme(legend.position = "right",legend.box = "vertical") + 
+    theme(legend.key.size = unit(2,"line"))+ 
+    guides(linetype=guide_legend(""),color=guide_legend(""))
   
-  
-  w_graph_vardetailed <- ggplot(empvar[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","f19bad")),], 
-                                aes(x=y0, y=value, linetype=variable)) +
+  w_graph_mse_vsf <- function(x,variab="mu",variab2="type"){
+    empmse$tretre=empmse[[variab]]
+    empmse$trotro=empmse[[variab2]]
+    ggplot(empmse[levels(empmse$tretre)[empmse$tretre]==x,], 
+                                   aes(x=y0, y=value,linetype=trotro)) +
     scale_colour_grey()+ 
-    theme_bw()+
+      xlab("$y_0$")+ylab("")+
+      theme_bw()+
     geom_line()+ 
-    ggtitle(paste0("Empirical variance for ",nrep, " replications"))+
-    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
+    labs(title="", caption=paste0(model$name,": Emp. MSE, ",x,", ",nrep," replications"))+
+    scale_y_log10()+
+          theme(legend.position = "right",legend.box = "vertical") + 
+            theme(legend.key.size = unit(2,"line"))+ 
+            guides(linetype=guide_legend(""),color=guide_legend(""))
+  }
+  w_graph_mse_vsmu1<-w_graph_mse_vsf(levels(empmse$mu)[1])
+  w_graph_mse_vsmu2<-w_graph_mse_vsf(levels(empmse$mu)[2])
+  w_graph_mse_vsmu3<-w_graph_mse_vsf(levels(empmse$mu)[3])
+  w_graph_mse_vsmu4<-w_graph_mse_vsf(levels(empmse$mu)[4])
+  w_graph_mse_vsmu5<-w_graph_mse_vsf(levels(empmse$mu)[5])
+  w_graph_mse_vsmu6<-w_graph_mse_vsf(levels(empmse$mu)[6])
+  w_graph_mse_vsmu7<-w_graph_mse_vsf(levels(empmse$mu)[7])
+  w_graph_mse_vstype1<-w_graph_mse_vsf(levels(empmse$type)[2],"type","mu")
+  w_graph_mse_vstype2<-w_graph_mse_vsf(levels(empmse$type)[3],"type","mu")
+  w_graph_mse_vstype3<-w_graph_mse_vsf(levels(empmse$type)[4],"type","mu")
   
   
-  
-  w_graph_mse_tildevshat <- ggplot(empmse[empvar$type=="outer",], 
-                                   aes(x=y0, y=value, color=mu,linetype=C)) +
-    scale_colour_grey()+ 
-    theme_bw()+
-    geom_line()+ 
-    ggtitle(paste0("Empirical MSE, tilde vs hat, for ",nrep, " replications"))+
-    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-  
-  
-  w_graph_mse_innervsouter <- ggplot(empmse[is.element(empvar$type,c("outer","inner"))&is.element(empvar$C,c("NA","tilde")),], 
-                                     aes(x=y0, y=value, color=mu,linetype=type)) +
-    scale_colour_grey()+ 
-    theme_bw()+
-    geom_line()+ 
-    ggtitle(paste0("Empirical MSE, inner versus outer, for ",nrep, " replications"))+
-    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-  
-  
-  
-  w_graph_mse_tildevshat2 <- ggplot(empmse[empvar$type=="outer"&is.element(empvar$mu,c("true","xihat")),], 
-                                    aes(x=y0, y=value, color=mu,linetype=C)) +
-    theme_bw()+
-    scale_colour_grey()+ 
-    geom_line()+ 
-    ggtitle(paste0("Empirical MSE, tilde vs hat (2) for ",nrep, " replications"))+
-    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-  
-  
-  
-  w_graph_mse <- ggplot(empmse[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19","f19bad")),], 
-                        aes(x=y0, y=value, linetype=muC,shade=type)) +
-    theme_bw()+
-    scale_colour_grey()+ 
-    geom_line()+ 
-    ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
-    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
-  
-  
-  w_graph_msedetailed <- ggplot(empmse[is.element(empvar$variable,c("f4","f12","f21","f23","f23bad","f25","f26","f13","f14","f15","f15bad","f17","f18","f19")),], 
-                                aes(x=y0, y=value, linetype=variable))+
-    scale_colour_grey()+ 
-    geom_line()+ 
-    ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
-    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
   
   
   w_graph_mse_final <- ggplot(empmse[is.element(empvar$C,c("NA","tilde")),], 
@@ -489,10 +570,29 @@ allplots<-function(dd){
     theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
   
   
-  return(list(w_graph1=w_graph1,w_graph2=w_graph2,w_graph_var=w_graph_var,w_graph_vardetailed=w_graph_vardetailed,
-              w_graph_mse_tildevshat=w_graph_mse_tildevshat,w_graph_mse_innervsouter=w_graph_mse_innervsouter,
-              w_graph_mse_tildevshat2=w_graph_mse_tildevshat2,w_graph_mse=w_graph_mse,
-              w_graph_msedetailed=w_graph_msedetailed,w_graph_mse_final=w_graph_mse_final))
+  return(list(w_graph_0=w_graph_0,
+              w_graph_0.1=w_graph_0.1,
+              w_graph_0_vsmu1=w_graph_0_vsmu1,
+              w_graph_0_vsmu2=w_graph_0_vsmu2,
+              w_graph_0_vsmu3=w_graph_0_vsmu3,
+              w_graph_0_vsmu4=w_graph_0_vsmu4,
+              w_graph_0_vsmu5=w_graph_0_vsmu5,
+              w_graph_0_vsmu6=w_graph_0_vsmu6,
+              w_graph_0_vsmu7=w_graph_0_vsmu7,
+              w_graph_0_vstype1=w_graph_0_vstype1,
+              w_graph_0_vstype2=w_graph_0_vstype2,
+              w_graph_0_vstype3=w_graph_0_vstype3,
+              w_graph1=w_graph1,w_graph2=w_graph2,w_graph_var=w_graph_var,
+              w_graph_mse_vsmu1=w_graph_mse_vsmu1,
+              w_graph_mse_vsmu2=w_graph_mse_vsmu2,
+              w_graph_mse_vsmu3=w_graph_mse_vsmu3,
+              w_graph_mse_vsmu4=w_graph_mse_vsmu4,
+              w_graph_mse_vsmu5=w_graph_mse_vsmu5,
+              w_graph_mse_vsmu6=w_graph_mse_vsmu6,
+              w_graph_mse_vsmu7=w_graph_mse_vsmu7,
+              w_graph_mse_vstype1=w_graph_mse_vstype1,
+              w_graph_mse_vstype2=w_graph_mse_vstype2,
+              w_graph_mse_vstype3=w_graph_mse_vstype3))
 }
 
 
@@ -622,3 +722,47 @@ Verif<-function(m,N,b,nrep=100,nbpts=30,fic,verifvp){
   return(list(vp=vp,vpemp=vpemp,y0=y0,mmts=mmts,model=model,verifvp=verifvp,N=N,nrep=nrep))
 }
 
+
+createallgraphs<-function(x){
+  y=load(x)
+  prefix<-basename(x)
+  prefix<-strsplit(prefix,".",fixed = TRUE)[[1]][1]
+  
+  #pdf(paste0("datanotpushed/graphs/pdf/",prefix,".pdf"))
+  #try(eval(parse(text=paste0("print(",y,")"))))
+  #dev.off()
+  
+  tikz(paste0("datanotpushed/graphs/texyihui/",prefix,"_yihui.tex"),standAlone = TRUE,sanitize=FALSE)
+  try(eval(parse(text=paste0("print(",y,")"))))
+  dev.off()
+  
+  tx  <- readLines(paste0("datanotpushed/graphs/texyihui/",prefix,"_yihui.tex"))
+  tx  <- c(tx[3],"\\usepackage{pgfplots}","\\usepgfplotslibrary{external}","\\tikzexternalize", tx[-(1:4)])
+  writeLines(tx, paste0("datanotpushed/graphs/texyihui/",prefix,"_yihui.tex"))
+  
+  
+  try(system(paste0( "pdflatex -shell-escape -interaction=nonstopmode datanotpushed/graphs/texyihui/",prefix,"_yihui.tex")))
+  try(system(paste0("mv ",prefix,"_yihui.pdf datanotpushed/graphs/pdfyihui/")))
+  
+  
+  Y=get(y)
+  attach(Y)
+  sapply(names(Y),function(z){
+    png(paste0("datanotpushed/graphs/png/",prefix,z,".png"))
+    try(eval(parse(text=paste0("print(",z,")"))))
+    dev.off()
+    
+    tikz(paste0("datanotpushed/graphs/texyihui/",prefix,z,"_yihui.tex"),standAlone = FALSE)
+    try(eval(parse(text=paste0("print(",z,")"))))
+    dev.off()
+    
+    
+  })
+}
+
+createalltables<-function(x){
+  load(x)
+  A=
+  stargazer::stargazer()/.
+  
+}

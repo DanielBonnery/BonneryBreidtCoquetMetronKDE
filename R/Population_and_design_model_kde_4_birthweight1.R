@@ -26,7 +26,7 @@ model.birthweight1<-function(
   #Computation of rho function (function of y)
   # objects related to estimation
   xihat=function(Obs){c((sum(Obs$z*log(Obs$z)*Obs$y)-(sum(Obs$z*log(Obs$z)))*(sum(Obs$z*Obs$y))/sum(Obs$z))/(sum(Obs$z*Obs$y^2)-(sum(Obs$z*Obs$y))^2/(sum(Obs$z))),
-                        .xi[2],.xi[3])}
+                        xi[2],xi[3])}
   thetaht=function(Obs){sum(Obs$y/Obs$pik)/sum(1/Obs$pik)}
   thetaniais=function(Obs){mean(Obs$y)}
   # Final result
@@ -50,5 +50,5 @@ model.birthweight1<-function(
     thetaht=thetaht,  
     yfun=function(obs){obs$y},
     thetaniais=thetaniais,
-    eta=function(Obs,.xi=xi,.conditionalto=conditionalto, .theta=theta){exp(-.xi[2]-.xi[1]*Obs$y+.xi[3]/2)}
+    eta=function(Obs,.xi=xi,.conditionalto=conditionalto, .theta=theta){exp(-.xi[2]-.xi[1]*Obs$y+.xi[3]/2)}))
 }
