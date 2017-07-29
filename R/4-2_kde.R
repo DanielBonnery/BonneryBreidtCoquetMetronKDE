@@ -362,7 +362,7 @@ joliquoi=c("$p$",paste0("$",
   
   
   
-Simuletout<-function(model, y0,nrep=1000){
+Simuletout<-function(model, y0=model$qloi.y((1:300)/301),nrep=1000){
   ff<-plyr::raply(nrep,(function(){
     Obs<-generate.observations(model);
     Allestimates(y0,Obs,model)
@@ -398,16 +398,19 @@ analysetout<-function(dd){
   empmse=merge(melt(data.frame(y0=y0,empvarA+empbias2A),id="y0"),aux, by="variable", all.x=TRUE)
   avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,"Vf"],2,mean))
   coefvar=merge(melt(data.frame(y0=y0,coefvarA),id="y0"),aux, by="variable", all.x=TRUE)
-  meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){data.frame(IntegratedMSE=sum(d$value*model$dloi.y(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
+  meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,.fun=function(d){nn<-nrow(d);data.frame(IntegratedMSE=sum(d$value[-nn]*model$dloi.y(d$y0[-nn])*(c(d$y0[-1]-d$y0))))}),aux)
   meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
   
   empmse$class<-cut(empmse$y0,breaks = model$qloi.y(c(0,.25,.5,.75,1)))
+  levels(empmse$class)=c("$.<q_{.25}$","$q_{.25}<.<q_{.5}$","$q_{.5}<.<q_{.75}$","$q_{.75}<.$")
   meanempMSEq=merge(plyr::ddply(.data = empmse,.variables = ~variable+class,
-                                .fun=function(d){data.frame(IntegratedMSE=sum(d$value*model$dloi.y(d$y0)/(c(d$y0[-1],2*y0[length(d$y0)]-d$y0[length(d$y0)-1])-d$y0)))}),aux)
-  meanempMSEq$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
+                                .fun=function(d){nn<-nrow(d);data.frame(IntegratedMSE=sum(d$value[-nn]*model$dloi.y(d$y0[-nn])*(c(d$y0[-1]-d$y0))))}),aux)
+  meanempMSEq$IntegratedMSErel=meanempMSEq$IntegratedMSE/meanempMSEq$IntegratedMSE[levels(meanempMSEq$variable)[meanempMSEq$variable]=="f12"]
+  meanempMSEq=reshape2::dcast(melt(meanempMSEq,measure.vars =c("IntegratedMSE","IntegratedMSErel"),variable.name = "measure") ,formula = variable+jolivariable+type+mu~class+measure,value.var="value")
   
+  meanempMSE=merge(meanempMSE,meanempMSEq,by="variable")
   
-  return(list(model=model,meanempMSE=meanempMSE,meanempMSEq=meanempMSEq,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
+  return(list(model=model,meanempMSE=meanempMSE,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
 }
 
 
@@ -488,7 +491,7 @@ allplots<-function(ee){
   w_graph_0.1+scale_fill_manual("",values=c("gray",NA,"gray"))
   
   
-  w_graph1 <- ggplot(AA[1:min(100,dim(AA)[1]),], aes(x=y0, y=f12, group=rep)) +
+  w_graph1 <- ggplot(AA[AA$rep<50 &AA$i%%5==1,], aes(x=y0, y=f12, group=rep)) +
     scale_colour_grey("")+
     xlab("$y_0$")+ylab("")+
     geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$",size=.2))+ 
@@ -502,7 +505,7 @@ allplots<-function(ee){
     guides(size=FALSE, linetype=guide_legend(override.aes=list(size=c(.4,.2,1),alpha=c(1,.1,1))))
   
   
-  w_graph2 <- ggplot(AA[1:min(100,dim(AA)[1]),], aes(x=y0, y=Vf, group=rep)) +
+  w_graph2 <- ggplot(AA[AA$rep<50 &AA$i%%5==1,], aes(x=y0, y=Vf, group=rep)) +
   xlab("$y_0$")+ylab("")+
     geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{V}$"))+
     labs(title="", caption=paste0("Empirical variance and variance estimates, simulations for ",model$name,", obtained with ",nrep, " replications"))+  
@@ -760,9 +763,17 @@ createallgraphs<-function(x){
   })
 }
 
-createalltables<-function(x){
-  load(x)
-  A=
-  stargazer::stargazer()/.
+createalltables<-function(ee){
+
   
-}
+  y=SweaveLst::stargazer2(data.frame(Estimator=ee$meanempMSE$jolivariable,"Integrated MSE"=ee$meanempMSE$IntegratedMSErel),
+                          summary=FALSE,title=ee$model$name,label=paste0("tab",ee$model$name))
+  y=gsub("\\\\","\\",y,fixed=TRUE);cat(y)
+  cat(capture.output(cat(y)),file=file.path("datanotpushed/table",paste0(tolower(gsub(" ", "",model$name, fixed = TRUE)),".tex")),append=FALSE)
+  
+  y=SweaveLst::stargazer2(data.frame(Estimator=ee$meanempMSEq$jolivariable,"Integrated MSE"=ee$meanempMSEq$IntegratedMSErel),
+                          summary=FALSE,title=ee$model$name,label=paste0("tab",ee$model$name,"q"))
+  y=gsub("\\\\","\\",y,fixed=TRUE)
+  cat(y,file=file.path("datanotpushed/table",paste0(tolower(gsub(" ", "",model$name, fixed = TRUE)),".tex")),append=TRUE)
+  y
+  }

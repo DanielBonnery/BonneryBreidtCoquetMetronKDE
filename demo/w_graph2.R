@@ -126,12 +126,13 @@ xi=c(xi=.175,xi0=-log(conditionalto$sampleparam$n/conditionalto$N)+.087^2/2-.175
 model<-popmodelfunction(theta,xi,conditionalto)
 model$name="Model 5"
 Obs<-generate.observations(model)
-dd=Simuletout(model,y0=seq(min(model$yfun(Obs)),max(model$yfun(Obs)),length.out=300),nrep=1000)
+dd=Simuletout(model)
 save(dd,file="datanotpushed/graphdata/modelbirthweight2.rda");
 load("datanotpushed/graphdata/modelbirthweight2.rda")
 ee=analysetout(dd)
 save(ee,file="datanotpushed/graphdata/modelbirthweight2_sum.rda");
 load("datanotpushed/graphdata/modelbirthweight2_sum.rda")
+createalltables(ee)
 pp<-allplots(ee)
 save(pp,file="datanotpushed/graphs/rda/modelbirthweight2.rda")
 load("datanotpushed/graphs/rda/modelbirthweight2.rda")
