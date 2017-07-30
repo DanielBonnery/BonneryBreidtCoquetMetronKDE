@@ -429,7 +429,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
   w_graph_0<-ggplot(AAA[is.element(AAA$variable,quoi[-c(1,23)])&AAA$rep==2,], 
                    aes(x=y0, y=value, linetype=mu,color=type)) +
     xlab("$y_0$")+ylab("")+
-    scale_coulour_function1()+ 
+    scale_colour_function1()+ 
     theme_bw()+
     geom_line()+ 
     labs(title="", caption=paste0(model$name,':  estimators of $f$'))+
@@ -443,7 +443,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
   w_graph_0.2<-ggplot(AAA[is.element(AAA$variable,quoi[1:2])&AAA$rep==2,], 
                     aes(x=y0, y=value, linetype=mu,color=type)) +
     xlab("$y_0$")+ylab("")+
-    scale_coulour_function1()+ 
+    scale_colour_function1()+ 
     theme_bw()+
     geom_line()+ 
     labs(title="", caption=paste0(model$name,': $p$, $\\hat{f}_{\\hat\\mu,\\rm{nopar}}$, and $f$'))+
@@ -465,7 +465,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
     
     ggplot(tab[levels(tab$tretre)[tab$tretre]==x,], 
            aes(x=y0, y=value,linetype=trotro,color=trotro)) +
-      scale_coulour_function1()+ 
+      scale_colour_function1()+ 
       xlab("$y_0$")+ylab("")+
       theme_bw()+
       geom_line()+ 
@@ -490,7 +490,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
   w_graph_0.1<-ggplot(dff2, 
                    aes(x=y0, y=f12,linetype="$\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$")) +
     xlab("$y_0$")+ylab("")+
-    scale_coulour_function1()+ 
+    scale_colour_function1()+ 
     theme_bw()+
     geom_line()+ 
     stat_function(fun = model$dloi.y,size=.8,aes(size=.8,linetype="$f$"))+
@@ -507,7 +507,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
     names(BB)<-c("y0","est")
     joliname=aux$jolivariable[aux$quoi==x]
     ggplot(BB, aes(x=y0, y=est, group=rep)) +
-    scale_coulour_function1("")+
+    scale_colour_function1("")+
     xlab("$y_0$")+ylab("")+
     geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$",size=.2))+ 
     labs(title="", caption=paste0("Simulations for ",model$name,", and  repeated ",max(nrep,50), " times"))+    
@@ -542,7 +542,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
   w_graph_var <- ggplot(empvar[is.element(empvar$variable,quoi[-c(1,23)]),], 
                         aes(x=y0, y=value, linetype=mu,color=type)) +
     xlab("$y_0$")+ylab("")+
-    scale_coulour_function1()+ 
+    scale_colour_function1()+ 
     theme_bw()+
     geom_line()+ 
     labs(title="", caption=paste0("Empirical variance, simulations for ",model$name,", obtained for ",nrep," replications"))+
@@ -561,7 +561,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
     
     ggplot(tab[levels(tab$tretre)[tab$tretre]==x,], 
                                    aes(x=y0, y=value,linetype=trotro)) +
-    scale_coulour_function1()+ 
+    scale_colour_function1()+ 
       xlab("$y_0$")+ylab("")+
       theme_bw()+
     geom_line()+ 
@@ -581,7 +581,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
   
   w_graph_mse_final <- ggplot(empmse[is.element(empvar$C,c("NA","tilde")),], 
                               aes(x=y0, y=value, linetype=mu,color=type)) +
-    scale_coulour_function1()+ 
+    scale_colour_function1()+ 
     theme_bw()+
     geom_line()+ 
     ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
