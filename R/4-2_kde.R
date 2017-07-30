@@ -511,7 +511,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
     scale_colour_function1("")+
     xlab("$y_0$")+ylab("")+
     geom_line(size=0.2, alpha=0.1,aes(linetype=joliname,size=.2))+ 
-    labs(title="", caption=paste0("Simulations for ",model$name,", and  repeated ",max(nrep,50), " times"))+    
+    labs(title="", caption=paste0("Simulations for ",model$name,", ",joliname ," repeated ",min(nrep,50), " times"))+    
     geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,x],2,mean)),aes(x=y0,y=f,group=NULL,linetype=paste0(joliname,", averaged")),size=1)  +
     stat_function(fun = model$dloi.y,size=.4,aes(size=.4,linetype="$f$"))+
     scale_linetype_manual("",values = c("solid",  "solid","dashed")) +
