@@ -476,9 +476,9 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
       guides(linetype=guide_legend(""),color=guide_legend(""))
       }
   w_graph_0_vsmus<-plyr::alply(levels(empmse$mu),1,w_graph_0_vsf)
-  names(w_graph_0_vsmus)<-paste0(w_graph_0_vsmu,1:nlevels(empmse$mu))
+  names(w_graph_0_vsmus)<-paste0("w_graph_0_vsmu",1:nlevels(empmse$mu))
   w_graph_0_vstypes<-plyr::alply(levels(empmse$type),1,w_graph_0_vsf,variab="type",variab2="mu")
-  names(w_graph_0_vstypes)<-paste0(w_graph_0_vsmu,1:nlevels(empmse$type))
+  names(w_graph_0_vstypes)<-paste0("w_graph_0_vsmu",1:nlevels(empmse$type))
 
 
   dff2<-reshape2::dcast(
@@ -572,9 +572,9 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
             guides(linetype=guide_legend(""),color=guide_legend(""))
   }
   w_graph_mse_vsmus<-plyr::alply(levels(empmse$mu),1,w_graph_mse_vsf)
-  names(w_graph_mse_vsmus)<-paste0(w_graph_mse_vsmu,1:nlevels(empmse$mu))
+  names(w_graph_mse_vsmus)<-paste0("w_graph_mse_vsmu",1:nlevels(empmse$mu))
   w_graph_mse_vstypes<-plyr::alply(levels(empmse$type),1,w_graph_mse_vsf,variab="type",variab2="mu")
-  names(w_graph_mse_vstypes)<-paste0(w_graph_mse_vsmu,1:nlevels(empmse$type))
+  names(w_graph_mse_vstypes)<-paste0("w_graph_mse_vsmu",1:nlevels(empmse$type))
   
   
   
