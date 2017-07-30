@@ -503,12 +503,12 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
   
   
   w_graph1f <- function(x){
-    BB=AA[AA$rep<50 &AA$i%%5==1,c("y0",x)]
-    names(BB)<-c("y0","est")
+    BB=AA[AA$rep<50 &AA$i%%5==1,c("y0",x,"rep")]
+    names(BB)<-c("y0","est","Rep")
     joliname=aux$jolivariable[aux$variable==x]
     
-    ggplot(BB, aes(x=y0, y=est, group=rep)) +
-    scale_colour_function1()+
+    ggplot(BB, aes(x=y0, y=est, group=Rep)) +
+    scale_colour_function1("")+
     xlab("$y_0$")+ylab("")+
     geom_line(size=0.2, alpha=0.1,aes(linetype=joliname,size=.2))+ 
     labs(title="", caption=paste0("Simulations for ",model$name,", and  repeated ",max(nrep,50), " times"))+    
