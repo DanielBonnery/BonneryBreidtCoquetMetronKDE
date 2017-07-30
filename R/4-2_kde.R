@@ -590,7 +590,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
   
   return(c(list(w_graph_0=w_graph_0,
               w_graph_0.1=w_graph_0.1,
-              w_graph1=w_graph1,w_graph2=w_graph2,w_graph_var=w_graph_var),
+              w_graph2=w_graph2,w_graph_var=w_graph_var),
          w_graph_1s,
          w_graph_mse_vsmus,
          w_graph_mse_vstypes,
