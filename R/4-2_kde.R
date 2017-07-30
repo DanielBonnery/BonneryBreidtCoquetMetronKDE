@@ -349,13 +349,13 @@ joliquoi=c("$p$",paste0("$",
   rep(c("\\hat{f}","\\tilde{f}","f^\\dagger"),times=7),
   "_{",
   rep(c("\\hat\\mu,\\rm{nonpar}","\\mu,\\xi","\\mu,\\hat\\xi","\\hat\\mu,\\rm{par}","\\hat\\mu,\\rm{par(rough)}","\\hat\\omega,\\rm{nonpar}","\\hat\\omega,\\rm{par}"),each=3),
-  "}$"),"$\\hat{V}$")
+  "}$"),"\\hat{V}")
   
   
   aux<-data.frame(variable=quoi,
                   jolivariable=joliquoi,
                   type=c("$p$",rep(c("$\\hat{f}$","$\\tilde{f}$","$f^\\dagger$"),times=7),"$\\hat{V}$"),
-                  mu=c("1",rep(c("$\\hat\\mu,\\rm{nonpar}$","$\\mu,\\xi$","$\\mu,\\hat\\xi$","$\\hat\\mu,\\rm{par}$","$\\hat\\mu,\\rm{par(rough)}$","$\\hat\\omega,\\rm{nonpar}$","$\\hat\\omega,\\rm{par}$"),each=3),"\\hat{V}"))
+                  mu=c("1",rep(c("$\\hat\\mu,\\rm{nonpar}$","$\\mu,\\xi$","$\\mu,\\hat\\xi$","$\\hat\\mu,\\rm{par}$","$\\hat\\mu,\\rm{par(rough)}$","$\\hat\\omega,\\rm{nonpar}$","$\\hat\\omega,\\rm{par}$"),each=3),"$\\hat{V}$"))
 
   
   

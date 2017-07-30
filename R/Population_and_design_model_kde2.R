@@ -14,22 +14,22 @@ model.dep.strat2<-function(
   Scheme<- StratS(sampleparam)
   tau   <-sum(proph*tauh);
   Zetah <- qnorm(cumsum(proph),0,1)
-  zetah <- sqrt(xi^2*theta[2]^2*SX^2+ xi^2*theta[3]^2+sigma^2)*Zetah+xi*theta[1]+xi*theta[2]*EX
+  zetah <- sqrt(xi^2*theta[2]^2*conditionalto$SX^2+ xi^2*theta[3]^2+sigma^2)*Zetah+xi*theta[1]+xi*theta[2]*conditionalto$EX
   En    <- function(N){tau*N}#Global sampling rate (will be returned)
   # objects related to population and sample distribution
-  dloitheta=function(y,.theta=theta){dnorm(as.matrix(y)[,2],mean=theta[1]+theta[2]*as.matrix(y)[,1],sd=theta[3])}
-  dloi.y=function(y,.theta=theta){dnorm(y,mean=.theta[1]+.theta[2]*EX,sd=sqrt(.theta[3]^2+SX^2))}
-  qloi.y=function(y,.theta=theta){qnorm(y,mean=.theta[1]+.theta[2]*EX,sd=sqrt(.theta[3]^2+SX^2))}
-  dloi=function(y,.theta=theta){dnorm(y,mean=.theta[1]+.theta[2]*EX,sd=sqrt(.theta[3]^2+SX^2))}
+  dloitheta=function(y,.theta=theta,.conditionalto=conditionalto){dnorm(as.matrix(y)[,2],mean=theta[1]+theta[2]*as.matrix(y)[,1],sd=theta[3])}
+  dloi.y=function(y,.theta=theta,.conditionalto=conditionalto){dnorm(y,mean=.theta[1]+.theta[2]*.conditionalto$EX,sd=sqrt(.theta[3]^2+.conditionalto$SX^2))}
+  qloi.y=function(y,.theta=theta,.conditionalto=conditionalto){qnorm(y,mean=.theta[1]+.theta[2]*.conditionalto$EX,sd=sqrt(.theta[3]^2+.conditionalto$SX^2))}
+  dloi=function(y,.theta=theta,.conditionalto=conditionalto){dnorm(y,mean=.theta[1]+.theta[2]*.conditionalto$EX,sd=sqrt(.theta[3]^2+.conditionalto$SX^2))}
   #Population generation function
   #Computation of rho function (function of y,theta,xi)
-  rhothetaxi=function(y,theta,xi){
+  rhothetaxi=function(y,theta,xi,.conditionalto=conditionalto){
       #Initialisation of numerator and deniminator
       rhorho1<-tauh[length(tauh)];
       rhorho2<-tauh[length(tauh)]; 
       #Computation of limits of strata
       Zetah=qnorm(cumsum(proph),0,1)
-      zetah=sqrt(xi^2*theta[2]^2*SX^2+ xi^2*theta[3]^2+sigma^2)*Zetah+xi*theta[1]+xi*theta[2]*EX
+      zetah=sqrt(xi^2*theta[2]^2*.conditionalto$SX^2+ xi^2*theta[3]^2+sigma^2)*Zetah+xi*theta[1]+xi*theta[2]*.conditionalto$EX
       #Computation of numerator and deniminator
       for(h in 1:(length(tauh)-1)){
         rhorho1<-rhorho1+(tauh[h]-tauh[h+1])*pnorm((zetah[h]-xi*as.matrix(y)[,2]                    )/ sigma);
@@ -39,11 +39,11 @@ model.dep.strat2<-function(
 1}
   #Computation of rho function (function of y)
   rho=function(y){return(rhothetaxi(y,theta,xi))}
-  rhoxthetaxi=function(y,theta,xi){
+  rhoxthetaxi=function(y,theta,xi,.conditionalto=conditionalto){
       H<-length(tauh)
       #Computation of limits of strata
       Zetah=qnorm(cumsum(proph),0,1)
-      zetah=sqrt(xi^2*theta[2]^2*SX^2+ xi^2*theta[3]^2+sigma^2)*Zetah+xi*theta[1]+xi*theta[2]*EX
+      zetah=sqrt(xi^2*theta[2]^2*.conditionalto$SX^2+ xi^2*theta[3]^2+sigma^2)*Zetah+xi*theta[1]+xi*theta[2]*.conditionalto$EX
       #for(h in 1:(H-1)){rhorho1<-rhorho1+(tauh[h]-tauh[h+1])*pnorm((zetah[h]-xi*(theta[1]+theta[2]*as.matrix(y)[,1])))}
       cumsum(c(tauh[H],sapply(1:(H-1),function(h){(tauh[h]-tauh[h+1])*pnorm((zetah[h]-xi*(theta[1]+theta[2]*as.matrix(y)[,1])))})))/
                sum(tauh*proph)}
@@ -85,3 +85,4 @@ model.dep.strat2<-function(
     eta=eta,
     yfun=function(obs){obs$y[,2]},
     thetaniais=thetaniais))}
+
