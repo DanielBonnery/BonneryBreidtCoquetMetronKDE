@@ -512,7 +512,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
     xlab("$y_0$")+ylab("")+
     geom_line(size=0.2, alpha=0.1,aes(linetype=joliname,size=.2))+ 
     labs(title="", caption=paste0("Simulations for ",model$name,", ",joliname ," repeated ",min(nrep,50), " times"))+    
-    geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,x],2,mean)),aes(x=y0,y=f,group=NULL,linetype=paste0(joliname,", averaged")),size=1)  +
+    geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,x],2,mean)),aes(x=y0,y=f,group=NULL,linetype=paste0(joliname,", averaged on ",nrep," replications")),size=1)  +
     stat_function(fun = model$dloi.y,size=.4,aes(size=.4,linetype="$f$"))+
     scale_linetype_manual("",values = c("solid",  "solid","dashed")) +
     scale_size_manual(values = c(0.4, .2,1))+
@@ -525,9 +525,9 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
   w_graph2 <- ggplot(AA[AA$rep<50 &AA$i%%5==1,], aes(x=y0, y=Vf, group=rep)) +
   xlab("$y_0$")+ylab("")+
     geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{V}$"))+
-    labs(title="", caption=paste0("Empirical variance and variance estimates, simulations for ",model$name,", obtained with ",nrep, " replications"))+  
+    labs(title="", caption=paste0("Empirical variance and variance estimates, simulations for ",model$name,", repeated ",min(50,nrep), " times"))+  
     geom_line(data=empvar[empvar$variable=="f12",],aes(x=y0,y=value,group=NULL,linetype="Empirical variance"), size=.8)+
-    geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL,linetype="$\\hat{V}$, averaged"),size=.8)+
+    geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL,linetype="$\\hat{V}$, averaged on ",nrep," replications"),size=.8)+
     scale_linetype_manual("",values = c("solid",  "solid","dashed")) +
     scale_size_manual(values = c(0.4, .2,1))+
     theme(legend.position = "bottom")+ 
