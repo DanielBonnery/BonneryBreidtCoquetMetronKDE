@@ -519,8 +519,8 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
     theme(legend.position = "bottom")+ 
     theme(legend.key.size = unit(2,"line"))+
     guides(size=FALSE, linetype=guide_legend(override.aes=list(size=c(.4,.2,1),alpha=c(1,.1,1))))}
-  w_graph1s<-plyr::alply(quoi[-23],1,w_graph1f)
-  names(w_graph1s)<-paste0("w_graph1_",quoi[-23])
+  w_graph_1s<-plyr::alply(quoi[-23],1,w_graph1f)
+  names(w_graph_1s)<-paste0("w_graph1_",quoi[-23])
   
   w_graph2 <- ggplot(AA[AA$rep<50 &AA$i%%5==1,], aes(x=y0, y=Vf, group=rep)) +
   xlab("$y_0$")+ylab("")+
