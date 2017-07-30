@@ -475,9 +475,9 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
       theme(legend.key.size = unit(2,"line"))+ 
       guides(linetype=guide_legend(""),color=guide_legend(""))
       }
-  w_graph_0_vsmus<-plyr::laply(levels(empmse$mu),1,w_graph_0_vsf)
+  w_graph_0_vsmus<-plyr::alply(levels(empmse$mu),1,w_graph_0_vsf)
   names(w_graph_0_vsmus)<-paste0(w_graph_0_vsmu,1:nlevels(empmse$mu))
-  w_graph_0_vstypes<-plyr::laply(levels(empmse$type),1,w_graph_0_vsf,variab="type",variab2="mu")
+  w_graph_0_vstypes<-plyr::alply(levels(empmse$type),1,w_graph_0_vsf,variab="type",variab2="mu")
   names(w_graph_0_vstypes)<-paste0(w_graph_0_vsmu,1:nlevels(empmse$type))
 
 
@@ -518,7 +518,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
     theme(legend.position = "bottom")+ 
     theme(legend.key.size = unit(2,"line"))+
     guides(size=FALSE, linetype=guide_legend(override.aes=list(size=c(.4,.2,1),alpha=c(1,.1,1))))}
-  w_graph1s<-plyr::laply(quoi[-23],1,w_graph1f)
+  w_graph1s<-plyr::alply(quoi[-23],1,w_graph1f)
   names(w_graph1s)<-paste0("w_graph1_",quoi[-23])
   
   w_graph2 <- ggplot(AA[AA$rep<50 &AA$i%%5==1,], aes(x=y0, y=Vf, group=rep)) +
@@ -571,9 +571,9 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
             theme(legend.key.size = unit(2,"line"))+ 
             guides(linetype=guide_legend(""),color=guide_legend(""))
   }
-  w_graph_mse_vsmus<-plyr::laply(levels(empmse$mu),1,w_graph_mse_vsf)
+  w_graph_mse_vsmus<-plyr::alply(levels(empmse$mu),1,w_graph_mse_vsf)
   names(w_graph_mse_vsmus)<-paste0(w_graph_mse_vsmu,1:nlevels(empmse$mu))
-  w_graph_mse_vstypes<-plyr::laply(levels(empmse$type),1,w_graph_mse_vsf,variab="type",variab2="mu")
+  w_graph_mse_vstypes<-plyr::alply(levels(empmse$type),1,w_graph_mse_vsf,variab="type",variab2="mu")
   names(w_graph_mse_vstypes)<-paste0(w_graph_mse_vsmu,1:nlevels(empmse$type))
   
   
