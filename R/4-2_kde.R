@@ -346,16 +346,16 @@ quoi=c("f4",
        "f20","f21","f22","f23","f23bad","f25",     "f26",
        "Vf")
 joliquoi=c("$p$",paste0("$",
-  rep(c("\\hat{f}","\\tilde{f}","f^\\dagger"),times=7),
+  rep(c("\\hat{f}","\\tilde{f}","f^\\dagger"),each=7),
   "_{",
-  rep(c("\\hat\\mu,\\rm{nonpar}","\\mu,\\xi","\\mu,\\hat\\xi","\\hat\\mu,\\rm{par}","\\hat\\mu,\\rm{par(rough)}","\\hat\\omega,\\rm{nonpar}","\\hat\\omega,\\rm{par}"),each=3),
+  rep(c("\\hat\\mu,\\rm{nonpar}","\\mu,\\xi","\\mu,\\hat\\xi","\\hat\\mu,\\rm{par}","\\hat\\mu,\\rm{par(rough)}","\\hat\\omega,\\rm{nonpar}","\\hat\\omega,\\rm{par}"),times=3),
   "}$"),"\\hat{V}")
   
   
   aux<-data.frame(variable=quoi,
                   jolivariable=joliquoi,
-                  type=c("$p$",rep(c("$\\hat{f}$","$\\tilde{f}$","$f^\\dagger$"),times=7),"$\\hat{V}$"),
-                  mu=c("1",rep(c("$\\hat\\mu,\\rm{nonpar}$","$\\mu,\\xi$","$\\mu,\\hat\\xi$","$\\hat\\mu,\\rm{par}$","$\\hat\\mu,\\rm{par(rough)}$","$\\hat\\omega,\\rm{nonpar}$","$\\hat\\omega,\\rm{par}$"),each=3),"$\\hat{V}$"))
+                  type=c("$p$",rep(c("$\\hat{f}$","$\\tilde{f}$","$f^\\dagger$"),each=7),"$\\hat{V}$"),
+                  mu=c("1",rep(c("$\\hat\\mu,\\rm{nonpar}$","$\\mu,\\xi$","$\\mu,\\hat\\xi$","$\\hat\\mu,\\rm{par}$","$\\hat\\mu,\\rm{par(rough)}$","$\\hat\\omega,\\rm{nonpar}$","$\\hat\\omega,\\rm{par}$"),times=3),"$\\hat{V}$"))
 
   
   
@@ -406,12 +406,14 @@ analysetout<-function(dd){
                                .fun=function(d){nn<-nrow(d);data.frame(IntegratedMSE=sum(d$value[-nn]*model$dloi.y(d$y0[-nn])*(c(d$y0[-1]-d$y0[-nn]))))}),aux)
   meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
   
+  interval<-mean(y0[-1]-y0[-length(y0)])
   empmse$class<-cut(empmse$y0,breaks = model$qloi.y(c(0:4)/4))
   levels(empmse$class)=c("$Y<q_{.25}$","$q_{.25}<Y<q_{.5}$","$q_{.5}<Y<q_{.75}$","$q_{.75}<Y$")
   meanempMSEq=merge(plyr::ddply(.data = empmse,.variables = ~class+variable,
                                 .fun=function(d){nn<-nrow(d);if(nn>0){
-                                  data.frame(IntegratedMSEq=sum(d$value[-nn]*model$dloi.y(d$y0[-nn])*(c(d$y0[-1]-d$y0[-nn]))))
-                                  }else{data.frame(IntegratedMSEq=0)}},.drop=FALSE),aux)
+                                  #data.frame(IntegratedMSEq=sum(d$value[-nn]*model$dloi.y(d$y0[-nn])*(c(d$y0[-1]-d$y0[-nn]))))
+                                  data.frame(IntegratedMSEq=sum(d$value)*  interval)
+                                }else{data.frame(IntegratedMSEq=0)}},.drop=FALSE),aux)
   meanempMSEq$IntegratedMSErelq=meanempMSEq$IntegratedMSEq/meanempMSEq$IntegratedMSEq[levels(meanempMSEq$variable)[meanempMSEq$variable]=="f12"]
   meanempMSEq=reshape2::dcast(reshape2::melt(meanempMSEq,measure.vars =c("IntegratedMSEq","IntegratedMSErelq"),variable.name = "measure") ,formula = variable+jolivariable+type+mu~measure+class,value.var="value")
   
