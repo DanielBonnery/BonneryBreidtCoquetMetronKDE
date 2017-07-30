@@ -8,13 +8,7 @@ model<-popmodelfunction(theta,xi,conditionalto)
 model$name="Model 1"
 id=tolower(gsub(".", "",gsub(" ", "",model$name, fixed = TRUE), fixed = TRUE))
 dd=Simuletout(model)
-save(dd,file=paste0("datanotpushed/graphdata/",id,".rda"));
-load(paste0("datanotpushed/graphdata/",id,".rda"))
 ee=analysetout(dd)
-save(ee,file=paste0("datanotpushed/graphdata/",id,".rda"));
-load(paste0("datanotpushed/graphdata/",id,".rda"))
 pp<-allplots(ee)
-#ppc<-allplots(ee,scale_colour_function1=ggplot2::scale_colour_hue,scale_colour_function2=ggplot2::scale_colour_hue)
+print(pp)
 createalltables(ee)
-save(pp,file=paste0("datanotpushed/graphs/rda/",id,".rda"))
-createallgraphs(paste0("datanotpushed/graphs/rda/",id,".rda"))
