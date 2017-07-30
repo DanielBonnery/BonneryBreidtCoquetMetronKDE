@@ -423,7 +423,7 @@ analysetout<-function(dd){
 
 
 
-allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_colour_function2=ggplot2::scale_colour_grey(values="black")){
+allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
   attach(ee)
   theme_set(theme_bw())
   w_graph_0<-ggplot(AAA[is.element(AAA$variable,quoi[-c(1,23)])&AAA$rep==2,], 
@@ -556,7 +556,6 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
     tab=empmse
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
-    try(tab$ftheta[tab$ftheta<1e-10]<-1e-10)
     try(tab$value[is.na(tab$value)]<-1e-10)
     try(tab$value[tab$value<1e-10]<-1e-10)
     
@@ -591,12 +590,12 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey,scale_co
   
   return(c(list(w_graph_0=w_graph_0,
               w_graph_0.1=w_graph_0.1,
-              w_graph1=w_graph1,w_graph2=w_graph2,w_graph_var=w_graph_var)),
+              w_graph1=w_graph1,w_graph2=w_graph2,w_graph_var=w_graph_var),
          w_graph_1s,
          w_graph_mse_vsmus,
          w_graph_mse_vstypes,
          w_graph_0_vsmus,
-         w_graph_0_vstypes)
+         w_graph_0_vstypes))
 }
 
 
