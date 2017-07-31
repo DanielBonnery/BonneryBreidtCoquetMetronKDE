@@ -12,12 +12,10 @@ Imports: ggplot2,
 	Hmisc,
 	MASS,
 	filehash,
-	plyr,
-	rmutil
+	plyr
 Suggests: 
 Description: Data
 Remotes: DanielBonnery/pubBonneryBreidtCoquet2016
-Depends: pubBonneryBreidtCoquet2016
 License: GPL (>= 2)
 LazyLoad: yes
 LazyData: true
