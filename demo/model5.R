@@ -18,8 +18,8 @@ dd=Simuletout(model)
 save(dd,file=paste0("datanotpushed/graphdata/",id,".rda"));
 load(paste0("datanotpushed/graphdata/",id,".rda"))
 ee=analysetout(dd)
-save(ee,file=paste0("datanotpushed/graphdata/",id,".rda"));
-load(paste0("datanotpushed/graphdata/",id,".rda"))
+save(ee,file=paste0("datanotpushed/graphdata/",id,"_sum.rda"));
+load(paste0("datanotpushed/graphdata/",id,"_sum.rda"))
 pp<-allplots(ee)
 #ppc<-allplots(ee,scale_colour_function1=ggplot2::scale_colour_hue,scale_colour_function2=ggplot2::scale_colour_hue)
 createalltables(ee)
