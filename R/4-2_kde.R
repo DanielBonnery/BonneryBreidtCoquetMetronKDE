@@ -1,7 +1,7 @@
+  if(FALSE){
   library(pubBonneryBreidtCoquet2017)
   library(ggplot2)
-if(FALSE){
-    ker=kergaus
+  ker=kergaus
   pifun=function(obs){obs$pik}
   popmodelfunction = model.Pareto.bernstrat
   theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
@@ -57,7 +57,7 @@ mf<-function(ker=kergaus,yfun=function(obs){obs$y},pifun=function(obs){obs$pik})
 #' model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
 #' Obs<-generate.observations(model);
 #' (mftheo(model))(1:3,Obs)
-mftheo   <-function(model){function(y0,Obs){model$eta(list(y=y0),model$xi)}}
+mftheo   <-function(model,xi=model$xi){function(y0,Obs){model$eta(list(y=y0),.xi=xi)}}
 #' Compute an estimate of E[I\mid Y=y0] of the form $m(y,\hat{\xi})$ 
 #' @param y0: Point of vector of points where the conditional expected value is needed
 #' @param Obs: Observations
@@ -218,8 +218,8 @@ Ctildef<-function(mus,pik,Nhat){sum(mus/pik)/Nhat}
 #' Allestimates(y0,Obs,model)
 
 
-grid1f<-function(model,npoints){seq(model$qloi.y(1/(npoints+1)),model$qloi.y(npoints/(npoints+1)),length.out=npoints)}
-grid2f<-function(model,npoints){model$qloi.y(seq(1/(npoints+1)),(npoints/(npoints+1)),length.out=npoints)}
+grid1f<-function(model,npoints=300){seq(model$qloi.y(1/(npoints+1)),model$qloi.y(npoints/(npoints+1)),length.out=npoints)}
+grid2f<-function(model,npoints=300){model$qloi.y(seq(1/(npoints+1)),(npoints/(npoints+1)),length.out=npoints)}
 
 Allestimates<-function(model,y0=grid1f(model)){
   
@@ -234,7 +234,7 @@ Allestimates<-function(model,y0=grid1f(model)){
   pik=Obs$pik
   ys=model$yfun(Obs)
   Nhat=sum(1/pik)
-  
+  xihat=model$xihat(Obs)
   mus_20=apply(Ks/(Obs$pik),2,sum)/apply(Ks,2,sum)
   mu0_12=mf(yfun = model$yfun,pifun=function(Obs){1/Obs$pik})(y0,Obs)/mf(yfun = model$yfun,pifun=function(Obs){1})(y0,Obs)
   #Ctilde16=Ctildef(mus_20,pik,Nhat)
@@ -243,8 +243,8 @@ Allestimates<-function(model,y0=grid1f(model)){
   mu0_13=mftheo(model)(y0,Obs)
   #Ctilde17=Ctildef(mus_21,pik,Nhat)
   
-  mus_22=mfhattheo(model)(ys,Obs)
-  mu0_14=mfhattheo(model)(y0,Obs)
+  mus_22=mftheo(model,xihat)(ys,Obs)
+  mu0_14=mftheo(model,xihat)(y0,Obs)
   #Ctilde18=Ctildef(mus_22,pik,Nhat)
   
   #mus_23bad=mfroughreg(yfun=model$yfun)(ys,Obs)
@@ -286,13 +286,13 @@ Allestimates<-function(model,y0=grid1f(model)){
   
   #Compute outer
   Chat<-length(ys)/Nhat
-  
-  f13   =f4*Chat/mu0_13
-  f14   =f4*Chat/mu0_14
+  Trapeze<-function(y0,f4,mu){f4/(mu*caTools::trapz(y0,f4/mu))}
+  f13   =if(is.null(model$nc)){Trapeze(y0,f4,mu0_13)}else{f4/(mu0_13*model$nc(ys,model$xi,h))}
+  f14   =if(is.null(model$nc)){Trapeze(y0,f4,mu0_14)}else{f4/(mu0_14*model$nc(ys,xihat,h))}
   #f15bad=f4*Chat/mu0_15bad
-  f15   =f4*Chat/mu0_15
-  fhat25   =f4*Chat/mu0for25
-  fhat26   =f4*Chat/mu0for26
+  f15   =Trapeze(y0,f4,mu0_15)
+  fhat25   =Trapeze(y0,f4,mu0for25)
+  fhat26   =Trapeze(y0,f4,mu0for26)
   
   #f16=kde.innerf4Cmu0(f4,Ctilde16,mu0_12)
   #f17=kde.innerf4Cmu0(f4,Ctilde17,mu0_13)
@@ -375,18 +375,20 @@ joliquoi=c("$f$","$p$",paste0("$",
                   jolivariable=joliquoi,
                   equationnumber=equationnumber,
                   jolivariable2=paste(equationnumber,joliquoi),
+                  type=c("f","p",rep(c("hatf","tildef","fdagger","hatmu"),each=7),"hatV"),
                   jolitype=c("f","$p$",rep(c("$\\hat{f}$","$\\tilde{f}$","$f^\\dagger$","$\\hat\\mu$"),each=7),"$\\hat{V}$"),
-                  mu=c("","1",rep(c("$\\hat\\mu,\\rm{nonpar}$","$\\mu,\\xi$","$\\mu,\\hat\\xi$","$\\hat\\mu,\\rm{par}$","$\\hat\\mu,\\rm{par(rough)}$","$\\hat\\omega,\\rm{nonpar}$","$\\hat\\omega,\\rm{par}$"),times=4),"$\\hat{V}$"))
+                  mu=c("","1",rep(c("$\\hat\\mu,\\rm{nonpar}$","$\\mu,\\xi$","$\\mu,\\hat\\xi$","$\\hat\\mu,\\rm{par}$","$\\hat\\mu,\\rm{par(rough)}$","$\\hat\\omega,\\rm{nonpar}$","$\\hat\\omega,\\rm{par}$"),times=4),"$\\hat{V}$"),
+                  mulaid=c("","1",rep(c("nonpar$","xi","xihat","muhatpar","muhatparrough","omeganonpar$","omegapar$"),times=4),"$V$"))
 
   
 
 Checkdensity<-function(model,npoints){
   attach(model)
   y0=seq(model$qloi.y(1/(npoints+1)),model$qloi.y(npoints/(npoints+1)),length.out=npoints)
-  plyr::aaply(Allestimates(model,y0),2,sum)*(function(x){x[2]-x[1]})(range(y0))/(length(y0)-1)}
+  plyr::aaply(Allestimates(model,y0),2,function(y){caTools::trapz(y0,y)})}
   
   
-Simuletout<-function(model,y0=seq(model$qloi.y(1/301),model$qloi.y(300/301),length.out=300),nrep=1000){
+Simuletout<-function(model,npoints=300,y0=grid1f(model,npoints),nrep=1000){
   #library(foreach)
   #library(doParallel)
   #workers <- makeCluster(8) 
@@ -408,9 +410,7 @@ Simuletout<-function(model,y0=seq(model$qloi.y(1/301),model$qloi.y(300/301),leng
 
 analysetout<-function(dd){
   attach(dd)  
-  
-  library(reshape2)
-  A<-reshape2::melt(ff)
+  A<-reshape2::melt(ff[1:min(50,dim(ff)[1]),,])
   AA<-reshape2::dcast(A,i+rep~variable,value.var="value")
   AAA<-reshape2::dcast(A,i+rep+variable~1,value.var="value")
   AA<-merge(AA,data.frame(i=1:length(y0),y0=y0,ftheta=model$dloi.y(y0)))
@@ -418,14 +418,16 @@ analysetout<-function(dd){
   AAA<-merge(AAA,aux,by="variable",all.x=TRUE)
   names(AAA)[names(AAA)==1]<-"value"
   
+  empmeanA=plyr::aaply(ff[,,],2:3,mean,na.rm=TRUE)
   empvarA=plyr::aaply(ff[,,],2:3,var,na.rm=TRUE)
-  empbias2A=(plyr::aaply(ff[,,],2:3,mean,na.rm=TRUE)-model$dloi.y(y0))^2
-  coefvarA=sqrt(empbias2A+empvarA)/model$dloi.y(y0)
+  empbias2A=(empmeanA-ff[1,,rep(c("f","mu0_13"),times=c(14,7))])^2
+  empmseA=empvarA+empbias2A
+  coefvarA=sqrt(empbias2A+empvarA)/ff[1,,"f"]
   
   
   
   empvar=merge(melt(data.frame(y0=y0,empvarA),id="y0"),aux, by="variable", all.x=TRUE)
-  empmse=merge(melt(data.frame(y0=y0,empvarA+empbias2A),id="y0"),aux, by="variable", all.x=TRUE)
+  empmse=merge(melt(data.frame(y0=y0,empmseA),id="y0"),aux, by="variable", all.x=TRUE)
   avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,"Vf"],2,mean))
   coefvar=merge(melt(data.frame(y0=y0,coefvarA),id="y0"),aux, by="variable", all.x=TRUE)
   
@@ -442,12 +444,16 @@ analysetout<-function(dd){
                                   #data.frame(IntegratedMSEq=sum(d$value[-nn]*model$dloi.y(d$y0[-nn])*(c(d$y0[-1]-d$y0[-nn]))))
                                   data.frame(IntegratedMSEq=sum(d$value)*  interval)
                                 }else{data.frame(IntegratedMSEq=0)}},.drop=FALSE),aux)
-  meanempMSEq$IntegratedMSErelq=meanempMSEq$IntegratedMSEq/meanempMSEq$IntegratedMSEq[levels(meanempMSEq$variable)[meanempMSEq$variable]=="f12"]
+  
+  ref=meanempMSEq[levels(meanempMSEq$variable)[meanempMSEq$variable]=="f12",c("class","IntegratedMSEq")]
+  names(ref)[2]<-"ref"
+  meanempMSEq=merge(meanempMSEq,ref)
+  meanempMSEq$IntegratedMSErelq=meanempMSEq$IntegratedMSE/meanempMSEq$ref
   meanempMSEq=reshape2::dcast(reshape2::melt(meanempMSEq,measure.vars =c("IntegratedMSEq","IntegratedMSErelq"),variable.name = "measure") ,formula = variable+jolivariable2+jolitype+mu~measure+class,value.var="value")
   
   meanempMSE=merge(meanempMSE,meanempMSEq)
-  
-  return(list(model=model,meanempMSE=meanempMSE,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,ff=ff,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar))
+  ee=list(npoints=length(y0),model=model,empmeanA=empmeanA,meanempMSE=meanempMSE,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar)
+  return(ee)
 }
 
 
@@ -455,11 +461,14 @@ analysetout<-function(dd){
 
 allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
   attach(ee)
+  
+  sel=(1:npoints)[(1:npoints)%%(npoints%/%100)==1]
+  
   theme_set(theme_bw())
   w_graph_0<-ggplot(AAA[(!is.element(AAA$variable,c("f15bad","f19bad","f23bad","Vf")))&AAA$rep==2,], 
                    aes(x=y0, y=value, linetype=mu,color=jolitype)) +
     xlab("$y_0$")+ylab("")+
-    scale_colour_function1()+ 
+    scale_colour_grey()+ 
     theme_bw()+
     geom_line()+ 
     labs(title="", caption=paste0(model$name,':  estimators of $f$'))+
@@ -470,23 +479,23 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
     guides(linetype=guide_legend(""),color=guide_legend(""))
   
   
-  w_graph_0.2<-ggplot(AAA[is.element(AAA$variable,quoi[1:2])&AAA$rep==2,], 
-                    aes(x=y0, y=value, linetype=mu,color=jolitype)) +
+  w_graph_0.2<-ggplot(AAA[is.element(AAA$variable,quoi[2:3])&AAA$rep==2,], 
+                    aes(x=y0, y=value, linetype=jolivariable)) +
     xlab("$y_0$")+ylab("")+
     scale_colour_function1()+ 
     theme_bw()+
     geom_line()+ 
     labs(title="", caption=paste0(model$name,': $p$, $\\hat{f}_{\\hat\\mu,\\rm{nopar}}$, and $f$'))+
     theme(legend.justification = c(1, 1), legend.position = c(1, 1))+
-    stat_function(fun = model$dloi.y,size=.8,aes(size=.8,color="$f$",linetype="$f$"))+
+    stat_function(fun = model$dloi.y,size=.8,aes(size=.8,linetype="$f$"))+
     theme(legend.position = "right",legend.box = "vertical") + 
     theme(legend.key.size = unit(2,"line"))+ 
-    guides(linetype=guide_legend(""),color=guide_legend(""))
+    guides(linetype=guide_legend(""))
   
   
   
   w_graph_0_vsf <- function(x,variab="mu",variab2="jolitype"){
-    tab=AAA[(!is.element(AAA$variable,c("f4","f15bad","f19bad","f23bad","Vf")))&AAA$rep==2,]
+    tab=AAA[(!is.element(AAA$variable,c("f","f4","f15bad","f19bad","f23bad","mu0_12","mu0_13","mu0_14","mu0_15","mu0for25","mu0for26","Vf")))&AAA$rep==2,]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
     try(tab$ftheta[tab$ftheta<1e-10]<-1e-10)
@@ -505,12 +514,16 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
       theme(legend.key.size = unit(2,"line"))+ 
       guides(linetype=guide_legend(""),color=guide_legend(""))
       }
-  w_graph_0_vsmus<-plyr::alply(levels(empmse$mu)[levels(empmse$mu)!="$\\hat\\mu,\\rm{par(rough)}$"],1,w_graph_0_vsf)
-  names(w_graph_0_vsmus)<-paste0("w_graph_0_vsmu",1:(nlevels(empmse$mu)-1))
-  w_graph_0_vstypes<-plyr::alply(levels(empmse$jolitype),1,w_graph_0_vsf,variab="jolitype",variab2="mu")
-  names(w_graph_0_vstypes)<-paste0("w_graph_0_vsmu",1:nlevels(empmse$jolitype))
+  w_graph_0_vsmus<-plyr::alply(levels(empmse$mu)[!is.element(levels(empmse$mu),c("$\\hat\\mu,\\rm{par(rough)}$","$\\hat{V}$","","1"))],1,w_graph_0_vsf)
+  names(w_graph_0_vsmus)<-paste0("w_graph_0_vsmu",(1:(nlevels(empmse$mu)))[!is.element(levels(empmse$mu),c("$\\hat\\mu,\\rm{par(rough)}$","$\\hat{V}$","","1"))])
+  w_graph_0_vstypes<-plyr::alply(levels(empmse$jolitype)[!is.element(levels(empmse$jolitype),c("$\\hat\\mu$","$\\hat{V}$","$\\tilde{f}$","$p$","f"))],1,w_graph_0_vsf,variab="jolitype",variab2="mu")
+  names(w_graph_0_vstypes)<-paste0("w_graph_0_vsmu",(1:nlevels(empmse$jolitype))[!is.element(levels(empmse$jolitype),c("$\\hat\\mu$","$\\hat{V}$","$\\tilde{f}$","$p$","f"))])
 
 
+  
+  
+  
+  
   dff2<-reshape2::dcast(
     AAA[is.element(AAA$variable,c("f12","Vf"))&AAA$rep==1,]
     ,i+y0+ftheta~variable,value.var="value")
@@ -533,7 +546,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
   
   
   w_graph1f <- function(x){
-    BB=AA[AA$rep<50 &AA$i%%5==1,c("y0",x,"rep")]
+    BB=AA[AA$rep<50 &is.element(AA$i,sel),c("y0",x,"rep")]
     names(BB)<-c("y0","est","Rep")
     joliname=aux$jolivariable2[aux$variable==x]
     
@@ -542,17 +555,17 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
     xlab("$y_0$")+ylab("")+
     geom_line(size=0.2, alpha=0.1,aes(linetype=joliname,size=.2))+ 
     labs(title="", caption=paste0("Simulations for ",model$name,", ",joliname ," repeated ",min(nrep,50), " times"))+    
-    geom_line(data=data.frame(y0=y0,f=plyr::aaply(ff[,,x],2,mean)),aes(x=y0,y=f,group=NULL,linetype=paste0(joliname,", averaged on ",nrep," replications")),size=1)  +
+    geom_line(data=data.frame(y0=y0,f=empmeanA[,x]),aes(x=y0,y=f,group=NULL,linetype=paste0(joliname,", averaged on ",nrep," replications")),size=1)  +
     stat_function(fun = model$dloi.y,size=.4,aes(size=.4,linetype="$f$"))+
     scale_linetype_manual("",values = c("solid",  "solid","dashed")) +
     scale_size_manual(values = c(0.4, .2,1))+
     theme(legend.position = "bottom")+ 
     theme(legend.key.size = unit(2,"line"))+
     guides(size=FALSE, linetype=guide_legend(override.aes=list(size=c(.4,.2,1),alpha=c(1,.1,1))))}
-  w_graph_1s<-plyr::alply(quoi[-23],1,w_graph1f)
-  names(w_graph_1s)<-paste0("w_graph1_",quoi[-23])
+  w_graph_1s<-plyr::alply(c("f4","f12","f13","f14","f15","fhat25","fhat26","f20","f21","f22","f23","f25","f26"),1,w_graph1f)
+  names(w_graph_1s)<-paste0("w_graph1_",c("f4","f12","f13","f14","f15","fhat25","fhat26","f20","f21","f22","f23","f25","f26"))
   
-  w_graph2 <- ggplot(AA[AA$rep<50 &AA$i%%5==1,], aes(x=y0, y=Vf, group=rep)) +
+  w_graph2 <- ggplot(AA[AA$rep<50 &(is.element(AA$i,sel)),], aes(x=y0, y=Vf, group=rep)) +
   xlab("$y_0$")+ylab("")+
     geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{V}$"))+
     labs(title="", caption=paste0("Empirical variance and variance estimates, simulations for ",model$name,", repeated ",min(50,nrep), " times"))+  
@@ -616,16 +629,16 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
     geom_line()+ 
     ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
     theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
+  pp=c(list(w_graph_0=w_graph_0,
+            w_graph_0.1=w_graph_0.1,
+            w_graph2=w_graph2,w_graph_var=w_graph_var),
+       w_graph_1s,
+       w_graph_mse_vsmus,
+       w_graph_mse_vstypes,
+       w_graph_0_vsmus,
+       w_graph_0_vstypes)
   
-  
-  return(c(list(w_graph_0=w_graph_0,
-              w_graph_0.1=w_graph_0.1,
-              w_graph2=w_graph2,w_graph_var=w_graph_var),
-         w_graph_1s,
-         w_graph_mse_vsmus,
-         w_graph_mse_vstypes,
-         w_graph_0_vsmus,
-         w_graph_0_vstypes))
+  return(pp)
 }
 
 
@@ -800,9 +813,9 @@ createalltables<-function(ee){
   ddd[!is.element(ddd$variable,c("f15bad","f19bad","f23bad")),]
   names(ddd)<-gsub("IntegratedMSE","IMSE",names(ddd),fixed=TRUE)
   ccoo<-function(x,y){paste0(signif(ddd[[x]],2)," (",signif(ddd[[y]],2),")")}
-  ddd[[5]]=ccoo(5,6)
-  for(i in 1:4){ddd[[6+i]]=ccoo(6+i,10+i)}
-  ddd=ddd[-c(1,3:4,6,11:14)]
+  ddd[[5]]=ccoo(5,10)
+  for(i in 1:4){ddd[[10+i]]=ccoo(10+i,14+i)}
+  ddd=ddd[-c(1,3:4,6:10,15:18)]
   names(ddd)<-gsub("q_$"," $\\mid ",names(ddd),fixed=TRUE)
   names(ddd)<-gsub("jolivariable2","Estimator",names(ddd),fixed=TRUE)
   
