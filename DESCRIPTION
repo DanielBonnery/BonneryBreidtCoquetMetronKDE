@@ -11,7 +11,6 @@ Imports: abind,
 	Hmisc,
 	MASS,
 	filehash,
-	plyr,
 	ggplot2
 Suggests: 
 Description: Data
