@@ -1,6 +1,7 @@
   library(pubBonneryBreidtCoquet2017)
   library(ggplot2)
-  ker=kergaus
+if(FALSE){
+    ker=kergaus
   pifun=function(obs){obs$pik}
   popmodelfunction = model.Pareto.bernstrat
   theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
