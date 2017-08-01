@@ -235,8 +235,9 @@ Allestimates<-function(model,y0=grid1f(model)){
   ys=model$yfun(Obs)
   Nhat=sum(1/pik)
   xihat=model$xihat(Obs)
-  mus_20=apply(Ks/(Obs$pik),2,sum)/apply(Ks,2,sum)
-  mu0_12=mf(yfun = model$yfun,pifun=function(Obs){1/Obs$pik})(y0,Obs)/mf(yfun = model$yfun,pifun=function(Obs){1})(y0,Obs)
+  
+  mus_20=apply(Ks,2,sum)/apply(Ks/(Obs$pik),2,sum)
+  mu0_12=mf(yfun = model$yfun,pifun=function(Obs){1})(y0,Obs)/mf(yfun = model$yfun,pifun=function(Obs){1/Obs$pik})(y0,Obs)
   #Ctilde16=Ctildef(mus_20,pik,Nhat)
   
   mus_21=mftheo(model)(ys,Obs)
@@ -256,8 +257,8 @@ Allestimates<-function(model,y0=grid1f(model)){
   mu0_15=(function(y){exp(y)/(1+exp(y))})(predict.lm(lm(transpi~ys,weights=1/pik),newdata=data.frame(ys=y0)))
   #Ctilde19=Ctildef(mus_23,pik,Nhat)
   
-  mus_25=apply(Ks/(Obs$pik^2),2,sum)/apply(Ks/Obs$pik,2,sum)
-  mu0for25=apply(K0/(Obs$pik^2),2,sum)/apply(K0/Obs$pik,2,sum)
+  mus_25=apply(Ks/Obs$pik,2,sum)/apply(Ks/(Obs$pik^2),2,sum)
+  mu0for25=apply(K0/Obs$pik,2,sum)/apply(K0/(Obs$pik^2),2,sum)
   #Ctildefor25=Ctildef(mus_25,pik,Nhat)
   
   transpi2<-(function(x){log(1/x)-1})(pik)
@@ -426,10 +427,10 @@ analysetout<-function(dd){
   
   
   
-  empvar=merge(melt(data.frame(y0=y0,empvarA),id="y0"),aux, by="variable", all.x=TRUE)
-  empmse=merge(melt(data.frame(y0=y0,empmseA),id="y0"),aux, by="variable", all.x=TRUE)
-  avgvarest=data.frame(y0=y0,Vf=plyr::aaply(ff[,,"Vf"],2,mean))
-  coefvar=merge(melt(data.frame(y0=y0,coefvarA),id="y0"),aux, by="variable", all.x=TRUE)
+  empvar=merge(reshape2::melt(data.frame(y0=y0,i=1:length(y0),empvarA),id=c("y0","i")),aux, by="variable", all.x=TRUE)
+  empmse=merge(reshape2::melt(data.frame(y0=y0,i=1:length(y0),empmseA),id=c("y0","i")),aux, by="variable", all.x=TRUE)
+  avgvarest=data.frame(y0=y0,i=1:length(y0),Vf=plyr::aaply(ff[,,"Vf"],2,mean))
+  coefvar=merge(reshape2::melt(data.frame(y0=y0,i=1:length(y0),coefvarA),id=c("y0","i")),aux, by="variable", all.x=TRUE)
   
   interval<-mean(y0[-1]-y0[-length(y0)])
   
@@ -462,10 +463,11 @@ analysetout<-function(dd){
 allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
   attach(ee)
   
-  sel=(1:npoints)[(1:npoints)%%(npoints%/%100)==1]
+  sel=(1:npoints)[(1:npoints)%%(npoints%/%60)==1]
+  sel2=(1:npoints)[(1:npoints)%%(npoints%/%300)==1]
   
   theme_set(theme_bw())
-  w_graph_0<-ggplot(AAA[(!is.element(AAA$variable,c("f15bad","f19bad","f23bad","Vf")))&AAA$rep==2,], 
+  w_graph_0<-ggplot(AAA[(!is.element(AAA$variable,c("f15bad","f19bad","f23bad","Vf")))&AAA$rep==2&is.element(AAA$i,sel),], 
                    aes(x=y0, y=value, linetype=mu,color=jolitype)) +
     xlab("$y_0$")+ylab("")+
     scale_colour_grey()+ 
@@ -583,7 +585,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
   
   
   
-  w_graph_var <- ggplot(empvar[is.element(empvar$variable,quoi[-c(1,23)]),], 
+  w_graph_var <- ggplot(empvar[sel,][is.element(empvar$variable,quoi[-c(1,23)])&is.element(empvar$i,sel),], 
                         aes(x=y0, y=value, linetype=mu,color=jolitype)) +
     xlab("$y_0$")+ylab("")+
     scale_colour_function1()+ 
@@ -631,7 +633,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
     theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
   pp=c(list(w_graph_0=w_graph_0,
             w_graph_0.1=w_graph_0.1,
-            w_graph2=w_graph2,w_graph_var=w_graph_var),
+            w_graph2=w_graph2),
        w_graph_1s,
        w_graph_mse_vsmus,
        w_graph_mse_vstypes,
@@ -826,3 +828,10 @@ createalltables<-function(ee){
   try(system("cd datanotpushed/table;pdflatex -shell-escape -interaction=nonstopmode tables.tex"))
   return(ddd)
   }
+
+
+JayRtablef<-function(ee){
+  jj=cbind(y0=ee$y0,reshape2::acast(ee$empmse,y0~variable,value.var="value"))[,1:15]
+  rownames(x)<-NULL
+  jj
+}
