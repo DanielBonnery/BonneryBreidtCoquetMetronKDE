@@ -13,6 +13,7 @@ Note that this package depends on different packages we developped, that will be
 ## 2. Simulations
 
 For the description of the simulations, we will provide the link to the paper once published.
+## 2.1. Graphs
 
 
 ```r
@@ -269,3 +270,6 @@ demo(model2,package = "pubBonneryBreidtCoquet2017")
 ![]( datanotpushed/graphs/pdfyihui/pdfpages/model5/pg_0042.pdf )
 ![]( datanotpushed/graphs/pdfyihui/pdfpages/model5/pg_0043.pdf )
     
+## 2.2. Tables
+
+![](datanotpushed/table/tables.pdf)
