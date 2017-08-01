@@ -11,22 +11,20 @@ Note that this package depends on different packages we developped, that will be
 * [pubBonneryBreidtCoquet2016](https://github.com/DanielBonnery/pubBonneryBreidtCoquet2017). pubBonneryBreidtCoquet2016 is a package that contains generic functions to simulate populations and draw samples
 
 ## 2. Simulations
+
+For the description of the simulations, we will provide the link to the paper once published.
 ### 2.1. Population/design model 1
-
-$Y$ follows a Pareto(4) distribution.
-$Z_k\mid Y_k$ follows a Bernoulli ($Y_k^{-1}$) distribution.
-$I_k\mid Z_k=0$ (resp. $I_k\mid Z_k=1$) follows a Bernoulli (0.01) (resp. Bernoulli(0.1)) distribution.
-
-#### 2.1.1 Working graph 1 and 1.1
-
-We generate one population, one sample.
-We estimate in all 1/1000 quantiles of Pareto(4) distribution the HT kde and the associated variance.
-Band upper and lower bounds are based on a normality assumption.
-Black line is Pareto(4) pdf.
 
 Execution: 
 
 
+```r
+demo(model1,package = "pubBonneryBreidtCoquet2017")
+demo(model2,package = "pubBonneryBreidtCoquet2017")
+demo(model3,package = "pubBonneryBreidtCoquet2017")
+demo(model4,package = "pubBonneryBreidtCoquet2017")
+demo(model5,package = "pubBonneryBreidtCoquet2017")
+```
 
 
 
