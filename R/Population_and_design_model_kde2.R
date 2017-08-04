@@ -35,8 +35,17 @@ model.dep.strat2<-function(
         rhorho1<-rhorho1+(tauh[h]-tauh[h+1])*pnorm((zetah[h]-xi*as.matrix(y)[,2]                    )/ sigma);
         rhorho2<-rhorho2+(tauh[h]-tauh[h+1])*pnorm((zetah[h]-xi*(theta[1]+theta[2]*as.matrix(y)[,1]))/sqrt(sigma^2+xi^2*theta[3]^2));}
       return(rhorho1/rhorho2)}
-  eta=function(y,xi){
-1}
+  eta=function(Obs,.xi=xi,.conditionalto=conditionalto, .theta=theta){
+    #Initialisation of numerator and deniminator
+    rhorho1<-.conditionalto$sampleparam$tauh[length(.conditionalto$sampleparam$tauh)];
+    #Computation of limits of strata
+    Zetah=qnorm(cumsum(.conditionalto$sampleparam$proph),0,1)
+    zetah=sqrt(.xi^2*.theta[2]^2*.conditionalto$SX^2+ .xi^2*.theta[3]^2+.conditionalto$sigma^2)*Zetah+.xi*.theta[1]+.xi*.theta[2]*.conditionalto$EX
+    #Computation of numerator and deniminator
+    for(h in 1:(length(.conditionalto$sampleparam$tauh)-1)){
+      rhorho1<-rhorho1+(.conditionalto$sampleparam$tauh[h]-.conditionalto$sampleparam$tauh[h+1])*pnorm((zetah[h]-.xi*Obs$y[,2])/ .conditionalto$sigma);}
+    return(rhorho1)
+  }
   #Computation of rho function (function of y)
   rho=function(y){return(rhothetaxi(y,theta,xi))}
   rhoxthetaxi=function(y,theta,xi,.conditionalto=conditionalto){
@@ -84,5 +93,6 @@ model.dep.strat2<-function(
     thetaht=thetaht,
     eta=eta,
     yfun=function(obs){obs$y[,2]},
+    obsifyf=function(y,.conditionalto=conditionalto){list(y=cbind(NA,y))},
     thetaniais=thetaniais))}
 

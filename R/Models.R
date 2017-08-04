@@ -22,7 +22,6 @@ model}
 
 #model 3
 model3f<-function(){
-  
   popmodelfunction = model.dep.strat2
   set.seed(1)#NB: the seed was not set for the table in the publication
   conditionalto=list(N=50000,sigma=1 ,EX=1,SX=1,sampleparam=list(proph=c(.7,.3),tauh=c(1/70,2/15)))

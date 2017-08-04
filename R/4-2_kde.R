@@ -1,19 +1,3 @@
-  if(FALSE){
-  library(pubBonneryBreidtCoquet2017)
-  library(ggplot2)
-  ker=kergaus
-  pifun=function(obs){obs$pik}
-  popmodelfunction = model.Pareto.bernstrat
-  theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
-  model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
-  Obs<-generate.observations(model);
-  h=ks::hpi(x=model$yfun(Obs))
-  pifun=function(obs){obs$pik}
-  setwd(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017"))
-  load("datanotpushed/graphdata/model.Pareto.bernstrat.rda")
-  attach(dd)
-}
-
 ##4.1. Definitions
 # Kernels
 kergaus<-list(K=dnorm,intK2=(1/(2*sqrt(pi))));
@@ -25,7 +9,7 @@ varp<-function(y0,b,ker=ker,model=model,N){(model$dloi(y0)/(N*b(N)))*(model$vinf
 varpsr<-function(y0,b,ker=ker,model=model,N){varp(y0,b,ker=ker,model=model,N)/((model$rho(y0))^2)}
 
 # Kernel density estimators definition of kde
-p0  <-function(y0,Obs,ker=ker,model,N){sum(ker$K((model$yfun(Obs)-y0)/b(N)))/(b(N)*length(model$yfun(Obs)))}
+p0  <-function(y0,Obs,ker=ker,model,h=ks::hpi(x=yfun(Obs))){sum(ker$K((model$yfun(Obs)-y0)/b(N)))/(b(N)*length(model$yfun(Obs)))}
 
 #' Compute an estimate of E[I\mid Y=y0] 
 #' @param y0: Point of vector of points where the conditional expected value is needed
@@ -57,7 +41,7 @@ mf<-function(ker=kergaus,yfun=function(obs){obs$y},pifun=function(obs){obs$pik})
 #' model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
 #' Obs<-generate.observations(model);
 #' (mftheo(model))(1:3,Obs)
-mftheo   <-function(model,xi=model$xi){function(y0,Obs){model$eta(list(y=y0),.xi=xi)}}
+mftheo   <-function(model,xi=model$xi){function(y0,Obs){model$eta(model$obsifyf(y0),.xi=xi)}}
 #' Compute an estimate of E[I\mid Y=y0] of the form $m(y,\hat{\xi})$ 
 #' @param y0: Point of vector of points where the conditional expected value is needed
 #' @param Obs: Observations
@@ -71,7 +55,7 @@ mftheo   <-function(model,xi=model$xi){function(y0,Obs){model$eta(list(y=y0),.xi
 #' model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
 #' Obs<-generate.observations(model);
 #' (mfhattheo(model))(1:3,Obs)
-mfhattheo<-function(model,xihatfun=model$xihat){function(y0,Obs){model$eta(list(y=y0),xihatfun(Obs))}}
+mfhattheo<-function(model,xihatfun=model$xihat){function(y0,Obs){model$eta(model$obsifyf(y0),.xi=xihatfun(Obs))}}
 #' Compute an estimate of 1/E[1/\pi\mid Y=y0] of the form $m(y,\hat{\xi})$ 
 #' @param y0: Point of vector of points where the conditional expected value is needed
 #' @param Obs: Observations
@@ -203,6 +187,10 @@ kde.innerf4Cmu0<-function(f4,Ctilde,mu0){Ctilde*f4/mu0}
 Ctildef<-function(mus,pik,Nhat){sum(mus/pik)/Nhat}
 
 
+grid1f<-function(model,npoints=300){seq(model$qloi.y(1/(npoints+1)),model$qloi.y(npoints/(npoints+1)),length.out=npoints)}
+grid2f<-function(model,npoints=300){model$qloi.y(seq(1/(npoints+1)),(npoints/(npoints+1)),length.out=npoints)}
+
+
 #' Compute Pfeffermann like kernel density estimators 
 #' @param y0: Point of vector of points where the density estimate is needed
 #' @param Obs: Observations
@@ -216,13 +204,7 @@ Ctildef<-function(mus,pik,Nhat){sum(mus/pik)/Nhat}
 #' model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
 #' Obs<-generate.observations(model);
 #' Allestimates(y0,Obs,model)
-
-
-grid1f<-function(model,npoints=300){seq(model$qloi.y(1/(npoints+1)),model$qloi.y(npoints/(npoints+1)),length.out=npoints)}
-grid2f<-function(model,npoints=300){model$qloi.y(seq(1/(npoints+1)),(npoints/(npoints+1)),length.out=npoints)}
-
 Allestimates<-function(model,y0=grid1f(model)){
-  
   Obs<-generate.observations(model)
   ker=kergaus
   pifun=function(obs){obs$pik}
@@ -780,19 +762,19 @@ createallgraphs<-function(x){
   #try(eval(parse(text=paste0("print(",y,")"))))
   #dev.off()
   
-  tikz(paste0("datanotpushed/graphs/texyihui/",prefix,"_yihui.tex"),standAlone = TRUE,sanitize=FALSE)
+  tikz(paste0("datanotpushed/graphs/tex/",prefix,".tex"),standAlone = TRUE,sanitize=FALSE)
   try(eval(parse(text=paste0("print(",y,")"))))
   dev.off()
   
-  tx  <- readLines(paste0("datanotpushed/graphs/texyihui/",prefix,"_yihui.tex"))
+  tx  <- readLines(paste0("datanotpushed/graphs/tex/",prefix,".tex"))
   tx  <- c(tx[3],"\\usepackage{pgfplots}","\\usepgfplotslibrary{external}","\\tikzexternalize", tx[-(1:4)])
-  writeLines(tx, paste0("datanotpushed/graphs/texyihui/",prefix,"_yihui.tex"))
+  writeLines(tx, paste0("datanotpushed/graphs/tex/",prefix,".tex"))
   
   
-  try(system(paste0( "pdflatex -shell-escape -interaction=nonstopmode datanotpushed/graphs/texyihui/",prefix,"_yihui.tex")))
-  try(system(paste0("mv ",prefix,"_yihui.pdf datanotpushed/graphs/pdfyihui/")))
+  try(system(paste0( "pdflatex -shell-escape -interaction=nonstopmode datanotpushed/graphs/tex/",prefix,".tex")))
+  try(system(paste0("mv ",prefix,".pdf datanotpushed/graphs/pdf/")))
   
-  
+  if(FALSE){
   Y=get(y)
   attach(Y)
   sapply(names(Y),function(z){
@@ -800,17 +782,13 @@ createallgraphs<-function(x){
     try(eval(parse(text=paste0("print(",z,")"))))
     dev.off()
     
-    tikz(paste0("datanotpushed/graphs/texyihui/",prefix,z,"_yihui.tex"),standAlone = FALSE)
+    tikz(paste0("datanotpushed/graphs/tex/",prefix,z,".tex"),standAlone = FALSE)
     try(eval(parse(text=paste0("print(",z,")"))))
     dev.off()
-    
-    
-  })
+    })}
 }
 
-createalltables<-function(ee){
-
-  
+createalltables<-function(ee,dest.folder="datanotpushed/table"){
   ddd=ee$meanempMSE[-nrow(ee$meanempMSE),]
   ddd[!is.element(ddd$variable,c("f15bad","f19bad","f23bad")),]
   names(ddd)<-gsub("IntegratedMSE","IMSE",names(ddd),fixed=TRUE)
@@ -823,15 +801,15 @@ createalltables<-function(ee){
   
   y=SweaveLst::stargazer2(ddd,summary=FALSE,style="aer",title=ee$model$name,label=paste0("tab",ee$model$name),rownames=FALSE)
   y=gsub("\\\\","\\",y,fixed=TRUE);cat(y)
-  cat(capture.output(cat(y)),file=file.path("datanotpushed/table",paste0(tolower(gsub(" ", "",ee$model$name, fixed = TRUE)),".tex")),append=FALSE)
+  cat(capture.output(cat(y)),file=file.path(dest.folder,paste0(tolower(gsub(" ", "",ee$model$name, fixed = TRUE)),".tex")),append=FALSE)
   
-  try(system("cd datanotpushed/table;pdflatex -shell-escape -interaction=nonstopmode tables.tex"))
+  try(system(paste0("cd ",dest.folder,";pdflatex -shell-escape -interaction=nonstopmode tables.tex")))
   return(ddd)
   }
 
 
 JayRtablef<-function(ee){
   jj=cbind(y0=ee$y0,reshape2::acast(ee$empmse,y0~variable,value.var="value"))[,1:15]
-  rownames(x)<-NULL
+  rownames(jj)<-NULL
   jj
 }

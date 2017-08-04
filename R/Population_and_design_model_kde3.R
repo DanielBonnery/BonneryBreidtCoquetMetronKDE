@@ -44,7 +44,8 @@ model.proptosize<-function(
     tau=tau,
     xihat=xihat,
     thetaht=thetaht,  
-    yfun=function(obs){obs$y},
+    yfun=function(obs){obs$y},  
+    obsifyf=function(y,.conditionalto=conditionalto){list(y=y)},
     thetaniais=thetaniais,
     eta=function(Obs,.xi=xi,.conditionalto=conditionalto, .theta=theta){
       (1-(1-(Obs$y+.xi^2)/(.conditionalto$N*(.theta+.xi^2)))^(tau*.conditionalto$N))}))}
