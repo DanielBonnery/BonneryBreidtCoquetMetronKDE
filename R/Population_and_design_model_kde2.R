@@ -69,7 +69,8 @@ model.dep.strat2<-function(
         lmm<-lm(Obs$y[,2]~cbind(Obs$y[,1]));
         return(c(as.vector(lmm$coefficients),summary(lmm)$sigma))}
   # Final result
-  return(list(
+    model=
+list(
     theta=theta,xi=xi,conditionalto=conditionalto,
     rloiy=rloiy,
     ploi=function(y){pnorm(y[,2],mean=theta[1]+theta[2]*y[,1],sd=theta[3])},
@@ -93,6 +94,9 @@ model.dep.strat2<-function(
     thetaht=thetaht,
     eta=eta,
     yfun=function(obs){obs$y[,2]},
+    pifun=function(obs){obs$pik},
     obsifyf=function(y,.conditionalto=conditionalto){list(y=cbind(NA,y))},
-    thetaniais=thetaniais))}
+    thetaniais=thetaniais)
+    append(class(model),"Model")
+    return(model)}
 

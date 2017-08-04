@@ -1,9 +1,8 @@
 #2.1. Pareto distribution
 model.Pareto.bernstrat<-function(theta=1,xi=1,conditionalto=list(N=1000,sampleparam=list(tauh=c(.1,.5)))){
-    #sampleparam is a list with tauh
+  #sampleparam is a list with tauh
   suppressMessages(attach(conditionalto))
   suppressMessages(attach(sampleparam))
-  
   calculeSigma<-function(){
     # Check that Taylor deviates have mean zero, and compute their second moment.
     E_I<-tauh[1]+(tauh[2]-tauh[1])*theta/(theta+xi)
@@ -45,7 +44,7 @@ model.Pareto.bernstrat<-function(theta=1,xi=1,conditionalto=list(N=1000,samplepa
   
   qloi.y=function(p){exp(-log(1 - p)/theta)}
   
-  return(
+  model=
   list(
    theta=theta,
     xi=xi,
@@ -72,6 +71,7 @@ model.Pareto.bernstrat<-function(theta=1,xi=1,conditionalto=list(N=1000,samplepa
                                     (sampleparam$tauh%*%rbind(1-1/(as.vector(y)^xi),1/(as.vector(y)^xi))))},
   tau=tau,
   yfun=function(obs){obs$y},
+  pifun=function(obs){obs$pik},
   obsifyf=function(y,.conditionalto=conditionalto){list(y=y)},
   #logl1prime=logl1prime,
   xihat=function(Obs){
@@ -87,4 +87,6 @@ model.Pareto.bernstrat<-function(theta=1,xi=1,conditionalto=list(N=1000,samplepa
     HT_y<-sum((Obs$y/Obs$pik))
     HT_1<-sum(1/Obs$pik)
     HT_y/(HT_y-HT_1)},
-  supportY=c(-.1,2.1)))}
+  supportY=c(-.1,2.1))
+  append(class(model),"Model")
+  return(model)}

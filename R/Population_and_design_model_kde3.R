@@ -45,6 +45,7 @@ model.proptosize<-function(
     xihat=xihat,
     thetaht=thetaht,  
     yfun=function(obs){obs$y},  
+    pifun=function(obs){obs$pik},  
     obsifyf=function(y,.conditionalto=conditionalto){list(y=y)},
     thetaniais=thetaniais,
     eta=function(Obs,.xi=xi,.conditionalto=conditionalto, .theta=theta){
