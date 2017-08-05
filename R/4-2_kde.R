@@ -11,7 +11,6 @@ append(class(model0),"Model")
 kergaus<-list(K=dnorm,intK2=(1/(2*sqrt(pi))));
 ker<-kergaus
 
-
 #' Compute an estimate of E[I\mid Y=y0] 
 #' @param y0: Point of vector of points where the conditional expected value is needed
 #' @param Obs: Observations
@@ -47,12 +46,13 @@ mftheo   <-function(model=model0,xi=model$xi){function(y0,Obs){model$eta(model$o
 #' @param afun: Function that takes Obs as an argument and returns the weights on the sample 
 #' @param h: Bandwidth
 #' @example
-#' model<-modelf(1)popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
+#' model<-modelf(1)
 #' Obs<-generate.observations(model);
-#' (mfhattheo(model))(1:3,Obs)
+#' plot(y0,mftheo(model)(y0,generate.observations(model)),type='l')
+#' lines(y0,mfhattheo(model)(y0,generate.observations(model)),col='blue')
 mfhattheo<-function(model=model0,
                     xihatfun=model$xihat){
-  function(y0,Obs){model$eta(model$obsifyf(y0),.xi=xihatfun(Obs))}}
+  function(y0,Obs){mftheo(model,xihatfun(Obs))(y0,Obs)}}
 
 #' Compute HT-like kernel density estimates 
 #' @param y0: Point of vector of points where the density estimate is needed
@@ -299,10 +299,6 @@ Checkdensity<-function(model,npoints){
   y0=seq(model$qloi.y(1/(npoints+1)),model$qloi.y(npoints/(npoints+1)),length.out=npoints)
   plyr::aaply(Allestimates(model,y0),2,function(y){caTools::trapz(y0,y)})}
   
-
-
-
-
 
 #' @example
 #' popmodelfunction = model.Pareto.bernstrat
