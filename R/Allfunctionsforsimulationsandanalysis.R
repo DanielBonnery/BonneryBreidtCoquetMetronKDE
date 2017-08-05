@@ -29,7 +29,7 @@ analysetout<-function(dd){
   
   empmeanA=plyr::aaply(ff[,,],2:3,mean,na.rm=TRUE)
   empvarA=plyr::aaply(ff[,,],2:3,var,na.rm=TRUE)
-  empbias2A=(empmeanA-ff[1,,rep(c("f","mu0_13"),times=c(14,7))])^2
+  empbias2A=(empmeanA-ff[1,,rep(c("f","mu0_parxi"),times=c(14,7))])^2
   empmseA=empvarA+empbias2A
   coefvarA=sqrt(empbias2A+empvarA)/ff[1,,"f"]
   
@@ -44,7 +44,7 @@ analysetout<-function(dd){
   
   meanempMSE=merge(plyr::ddply(.data = empmse,.variables = ~variable,
                                .fun=function(d){nn<-nrow(d);data.frame(IntegratedMSE=sum(d$value)*interval)}),aux)
-  meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f12"]
+  meanempMSE$IntegratedMSErel=meanempMSE$IntegratedMSE/meanempMSE$IntegratedMSE[levels(meanempMSE$variable)[meanempMSE$variable]=="f_inner_nonpar"]
   
   empmse$class<-cut(empmse$y0,breaks = model$qloi.y(c(0:4)/4))
   levels(empmse$class)=c("$Y<q_{.25}$","$q_{.25}<Y<q_{.5}$","$q_{.5}<Y<q_{.75}$","$q_{.75}<Y$")
@@ -54,7 +54,7 @@ analysetout<-function(dd){
                                   data.frame(IntegratedMSEq=sum(d$value)*  interval)
                                 }else{data.frame(IntegratedMSEq=0)}},.drop=FALSE),aux)
   
-  ref=meanempMSEq[levels(meanempMSEq$variable)[meanempMSEq$variable]=="f12",c("class","IntegratedMSEq")]
+  ref=meanempMSEq[levels(meanempMSEq$variable)[meanempMSEq$variable]=="f_inner_nonpar",c("class","IntegratedMSEq")]
   names(ref)[2]<-"ref"
   meanempMSEq=merge(meanempMSEq,ref)
   meanempMSEq$IntegratedMSErelq=meanempMSEq$IntegratedMSE/meanempMSEq$ref
@@ -71,7 +71,7 @@ allplotscolor<-function(ee){
   attach(ee)
   sel =(1:npoints)[(1:npoints)%%(npoints%/%60)==1]
   sel2=(1:npoints)[(1:npoints)%%(npoints%/%300)==1]
-  w_graph_0<-ggplot(AAA[(!is.element(AAA$variable,c("f15bad","f19bad","f23bad","Vf")))&AAA$rep==2&is.element(AAA$i,sel),], 
+  w_graph_0<-ggplot(AAA[(!is.element(AAA$variable,c("f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad","Vf")))&AAA$rep==2&is.element(AAA$i,sel),], 
                     aes(x=y0, y=value, linetype=mu,color=jolitype)) +
     xlab("$y_0$")+ylab("")+
     geom_line()+ 
@@ -98,7 +98,7 @@ allplotscolor<-function(ee){
   
   
   w_graph_0_vsf <- function(x,variab="mu",variab2="jolitype"){
-    tab=AAA[(!is.element(AAA$variable,c("f","f4","f15bad","f19bad","f23bad","mu0_12","mu0_13","mu0_14","mu0_15","mu0for25","mu0for26","Vf")))&AAA$rep==2,]
+    tab=AAA[(!is.element(AAA$variable,c("f","f_naive","f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_muhat","mu0_wnonpar","mu0_wpar","Vf")))&AAA$rep==2,]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
     try(tab$ftheta[tab$ftheta<1e-10]<-1e-10)
@@ -126,13 +126,13 @@ allplotscolor<-function(ee){
   
   
   dff2<-reshape2::dcast(
-    AAA[is.element(AAA$variable,c("f12","Vf"))&AAA$rep==1,]
+    AAA[is.element(AAA$variable,c("f_inner_nonpar","Vf"))&AAA$rep==1,]
     ,i+y0+ftheta~variable,value.var="value")
-  dff2$lb=dff2$f12-qnorm(.975)*sqrt(dff2$Vf)
-  dff2$ub=dff2$f12+qnorm(.975)*sqrt(dff2$Vf)
+  dff2$lb=dff2$f_inner_nonpar-qnorm(.975)*sqrt(dff2$Vf)
+  dff2$ub=dff2$f_inner_nonpar+qnorm(.975)*sqrt(dff2$Vf)
   
   w_graph_0.1<-ggplot(dff2, 
-                      aes(x=y0, y=f12,color="$\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$")) +
+                      aes(x=y0, y=f_inner_nonpar,color="$\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$")) +
     xlab("$y_0$")+ylab("")+
     stat_function(fun = model$dloi.y,size=.8,aes(size=.8,color="$f$"))+
     geom_line()+ 
@@ -160,14 +160,14 @@ allplotscolor<-function(ee){
       theme(legend.position = "bottom")+ 
       theme(legend.key.size = unit(2,"line"))+
       guides(size=FALSE, color=guide_legend(override.aes=list(size=c(.4,1,1),alpha=c(.1,1,1))))}
-  w_graph_1s<-plyr::alply(c("f4","f12","f13","f14","f15","fhat25","fhat26","f20","f21","f22","f23","f25","f26"),1,w_graph1f)
-  names(w_graph_1s)<-paste0("w_graph1_",c("f4","f12","f13","f14","f15","fhat25","fhat26","f20","f21","f22","f23","f25","f26"))
+  w_graph_1s<-plyr::alply(c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar","f_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"),1,w_graph1f)
+  names(w_graph_1s)<-paste0("w_graph1_",c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar","f_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"))
   
   w_graph2 <- ggplot(AA[AA$rep<50 &(is.element(AA$i,sel)),], aes(x=y0, y=Vf, group=rep)) +
     xlab("$y_0$")+ylab("")+
     geom_line(size=0.2, alpha=0.1,aes(color="$\\hat{V}$"))+
     labs(title="", caption=paste0("Empirical variance and variance estimates, simulations for ",model$name,", repeated ",min(50,nrep), " times"))+  
-    geom_line(data=empvar[empvar$variable=="f12",],aes(x=y0,y=value,group=NULL,color="Empirical variance"), size=.8)+
+    geom_line(data=empvar[empvar$variable=="f_inner_nonpar",],aes(x=y0,y=value,group=NULL,color="Empirical variance"), size=.8)+
     geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL,color=paste0("$\\hat{V}$, averaged on ",ee$nrep," replications")),size=.8)+
     scale_color_manual(values=c("black","blue","blue"))+
     scale_size_manual(values = c(1, .2,1))+
@@ -194,7 +194,7 @@ allplotscolor<-function(ee){
     guides(linetype=guide_legend(""),color=guide_legend(""))
   
   w_graph_mse_vsf <- function(x,variab="mu",variab2="jolitype"){
-    tab=empmse[(!is.element(empmse$variable,c("f4","f15bad","f19bad","f23bad","Vf"))),]
+    tab=empmse[(!is.element(empmse$variable,c("f_naive","f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad","Vf"))),]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
     try(tab$value[is.na(tab$value)]<-1e-10)
@@ -249,7 +249,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
   sel2=(1:npoints)[(1:npoints)%%(npoints%/%300)==1]
   
   theme_set(theme_bw())
-  w_graph_0<-ggplot(AAA[(!is.element(AAA$variable,c("f15bad","f19bad","f23bad","Vf")))&AAA$rep==2&is.element(AAA$i,sel),], 
+  w_graph_0<-ggplot(AAA[(!is.element(AAA$variable,c("f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad","Vf")))&AAA$rep==2&is.element(AAA$i,sel),], 
                     aes(x=y0, y=value, linetype=mu,color=jolitype)) +
     xlab("$y_0$")+ylab("")+
     scale_colour_grey()+ 
@@ -279,7 +279,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
   
   
   w_graph_0_vsf <- function(x,variab="mu",variab2="jolitype"){
-    tab=AAA[(!is.element(AAA$variable,c("f","f4","f15bad","f19bad","f23bad","mu0_12","mu0_13","mu0_14","mu0_15","mu0for25","mu0for26","Vf")))&AAA$rep==2,]
+    tab=AAA[(!is.element(AAA$variable,c("f","f_naive","f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_muhat","mu0_wnonpar","mu0_wpar","Vf")))&AAA$rep==2,]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
     try(tab$ftheta[tab$ftheta<1e-10]<-1e-10)
@@ -309,13 +309,13 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
   
   
   dff2<-reshape2::dcast(
-    AAA[is.element(AAA$variable,c("f12","Vf"))&AAA$rep==1,]
+    AAA[is.element(AAA$variable,c("f_inner_nonpar","Vf"))&AAA$rep==1,]
     ,i+y0+ftheta~variable,value.var="value")
-  dff2$lb=dff2$f12-qnorm(.975)*sqrt(dff2$Vf)
-  dff2$ub=dff2$f12+qnorm(.975)*sqrt(dff2$Vf)
+  dff2$lb=dff2$f_inner_nonpar-qnorm(.975)*sqrt(dff2$Vf)
+  dff2$ub=dff2$f_inner_nonpar+qnorm(.975)*sqrt(dff2$Vf)
   
   w_graph_0.1<-ggplot(dff2, 
-                      aes(x=y0, y=f12,linetype="$\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$")) +
+                      aes(x=y0, y=f_inner_nonpar,linetype="$\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$")) +
     xlab("$y_0$")+ylab("")+
     scale_colour_grey()+ 
     theme_bw()+
@@ -346,14 +346,14 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
       theme(legend.position = "bottom")+ 
       theme(legend.key.size = unit(2,"line"))+
       guides(size=FALSE, linetype=guide_legend(override.aes=list(size=c(.4,.2,1),alpha=c(1,.1,1))))}
-  w_graph_1s<-plyr::alply(c("f4","f12","f13","f14","f15","fhat25","fhat26","f20","f21","f22","f23","f25","f26"),1,w_graph1f)
-  names(w_graph_1s)<-paste0("w_graph1_",c("f4","f12","f13","f14","f15","fhat25","fhat26","f20","f21","f22","f23","f25","f26"))
+  w_graph_1s<-plyr::alply(c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar","f_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"),1,w_graph1f)
+  names(w_graph_1s)<-paste0("w_graph1_",c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar","f_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"))
   
   w_graph2 <- ggplot(AA[AA$rep<50 &(is.element(AA$i,sel)),], aes(x=y0, y=Vf, group=rep)) +
     xlab("$y_0$")+ylab("")+
     geom_line(size=0.2, alpha=0.1,aes(linetype="$\\hat{V}$"))+
     labs(title="", caption=paste0("Empirical variance and variance estimates, simulations for ",model$name,", repeated ",min(50,nrep), " times"))+  
-    geom_line(data=empvar[empvar$variable=="f12",],aes(x=y0,y=value,group=NULL,linetype="Empirical variance"), size=.8)+
+    geom_line(data=empvar[empvar$variable=="f_inner_nonpar",],aes(x=y0,y=value,group=NULL,linetype="Empirical variance"), size=.8)+
     geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL,linetype=paste0("$\\hat{V}$, averaged on ",nrep," replications")),size=.8)+
     scale_linetype_manual("",values = c("solid",  "solid","dashed")) +
     scale_size_manual(values = c(0.4, .2,1))+
@@ -378,7 +378,7 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
     guides(linetype=guide_legend(""),color=guide_legend(""))
   
   w_graph_mse_vsf <- function(x,variab="mu",variab2="jolitype"){
-    tab=empmse[(!is.element(empmse$variable,c("f4","f15bad","f19bad","f23bad","Vf"))),]
+    tab=empmse[(!is.element(empmse$variable,c("f_naive","f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad","Vf"))),]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
     try(tab$value[is.na(tab$value)]<-1e-10)
@@ -457,7 +457,7 @@ createallgraphs<-function(x){
 
 createalltables<-function(ee,dest.folder="datanotpushed/table"){
   ddd=ee$meanempMSE[-nrow(ee$meanempMSE),]
-  ddd[!is.element(ddd$variable,c("f15bad","f19bad","f23bad")),]
+  ddd[!is.element(ddd$variable,c("f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad")),]
   names(ddd)<-gsub("IntegratedMSE","IMSE",names(ddd),fixed=TRUE)
   ccoo<-function(x,y){paste0(signif(ddd[[x]],2)," (",signif(ddd[[y]],2),")")}
   ddd[[5]]=ccoo(5,10)

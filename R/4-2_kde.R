@@ -80,7 +80,7 @@ kde.outer<-function(y0,
 kde.outerK0mus<-function(K0,mus){apply(K0/mus,2,sum)/(sum(1/mus))}
 
 
-Trapeze<-function(y0,f4,mu){f4/(mu*caTools::trapz(y0,f4/mu))}
+Trapeze<-function(y0,f_naive,mu){f_naive/(mu*caTools::trapz(y0,f_naive/mu))}
 
 
 #' Compute Pfeffermann like kernel density estimators 
@@ -116,8 +116,7 @@ kde.inner<-function(y0,
 #' model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
 #' Obs<-generate.observations(model);
 #' kde.inner(y0,Obs)
-kde.innerf4Cmu0<-function(f4,Ctilde,mu0){Ctilde*f4/mu0}
-Ctildef<-function(mus,pik,Nhat){sum(mus/pik)/Nhat}
+kde.innerf_naiveCmu0<-function(f_naive,Ctilde,mu0){Ctilde*f_naive/mu0}
 
 
 grid1f<-function(model,npoints=300){seq(model$qloi.y(1/(npoints+1)),model$qloi.y(npoints/(npoints+1)),length.out=npoints)}
@@ -148,104 +147,73 @@ Allestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(model)
   Nhat=sum(1/pik)
   xihat=model$xihat(Obs)
   
-  mus_20=apply(Ks,2,sum)/apply(Ks/(Obs$pik),2,sum)
-  mu0_12=mf(yfun = model$yfun,afun=function(Obs){1})(y0,Obs)/mf(yfun = model$yfun,afun=function(Obs){1/Obs$pik})(y0,Obs)
-  #Ctilde16=Ctildef(mus_20,pik,Nhat)
-  
-  mus_21=mftheo(model)(ys,Obs)
-  mu0_13=mftheo(model)(y0,Obs)
-  #Ctilde17=Ctildef(mus_21,pik,Nhat)
-  
-  mus_22=mftheo(model,xihat)(ys,Obs)
-  mu0_14=mftheo(model,xihat)(y0,Obs)
-  #Ctilde18=Ctildef(mus_22,pik,Nhat)
-  
-  #mus_23bad=mfroughreg(model)(ys,Obs)
-  #mu0_15bad=mfroughreg(model)(y0,Obs)
-  #Ctilde19bad=Ctildef(mus_23bad,pik,Nhat)
-  
+  mus_nonpar=apply(Ks,2,sum)/apply(Ks/(Obs$pik),2,sum)
+  mu0_nonpar=mf(yfun = model$yfun,afun=function(Obs){1})(y0,Obs)/mf(yfun = model$yfun,afun=function(Obs){1/Obs$pik})(y0,Obs)
+
+  mus_parxi=mftheo(model)(ys,Obs)
+  mu0_parxi=mftheo(model)(y0,Obs)
+
+  mus_parxihat=mftheo(model,xihat)(ys,Obs)
+  mu0_parxihat=mftheo(model,xihat)(y0,Obs)
+
   transpi<-(function(x){log(x/(1-x))})(pik)
-  mus_23=(function(y){exp(y)/(1+exp(y))})(predict.lm(lm(transpi~ys,weights=1/pik)))
-  mu0_15=(function(y){exp(y)/(1+exp(y))})(predict.lm(lm(transpi~ys,weights=1/pik),newdata=data.frame(ys=y0)))
-  #Ctilde19=Ctildef(mus_23,pik,Nhat)
-  
-  mus_25=apply(Ks/Obs$pik,2,sum)/apply(Ks/(Obs$pik^2),2,sum)
-  mu0for25=apply(K0/Obs$pik,2,sum)/apply(K0/(Obs$pik^2),2,sum)
-  #Ctildefor25=Ctildef(mus_25,pik,Nhat)
-  
+  mus_muhat=(function(y){exp(y)/(1+exp(y))})(predict.lm(lm(transpi~ys,weights=1/pik)))
+  mu0_muhat=(function(y){exp(y)/(1+exp(y))})(predict.lm(lm(transpi~ys,weights=1/pik),newdata=data.frame(ys=y0)))
+
+  mus_wnonpar=apply(Ks/Obs$pik,2,sum)/apply(Ks/(Obs$pik^2),2,sum)
+  mu0_wnonpar=apply(K0/Obs$pik,2,sum)/apply(K0/(Obs$pik^2),2,sum)
+
   transpi2<-(function(x){log(1/x)-1})(pik)
-  mus_26=(function(x){exp(-(x+1))})(predict.lm(lm(transpi2~ys,weights=1/pik)))
-  mu0for26=(function(x){exp(-(x+1))})(predict.lm(lm(transpi2~ys,weights=1/pik),newdata=data.frame(ys=y0)))
-  #Ctildefor26=Ctildef(mus_26,pik,Nhat)
-  
-  
-  
+  mus_wpar=(function(x){exp(-(x+1))})(predict.lm(lm(transpi2~ys,weights=1/pik)))
+  mu0_wpar=(function(x){exp(-(x+1))})(predict.lm(lm(transpi2~ys,weights=1/pik),newdata=data.frame(ys=y0)))
+
   #naive
   f=model$dloi.y(y0)
-  f4=SK0/length(ys)
-  if(FALSE){kde.outerK0mus(K0,rep(1,length(ys)))-f4}
+  f_naive=SK0/length(ys)
+  if(FALSE){kde.outerK0mus(K0,rep(1,length(ys)))-f_naive}
   #intersect
-  f12<-kde.outerK0mus(K0,pik)
-  
-  #Compute inner
-  
-  f20<-kde.outerK0mus(K0,mus_20)         
-  f21<-kde.outerK0mus(K0,mus_21)         
-  f22<-kde.outerK0mus(K0,mus_22)         
-  #f23bad<-kde.outerK0mus(K0,mus_23bad)         
-  f23<-kde.outerK0mus(K0,mus_23)
-  f25<-kde.outerK0mus(K0,mus_25)         
-  f26<-kde.outerK0mus(K0,mus_26)         
+  f_inner_nonpar<-kde.outerK0mus(K0,pik)
   
   #Compute outer
+  f_outer_nonpar  <-kde.outerK0mus(K0,mus_nonpar)         
+  f_outer_parxi   <-kde.outerK0mus(K0,mus_parxi)         
+  f_outer_parxihat<-kde.outerK0mus(K0,mus_parxihat)         
+  f_outer_muhat<-kde.outerK0mus(K0,mus_muhat)
+  f_outer_wnonpar<-kde.outerK0mus(K0,mus_wnonpar)         
+  f_outer_wpar<-kde.outerK0mus(K0,mus_wpar)         
+  
+  #Compute inner
   Chat<-length(ys)/Nhat
-  f13   =if(is.null(model$nc)){Trapeze(y0,f4,mu0_13)}else{f4/(mu0_13*model$nc(ys,model$xi,h))}
-  f14   =if(is.null(model$nc)){Trapeze(y0,f4,mu0_14)}else{f4/(mu0_14*model$nc(ys,xihat,h))}
-  #f15bad=f4*Chat/mu0_15bad
-  f15   =Trapeze(y0,f4,mu0_15)
-  fhat25   =Trapeze(y0,f4,mu0for25)
-  fhat26   =Trapeze(y0,f4,mu0for26)
+  f_inner_parxi   =if(is.null(model$nc)){Trapeze(y0,f_naive,mu0_parxi)}else{f_naive/(mu0_parxi*model$nc(ys,model$xi,h))}
+  f_inner_parxihat   =if(is.null(model$nc)){Trapeze(y0,f_naive,mu0_parxihat)}else{f_naive/(mu0_parxihat*model$nc(ys,xihat,h))}
+  f_inner_muhat   =Trapeze(y0,f_naive,mu0_muhat)
+  f_wnonpar   =Trapeze(y0,f_naive,mu0_wnonpar)
+  f_wpar   =Trapeze(y0,f_naive,mu0_wpar)
   
-  #f16=kde.innerf4Cmu0(f4,Ctilde16,mu0_12)
-  #f17=kde.innerf4Cmu0(f4,Ctilde17,mu0_13)
-  #f18=kde.innerf4Cmu0(f4,Ctilde18,mu0_14)
-  #f19=kde.innerf4Cmu0(f4,Ctilde19,mu0_15)
-  #f19bad=kde.innerf4Cmu0(f4,Ctilde19bad,mu0_15bad)
-  #ftilde25=kde.innerf4Cmu0(f4,Ctildefor25,mu0for25)
-  #ftilde26=kde.innerf4Cmu0(f4,Ctildefor26,mu0for26)
-  
+
     Vf=varkde.outer(model,y0,Obs)
   
   cbind(f=f,
-        f4=f4,
-        f12=f12,
-        f13=f13,
-        f14=f14,
-        f15=f15,
-        #f15bad=f15bad,
-        fhat25=fhat25,
-        fhat26=fhat26,
-        #f16=f16,
-        #f17=f17,
-        #f18=f18,
-        #f19=f19,
-        #f19bad=f19bad,
-        #ftilde25=ftilde25,
-        #ftilde26=ftilde26,
-        f20=f20,
-        f21=f21,
-        f22=f22,
-        f23=f23,
-        #f23bad=f23bad,
-        f25=f25,
-        f26=f26,
+        f_naive=f_naive,
+        f_inner_nonpar=f_inner_nonpar,
+        f_inner_parxi=f_inner_parxi,
+        f_inner_parxihat=f_inner_parxihat,
+        f_inner_muhat=f_inner_muhat,
+        f_wnonpar          =f_wnonpar,
+        f_wpar          =f_wpar,
+        f_outer_nonpar  =f_outer_nonpar,
+        f_outer_parxi   =f_outer_parxi,
+        f_outer_parxihat=f_outer_parxihat,
+        f_outer_muhat  =f_outer_muhat,
+        f_outer_wnonpar=f_outer_wnonpar,
+        f_outer_wpar   =f_outer_wpar,
         Vf=Vf,
-        mu0_12=mu0_12,
-        mu0_13=mu0_13,
-        mu0_14=mu0_14,
-        mu0_15=mu0_15,
-        mu0for25=mu0for25,
-        mu0for26=mu0for26)
+        mu0_nonpar     =mu0_nonpar,
+        mu0_parxi      =mu0_parxi,
+        mu0_parxihat   =mu0_parxihat,
+        mu0_muhat      =mu0_muhat,
+        mu0_wnonpar    =mu0_wnonpar,
+        mu0_wpar       =mu0_wpar)
 }
 
 
@@ -265,14 +233,14 @@ Allestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(model)
 #' Obs<-generate.observations(model);
 #' Simuletout(model,Obs,model)
 
-quoi=c("f","f4",
-       "f12","f13","f14","f15","f15bad","fhat25",  "fhat26",
-       "f16","f17","f18","f19","f19bad","ftilde25","ftilde26",
-       "f20","f21","f22","f23","f23bad","f25",     "f26",
-       "mu0_12","mu0_13","mu0_14","mu0_15","mu0_15bad","mu0for25","mu0for26",
+quoi=c("f","f_naive",
+       "f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_inner_muhatbad","f_wnonpar",  "f_wpar",
+       "f_inner_16","f_inner_17","f_inner_18","f_inner_19","f_inner_19bad","ftilde25","ftilde26",
+       "f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_muhatbad","f_outer_wnonpar",     "f_outer_wpar",
+       "mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_muhat","mu0_muhatbad","mu0_wnonpar","mu0_wpar",
        "Vf")
 equationnumber=c("","(4)",
-                "(12)","(13)","(14)","(15)","(15bad)","(hat25)",  "(hat26)",
+                "(12)","(13)","(14)","(15)","(15bad)","(_wnonpar)",  "(_wpar)",
                 "(16)","(17)","(18)","(19)","(19bad)","(tilde25)","(tilde26)",
                 "(20)","(21)","(22)","(23)","(23bad)","(25)",     "(26)",
                 rep("",8))
