@@ -24,8 +24,6 @@ ker<-kergaus
 #' plot(y0,mf(model)(y0,generate.observations(model)),type='l')
   mf<-function(model=model0,ker=kergaus,yfun=model$yfun,afun=model$pifun){
   function(y0,Obs,h=ks::hpi(x=yfun(Obs))){apply(ker$K(outer(yfun(Obs),y0,"-")/h),2,sum)/apply(ker$K(outer(yfun(Obs),y0,"-")/h)/afun(Obs),2,sum)}}
-
-
 #' Compute an estimate of E[I\mid Y=y0] of the form $m(y,\hat{\xi})$ 
 #' @param y0: Point of vector of points where the conditional expected value is needed
 #' @param Obs: Observations
@@ -234,31 +232,29 @@ Allestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(model)
 #' Simuletout(model,Obs,model)
 
 quoi=c("f","f_naive",
-       "f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_inner_muhatbad","f_wnonpar",  "f_wpar",
-       "f_inner_16","f_inner_17","f_inner_18","f_inner_19","f_inner_19bad","ftilde25","ftilde26",
-       "f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_muhatbad","f_outer_wnonpar",     "f_outer_wpar",
-       "mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_muhat","mu0_muhatbad","mu0_wnonpar","mu0_wpar",
+       "f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar",  "f_wpar",
+       "f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar",     "f_outer_wpar",
+       "mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_muhat","mu0_wnonpar","mu0_wpar",
        "Vf")
 equationnumber=c("","(4)",
-                "(12)","(13)","(14)","(15)","(15bad)","(_wnonpar)",  "(_wpar)",
-                "(16)","(17)","(18)","(19)","(19bad)","(tilde25)","(tilde26)",
-                "(20)","(21)","(22)","(23)","(23bad)","(25)",     "(26)",
-                rep("",8))
+                "(12)","(13)","(14)","(15)","(_wnonpar)",  "(_wpar)",
+                "(20)","(21)","(22)","(23)","(25)",     "(26)",
+                rep("",7))
 joliquoi=c("$f$","$p$",paste0("$",
-  rep(c("\\hat{f}","$\\tilde{f}$","f^\\dagger",""),each=7),
-  rep(c("_{",""),times=c(21,7)),
-  rep(c("\\hat\\mu,\\rm{nonpar}","\\mu,\\xi","\\mu,\\hat\\xi","\\hat\\mu,\\rm{par}","\\hat\\mu,\\rm{par(rough)}","\\hat\\omega,\\rm{nonpar}","\\hat\\omega,\\rm{par}"),times=4),
-  rep(c("}$",""),times=c(21,7))),"\\hat{V}")
+  rep(c("\\hat{f}","f^\\dagger",""),each=6),
+  rep(c("_{",""),times=c(12,6)),
+  rep(c("\\hat\\mu,\\rm{nonpar}","\\mu,\\xi","\\mu,\\hat\\xi","\\hat\\mu,\\rm{par}","\\hat\\omega,\\rm{nonpar}","\\hat\\omega,\\rm{par}"),times=3),
+  rep(c("}$",""),times=c(12,6))),"\\hat{V}")
   
   
   aux<-data.frame(variable=quoi,
                   jolivariable=joliquoi,
                   equationnumber=equationnumber,
                   jolivariable2=paste(equationnumber,joliquoi),
-                  type=c("f","p",rep(c("hatf","tildef","fdagger","hatmu"),each=7),"hatV"),
-                  jolitype=c("f","$p$",rep(c("$\\hat{f}$","$\\tilde{f}$","$f^\\dagger$","$\\hat\\mu$"),each=7),"$\\hat{V}$"),
-                  mu=c("","1",rep(c("$\\hat\\mu,\\rm{nonpar}$","$\\mu,\\xi$","$\\mu,\\hat\\xi$","$\\hat\\mu,\\rm{par}$","$\\hat\\mu,\\rm{par(rough)}$","$\\hat\\omega,\\rm{nonpar}$","$\\hat\\omega,\\rm{par}$"),times=4),"$\\hat{V}$"),
-                  mulaid=c("","1",rep(c("nonpar$","xi","xihat","muhatpar","muhatparrough","omeganonpar$","omegapar$"),times=4),"$V$"))
+                  type=c("f","p",rep(c("hatf","fdagger","hatmu"),each=6),"hatV"),
+                  jolitype=c("f","$p$",rep(c("$\\hat{f}$","$f^\\dagger$","$\\hat\\mu$"),each=6),"$\\hat{V}$"),
+                  mu=c("","1",rep(c("$\\hat\\mu,\\rm{nonpar}$","$\\mu,\\xi$","$\\mu,\\hat\\xi$","$\\hat\\mu,\\rm{par}$","$\\hat\\omega,\\rm{nonpar}$","$\\hat\\omega,\\rm{par}$"),times=3),"$\\hat{V}$"),
+                  mulaid=c("","1",rep(c("nonpar$","xi","xihat","muhatpar","omeganonpar$","omegapar$"),times=3),"$V$"))
 
   
 
