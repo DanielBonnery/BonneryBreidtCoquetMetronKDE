@@ -509,11 +509,11 @@ createalltables<-function(ee,dest.folder="datanotpushed/table"){
   names(ddd)<-gsub("q_$"," $\\mid ",names(ddd),fixed=TRUE)
   names(ddd)<-gsub("jolivariable2","Estimator",names(ddd),fixed=TRUE)
   
+  if(!is.null(dest.folder)){
   y=SweaveLst::stargazer2(ddd,summary=FALSE,style="aer",title=ee$model$name,label=paste0("tab",ee$model$name),rownames=FALSE)
   y=gsub("\\\\","\\",y,fixed=TRUE);cat(y)
   cat(capture.output(cat(y)),file=file.path(dest.folder,paste0(tolower(gsub(" ", "",ee$model$name, fixed = TRUE)),".tex")),append=FALSE)
-  
-  if(!is.null(dest.folder)){try(system(paste0("cd ",dest.folder,";pdflatex -shell-escape -interaction=nonstopmode tables.tex")))}
+  try(system(paste0("cd ",dest.folder,";pdflatex -shell-escape -interaction=nonstopmode tables.tex")))}
   return(ddd)
 }
 
