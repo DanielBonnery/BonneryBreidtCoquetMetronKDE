@@ -227,7 +227,6 @@ allplotscolor<-function(ee){
   w_graph_var <- ggplot(empvar[sel,][is.element(empvar$variable,quoi[-c(1,23)])&is.element(empvar$i,sel),], 
                         aes(x=y0, y=value, linetype=mu,color=jolitype)) +
     xlab("$y_0$")+ylab("")+
-    scale_colour_function1()+ 
     theme_bw()+
     geom_line()+ 
     labs(title="", caption=paste0("Empirical variance, simulations for ",model$name,", obtained for ",nrep," replications"))+
@@ -245,7 +244,6 @@ allplotscolor<-function(ee){
     
     ggplot(tab[levels(tab$tretre)[tab$tretre]==x,], 
            aes(x=y0, y=value,color=trotro)) +
-      scale_colour_function1()+ 
       xlab("$y_0$")+ylab("")+
       theme_bw()+
       geom_line()+ 
@@ -265,7 +263,6 @@ allplotscolor<-function(ee){
   
   w_graph_mse_final <- ggplot(empmse[is.element(empvar$C,c("NA","tilde")),], 
                               aes(x=y0, y=value, linetype=mu,color=jolitype)) +
-    scale_colour_function1()+ 
     theme_bw()+
     geom_line()+ 
     ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
@@ -285,7 +282,7 @@ allplotscolor<-function(ee){
 
 
 
-allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
+allplots<-function(ee){
   attach(ee)
   
   sel=(1:npoints)[(1:npoints)%%(npoints%/%60)==1]
@@ -463,40 +460,20 @@ allplots<-function(ee,scale_colour_function1=ggplot2::scale_colour_grey){
 
 
 
-createallgraphs<-function(x){
+createallgraphs<-function(x,texfolderoutput="datanotpushed/graphs/tex/",pdffolderoutput="datanotpushed/graphs/pdf/"){
   y=load(x)
   prefix<-basename(x)
   prefix<-strsplit(prefix,".",fixed = TRUE)[[1]][1]
-  
-  #pdf(paste0("datanotpushed/graphs/pdf/",prefix,".pdf"))
-  #try(eval(parse(text=paste0("print(",y,")"))))
-  #dev.off()
-  
-  tikz(paste0("datanotpushed/graphs/tex/",prefix,".tex"),standAlone = TRUE,sanitize=FALSE)
+  tikz(paste0("texfolderoutput",prefix,".tex"),standAlone = TRUE,sanitize=FALSE)
   try(eval(parse(text=paste0("print(",y,")"))))
   dev.off()
   
-  tx  <- readLines(paste0("datanotpushed/graphs/tex/",prefix,".tex"))
+  tx  <- readLines(paste0("texfolderoutput",prefix,".tex"))
   tx  <- c(tx[3],"\\usepackage{pgfplots}","\\usepgfplotslibrary{external}","\\tikzexternalize", tx[-(1:4)])
-  writeLines(tx, paste0("datanotpushed/graphs/tex/",prefix,".tex"))
+  writeLines(tx, paste0("texfolderoutput",prefix,".tex"))
   
-  
-  try(system(paste0( "pdflatex -shell-escape -interaction=nonstopmode datanotpushed/graphs/tex/",prefix,".tex")))
-  try(system(paste0("mv ",prefix,".pdf datanotpushed/graphs/pdf/")))
-  
-  if(FALSE){
-    Y=get(y)
-    attach(Y)
-    sapply(names(Y),function(z){
-      png(paste0("datanotpushed/graphs/png/",prefix,z,".png"))
-      try(eval(parse(text=paste0("print(",z,")"))))
-      dev.off()
-      
-      tikz(paste0("datanotpushed/graphs/tex/",prefix,z,".tex"),standAlone = FALSE)
-      try(eval(parse(text=paste0("print(",z,")"))))
-      dev.off()
-    })}
-}
+  try(system(paste0( "pdflatex -shell-escape -interaction=nonstopmode ",texfolderoutput,prefix,".tex")))
+  try(system(paste0("mv ",prefix,".pdf ",pdffolderoutput)))}
 
 createalltables<-function(ee,dest.folder="datanotpushed/table"){
   ddd=ee$meanempMSE[-nrow(ee$meanempMSE),]

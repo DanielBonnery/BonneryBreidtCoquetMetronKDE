@@ -255,13 +255,13 @@ joliquoi=c("$f$","$p$",paste0("$",
   rep(c("\\hat{f}","f^\\dagger",""),each=6),
   rep(c("_{",""),times=c(12,6)),
   rep(c("\\hat\\mu,\\rm{nonpar}","\\mu,\\xi","\\mu,\\hat\\xi","\\hat\\mu,\\rm{par}","\\hat\\omega,\\rm{nonpar}","\\hat\\omega,\\rm{par}"),times=3),
-  rep(c("}$",""),times=c(12,6))),"\\hat{V}")
+  rep(c("}$","$"),times=c(12,6))),"$\\hat{V}$")
   
   
   aux<-data.frame(variable=quoi,
                   jolivariable=joliquoi,
                   equationnumber=equationnumber,
-                  jolivariable2=paste(equationnumber,joliquoi),
+                  jolivariable2=paste(joliquoi,equationnumber),
                   type=c("f","p",rep(c("hatf","fdagger","hatmu"),each=6),"hatV"),
                   jolitype=c("$f$","$p$",rep(c("$\\hat{f}$","$f^\\dagger$","$\\hat\\mu$"),each=6),"$\\hat{V}$"),
                   mu=c("","1",rep(c("$\\hat\\mu,\\rm{nonpar}$","$\\mu,\\xi$","$\\mu,\\hat\\xi$","$\\hat\\mu,\\rm{par}$","$\\hat\\omega,\\rm{nonpar}$","$\\hat\\omega,\\rm{par}$"),times=3),"$\\hat{V}$"),
