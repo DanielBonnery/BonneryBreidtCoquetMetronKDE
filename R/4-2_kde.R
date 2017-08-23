@@ -1,3 +1,13 @@
+
+generate.observations<-
+function (model) 
+{
+  Y <- model$rloiy()
+  Z <- model$rloiz(Y)
+  S <- model$Scheme$S(Z)
+  Pik <- model$Scheme$Pik(Z)
+  list(y = as.matrix(Y)[S, ], z = as.matrix(Z)[S, ], pik = Pik[S],m=mean(model$yfun(list(y=as.matrix(Y)))),N=model$conditionalto$N,n=length(S))
+}
 # model0 a default object of class model
 model0<-list(yfun=function(obs){obs$y},
              pifun=function(obs){obs$pik},
@@ -135,7 +145,7 @@ grid2f<-function(model,npoints=300){model$qloi.y(seq(1/(npoints+1)),(npoints/(np
 #' model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
 #' Obs<-generate.observations(model);
 #' Allestimates(model,Obs,y0)
-Allestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(model),ker=kergaus,h=ks::hpi(x=model$yfun(Obs))){
+Allkdeestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(model),ker=kergaus,h=ks::hpi(x=model$yfun(Obs))){
   K0=ker$K(outer(model$yfun(Obs),y0,"-")/h)/h
   Ks=ker$K(outer(model$yfun(Obs),model$yfun(Obs),"-")/h)/h
   SK0=apply(K0,2,sum)
@@ -181,12 +191,12 @@ Allestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(model)
   f_outer_wpar<-kde.outerK0mus(K0,mus_wpar)         
   
   #Compute inner
-  Chat<-length(ys)/Nhat
-  f_inner_parxi   =if(is.null(model$nc)){Trapeze(y0,f_naive,mu0_parxi)}else{f_naive/(mu0_parxi*model$nc(ys,model$xi,h))}
+  
+  f_inner_parxi      =if(is.null(model$nc)){Trapeze(y0,f_naive,mu0_parxi)}else{f_naive/(mu0_parxi*model$nc(ys,model$xi,h))}
   f_inner_parxihat   =if(is.null(model$nc)){Trapeze(y0,f_naive,mu0_parxihat)}else{f_naive/(mu0_parxihat*model$nc(ys,xihat,h))}
-  f_inner_muhat   =Trapeze(y0,f_naive,mu0_muhat)
-  f_wnonpar   =Trapeze(y0,f_naive,mu0_wnonpar)
-  f_wpar   =Trapeze(y0,f_naive,mu0_wpar)
+  f_inner_muhat      =Trapeze(y0,f_naive,mu0_muhat)
+  f_wnonpar          =Trapeze(y0,f_naive,mu0_wnonpar)
+  f_wpar             =Trapeze(y0,f_naive,mu0_wpar)
   
 
     Vf=varkde.outer(model,y0,Obs)
@@ -212,6 +222,7 @@ Allestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(model)
         mu0_muhat      =mu0_muhat,
         mu0_wnonpar    =mu0_wnonpar,
         mu0_wpar       =mu0_wpar)
+
 }
 
 
@@ -233,11 +244,11 @@ Allestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(model)
 
 quoi=c("f","f_naive",
        "f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar",  "f_wpar",
-       "f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar",     "f_outer_wpar",
+       "f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar",
        "mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_muhat","mu0_wnonpar","mu0_wpar",
        "Vf")
 equationnumber=c("","(4)",
-                "(12)","(13)","(14)","(15)","(_wnonpar)",  "(_wpar)",
+                "(12)","(13)","(14)","(15)","(wnonpar)",  "(wpar)",
                 "(20)","(21)","(22)","(23)","(25)",     "(26)",
                 rep("",7))
 joliquoi=c("$f$","$p$",paste0("$",
@@ -252,7 +263,7 @@ joliquoi=c("$f$","$p$",paste0("$",
                   equationnumber=equationnumber,
                   jolivariable2=paste(equationnumber,joliquoi),
                   type=c("f","p",rep(c("hatf","fdagger","hatmu"),each=6),"hatV"),
-                  jolitype=c("f","$p$",rep(c("$\\hat{f}$","$f^\\dagger$","$\\hat\\mu$"),each=6),"$\\hat{V}$"),
+                  jolitype=c("$f$","$p$",rep(c("$\\hat{f}$","$f^\\dagger$","$\\hat\\mu$"),each=6),"$\\hat{V}$"),
                   mu=c("","1",rep(c("$\\hat\\mu,\\rm{nonpar}$","$\\mu,\\xi$","$\\mu,\\hat\\xi$","$\\hat\\mu,\\rm{par}$","$\\hat\\omega,\\rm{nonpar}$","$\\hat\\omega,\\rm{par}$"),times=3),"$\\hat{V}$"),
                   mulaid=c("","1",rep(c("nonpar$","xi","xihat","muhatpar","omeganonpar$","omegapar$"),times=3),"$V$"))
 
@@ -260,8 +271,8 @@ joliquoi=c("$f$","$p$",paste0("$",
 
 Checkdensity<-function(model,npoints){
   attach(model)
-  y0=seq(model$qloi.y(1/(npoints+1)),model$qloi.y(npoints/(npoints+1)),length.out=npoints)
-  plyr::aaply(Allestimates(model,y0),2,function(y){caTools::trapz(y0,y)})}
+  y0=grid1f(model,npoints)
+  plyr::aaply(Allkdeestimates(model,y0),2,function(y){caTools::trapz(y0,y)})}
   
 
 #' @example

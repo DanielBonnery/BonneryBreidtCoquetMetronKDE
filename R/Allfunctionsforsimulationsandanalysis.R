@@ -6,11 +6,44 @@
 #' @example
 #' Simuletout(model=modelf(1),npoints=3,nrep=3)
 Simuletout<-function(model,npoints=300,y0=grid1f(model,npoints),nrep=1000){
-  ff<-plyr::raply(nrep,(function(x,.model=model,.y0=y0){
-    Allestimates(.model,.y0)})(),.progress="text")
+  OO<-plyr::rlply(nrep,(function(x,.model=model){
+    generate.observations(model)})(),.progress="text")
+  
+  ff<-plyr::laply(OO,function(Obs){
+    Allkdeestimates(model,Obs,y0)},.progress="text")
   dimnames(ff)[1:2]<-list(1:nrep,1:length(y0))
   names(dimnames(ff))<-c("rep","i","variable")
-  list(ff=ff,model=model,y0=y0,nrep=nrep)
+  gg<-plyr::laply(OO,function(Obs){
+    pik=model$pifun(Obs);ys=model$yfun(Obs);ht=sum(ys/pik); c(yS=sum(ys),t=N*Obs$m,m=Obs$m,ht=ht,hayek=ht/sum(1/pik),htm=ht/Obs$N,n=Obs$n,N=Obs$N)},.progress="text")
+  gg1<-cbind(gg,plyr::aaply(ff[,,c("f",
+                                  "f_naive",
+                                  "f_inner_nonpar",
+                                  "f_inner_parxi",
+                                  "f_inner_parxihat",
+                                  "f_inner_muhat",
+                                  "f_wnonpar",
+                                  "f_wpar",
+                                  "f_outer_nonpar",
+                                  "f_outer_parxi",
+                                  "f_outer_parxihat",
+                                  "f_outer_muhat",
+                                  "f_outer_wnonpar",
+                                  "f_outer_wpar")],c(1,3),function(d){caTools::trapz(y0,d*y0)}))
+  gg2=cbind(gg,gg[,"yS"]+(gg[,"N"]-gg[,"n"])*gg1[,c("f",
+                                  "f_naive",
+                                  "f_inner_nonpar",
+                                  "f_inner_parxi",
+                                  "f_inner_parxihat",
+                                  "f_inner_muhat",
+                                  "f_wnonpar",
+                                  "f_wpar",
+                                  "f_outer_nonpar",
+                                  "f_outer_parxi",
+                                  "f_outer_parxihat",
+                                  "f_outer_muhat",
+                                  "f_outer_wnonpar",
+                                  "f_outer_wpar")])
+  list(ff=ff,model=model,y0=y0,nrep=nrep,gg1=gg1,gg2=gg2)
 }
 
 #' Analyses simulation_output
@@ -63,6 +96,16 @@ analysetout<-function(dd){
   meanempMSE=merge(meanempMSE,meanempMSEq)
   ee=list(npoints=length(y0),model=model,empmeanA=empmeanA,meanempMSE=meanempMSE,model=model,y0=y0,nrep=nrep,AA=AA,AAA=AAA,empvar=empvar,empmse=empmse,avgvarest=avgvarest,coefvar=coefvar)
   return(ee)
+}
+
+
+
+analysemeanestimate<-function(dd){
+  attach(dd)  
+  allmeanestimates<-plyr::aaply(ff*ff["y0",],2,function(y){caTools::trapz(ff["y0",],y)})
+  
+  empvar
+  
 }
 
 
@@ -470,9 +513,14 @@ createalltables<-function(ee,dest.folder="datanotpushed/table"){
   y=gsub("\\\\","\\",y,fixed=TRUE);cat(y)
   cat(capture.output(cat(y)),file=file.path(dest.folder,paste0(tolower(gsub(" ", "",ee$model$name, fixed = TRUE)),".tex")),append=FALSE)
   
-  try(system(paste0("cd ",dest.folder,";pdflatex -shell-escape -interaction=nonstopmode tables.tex")))
+  if(dest.folder!=NULL){try(system(paste0("cd ",dest.folder,";pdflatex -shell-escape -interaction=nonstopmode tables.tex")))}
   return(ddd)
 }
+
+
+
+
+
 
 
 JayRtablef<-function(ee){
