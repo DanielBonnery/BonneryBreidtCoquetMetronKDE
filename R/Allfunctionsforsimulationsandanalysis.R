@@ -513,7 +513,7 @@ createalltables<-function(ee,dest.folder="datanotpushed/table"){
   y=gsub("\\\\","\\",y,fixed=TRUE);cat(y)
   cat(capture.output(cat(y)),file=file.path(dest.folder,paste0(tolower(gsub(" ", "",ee$model$name, fixed = TRUE)),".tex")),append=FALSE)
   
-  if(dest.folder!=NULL){try(system(paste0("cd ",dest.folder,";pdflatex -shell-escape -interaction=nonstopmode tables.tex")))}
+  if(!is.null(dest.folder)){try(system(paste0("cd ",dest.folder,";pdflatex -shell-escape -interaction=nonstopmode tables.tex")))}
   return(ddd)
 }
 
