@@ -114,7 +114,20 @@ allplotscolor<-function(ee){
   attach(ee)
   sel =(1:npoints)[(1:npoints)%%(npoints%/%60)==1]
   sel2=(1:npoints)[(1:npoints)%%(npoints%/%300)==1]
-  w_graph_0<-ggplot(AAA[(!is.element(AAA$variable,c("f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad","Vf")))&AAA$rep==2&is.element(AAA$i,sel),], 
+  w_graph_0<-ggplot(AAA[(is.element(AAA$variable,c("f",
+                                                   "f_inner_muhat",
+                                                   "f_inner_nonpar",
+                                                   "f_inner_parxi",
+                                                   "f_inner_parxihat",
+                                                   "f_naive",
+                                                   "f_outer_muhat",
+                                                   "f_outer_nonpar",
+                                                   "f_outer_parxi",
+                                                   "f_outer_parxihat",
+                                                   "f_outer_wnonpar",
+                                                   "f_outer_wpar",
+                                                   "f_wnonpar",
+                                                   "f_wpar")))&AAA$rep==2&is.element(AAA$i,sel),], 
                     aes(x=y0, y=value, linetype=mu,color=jolitype)) +
     xlab("$y_0$")+ylab("")+
     geom_line()+ 
@@ -122,26 +135,39 @@ allplotscolor<-function(ee){
     theme(legend.justification = c(1, 1), legend.position = c(1, 1))+
     stat_function(fun = model$dloi.y,size=.8,aes(size=.8,color="$f$",linetype="$f$"))+
     theme(legend.position = "right",legend.box = "vertical") + 
-    theme(legend.key.size = unit(2,"line"))+ 
+    theme(legend.key.size = unit(2,"line"))+
     guides(linetype=guide_legend(""),color=guide_legend(""))
   
   
-  w_graph_0.2<-ggplot(AAA[is.element(AAA$variable,quoi[2:3])&AAA$rep==2,], 
+  w_graph_0.2<-ggplot(AAA[is.element(AAA$variable,c("f_naive","f_inner_nonpar"))&AAA$rep==2,], 
                       aes(x=y0, y=value, color=jolivariable)) +
     xlab("$y_0$")+ylab("")+
     geom_line()+ 
     labs(title="", caption=paste0(model$name,': $p$, $\\hat{f}_{\\hat\\mu,\\rm{nopar}}$, and $f$'))+
     theme(legend.justification = c(1, 1), legend.position = c(1, 1))+
     stat_function(fun = model$dloi.y,size=.8,aes(size=.8,color="$f$"))+
-    theme(legend.position = "right",legend.box = "vertical") + 
+    theme(legend.position = "bottom") + 
     theme(legend.key.size = unit(2,"line"))+ 
-    scale_color_manual("",values=c("black","blue","red"))
+    scale_color_manual("",values=c("black","blue","red"))+
     guides(color=guide_legend(""))
   
   
   
   w_graph_0_vsf <- function(x,variab="mu",variab2="jolitype"){
-    tab=AAA[(!is.element(AAA$variable,c("f","f_naive","f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_muhat","mu0_wnonpar","mu0_wpar","Vf")))&AAA$rep==2,]
+    tab=AAA[(is.element(AAA$variable,c("f",
+                                       "f_inner_muhat",
+                                       "f_inner_nonpar",
+                                       "f_inner_parxi",
+                                       "f_inner_parxihat",
+                                       "f_naive",
+                                       "f_outer_muhat",
+                                       "f_outer_nonpar",
+                                       "f_outer_parxi",
+                                       "f_outer_parxihat",
+                                       "f_outer_wnonpar",
+                                       "f_outer_wpar",
+                                       "f_wnonpar",
+                                       "f_wpar")))&AAA$rep==2,]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
     try(tab$ftheta[tab$ftheta<1e-10]<-1e-10)
@@ -150,8 +176,8 @@ allplotscolor<-function(ee){
     
     ggplot(tab[levels(tab$tretre)[tab$tretre]==x,], aes(x=y0, y=value,color=trotro)) +
       xlab("$y_0$")+ylab("")+
-      stat_function(fun = model$dloi.y,size=.8,aes(size=.8,color="$f$"))+
       geom_line()+ 
+      stat_function(fun = model$dloi.y,size=.8,aes(size=.8,color="$f$"),colour="black")+
       labs(title="", caption=paste0(model$name,': "',x,'"-type estimators of $f$'))+
       theme(legend.position = "right",legend.box = "vertical") + 
       theme(legend.key.size = unit(2,"line"))+ 
@@ -183,7 +209,8 @@ allplotscolor<-function(ee){
     labs(title="", caption=paste0(model$name,':  Confidence interval for $\\hat{f}_{\\hat\\mu,\\rm{nonpar}}$'))+
     theme(legend.position = "right",legend.box = "vertical") + 
     theme(legend.key.size = unit(2,"line"))+
-    guides(color=guide_legend(""),color=guide_legend(""))
+    guides(color=guide_legend(""),color=guide_legend(""))+
+    theme(legend.position = "bottom")
   
   
   w_graph1f <- function(x){
@@ -199,10 +226,10 @@ allplotscolor<-function(ee){
                 aes(x=y0,y=f,group=NULL,color=paste0(joliname,", averaged on ",nrep," replications")),size=1)  +
       stat_function(fun = model$dloi.y,size=.4,aes(size=.4,color="$f$"))+
       scale_size_manual(values = c(0.4, .2,1))+
-      scale_color_manual(values=c("blue","blue","black"))+
+      scale_color_manual(values=c("black","blue","blue"))+
       theme(legend.position = "bottom")+ 
       theme(legend.key.size = unit(2,"line"))+
-      guides(size=FALSE, color=guide_legend(override.aes=list(size=c(.4,1,1),alpha=c(.1,1,1))))}
+      guides(size=FALSE, color=guide_legend(override.aes=list(size=c(1,.4,1),alpha=c(1,.1,1))))}
   w_graph_1s<-plyr::alply(c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar","f_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"),1,w_graph1f)
   names(w_graph_1s)<-paste0("w_graph1_",c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar","f_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"))
   
@@ -407,7 +434,20 @@ allplots<-function(ee){
   
   
   
-  w_graph_var <- ggplot(empvar[is.element(empvar$variable,quoi[-c(1,23)])&is.element(empvar$i,sel),], 
+  w_graph_var <- ggplot(empvar[is.element(empvar$variable,c("f",
+                                                            "f_inner_muhat",
+                                                            "f_inner_nonpar",
+                                                            "f_inner_parxi",
+                                                            "f_inner_parxihat",
+                                                            "f_naive",
+                                                            "f_outer_muhat",
+                                                            "f_outer_nonpar",
+                                                            "f_outer_parxi",
+                                                            "f_outer_parxihat",
+                                                            "f_outer_wnonpar",
+                                                            "f_outer_wpar",
+                                                            "f_wnonpar",
+                                                            "f_wpar"))&is.element(empvar$i,sel),], 
                         aes(x=y0, y=value, linetype=mu,color=jolitype)) +
     xlab("$y_0$")+ylab("")+
     geom_line()+ 
@@ -418,7 +458,18 @@ allplots<-function(ee){
     guides(linetype=guide_legend(""),color=guide_legend(""))
   
   w_graph_mse_vsf <- function(x,variab="mu",variab2="jolitype"){
-    tab=empmse[(!is.element(empmse$variable,c("f_naive","f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad","Vf"))),]
+    tab=empmse[(is.element(empmse$variable,c("f_inner_muhat",
+                                             "f_inner_nonpar",
+                                             "f_inner_parxi",
+                                             "f_inner_parxihat",
+                                             "f_outer_muhat",
+                                             "f_outer_nonpar",
+                                             "f_outer_parxi",
+                                             "f_outer_parxihat",
+                                             "f_outer_wnonpar",
+                                             "f_outer_wpar",
+                                             "f_wnonpar",
+                                             "f_wpar"))),]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
     try(tab$value[is.na(tab$value)]<-1e-10)
@@ -434,8 +485,18 @@ allplots<-function(ee){
       theme(legend.key.size = unit(2,"line"))+ 
       guides(color=guide_legend(""))
   }
-  w_graph_mse_vsmus<-plyr::alply(levels(empmse$mu)[levels(empmse$mu)!="$\\hat\\mu,\\rm{par(rough)}$"],1,w_graph_mse_vsf)
-  names(w_graph_mse_vsmus)<-paste0("w_graph_mse_vsmu",1:(nlevels(empmse$mu)-1))
+  w_graph_mse_vsmus<-plyr::alply(c("$\\hat\\mu,\\rm{nonpar}$",
+                                   "$\\hat\\mu,\\rm{par}$",
+                                   "$\\hat\\omega,\\rm{nonpar}$",
+                                   "$\\hat\\omega,\\rm{par}$",
+                                   "$\\mu,\\hat\\xi$",
+                                   "$\\mu,\\xi$"),1,w_graph_mse_vsf)
+  names(w_graph_mse_vsmus)<-paste0("w_graph_mse_vsmu",c("$\\hat\\mu,\\rm{nonpar}$",
+                                                        "$\\hat\\mu,\\rm{par}$",
+                                                        "$\\hat\\omega,\\rm{nonpar}$",
+                                                        "$\\hat\\omega,\\rm{par}$",
+                                                        "$\\mu,\\hat\\xi$",
+                                                        "$\\mu,\\xi$"))
   w_graph_mse_vstypes<-plyr::alply(levels(empmse$jolitype),1,w_graph_mse_vsf,variab="jolitype",variab2="mu")
   names(w_graph_mse_vstypes)<-paste0("w_graph_mse_vsmu",1:nlevels(empmse$jolitype))
   
