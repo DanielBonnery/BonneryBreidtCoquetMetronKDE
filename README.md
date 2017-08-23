@@ -1,8 +1,7 @@
-# KDE informative selection
-`pubBonneryBreidtCoquet2017` is an R package that contains the source code to reproduce the graphs and simulations of
-Kernel Estimation for a Superpopulation Probability Density Function under Informative Selection
-Daniel Bonnéry · F. Jay Breidt · François Coquet, 
-under revision in Metron Journal.
+# Kernel Estimation for a Superpopulation Probability Density Function under Informative Selection
+`pubBonneryBreidtCoquet2017` is an R package that contains the source code to reproduce the graphs and simulations of the article
+"Kernel Estimation for a Superpopulation Probability Density Function under Informative Selection", by 
+Daniel Bonnéry (UMD),  F. Jay Breidt (CSU) and  François Coquet (Irmar and Ensai), article under revision in Metron Journal.
 
 ## 1. How to install the package
 
@@ -52,77 +51,78 @@ demo(MSE_Figure.R,package = "pubBonneryBreidtCoquet2017")
 
 ## 2.2. Additional simulations
 
+## 2.2.1 Models 
+We ran simulations on different models. For each model, we produce a series of graphics and tables.
+
+
+
+## 2.2.2 How to run
+The following R statements  will run the simulations for all the models.
 
 
 ```r
 demo(model1,package = "pubBonneryBreidtCoquet2017")
-```
-
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_01.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_02.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_03.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_04.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_05.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_06.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_07.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_08.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_09.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_10.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_11.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_12.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_13.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_14.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_15.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_16.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_17.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_18.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_19.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_20.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_21.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_22.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_23.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_24.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_25.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_26.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_27.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_28.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_29.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_30.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_31.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_32.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_33.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_34.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_35.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_36.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_37.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_38.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_39.png )
-![]( datanotpushed/graphs/pdf/pdfpages/model1/page_40.png )
-
-
-```r
 demo(model2,package = "pubBonneryBreidtCoquet2017")
-```
-
-
-    
-
-```r
 demo(model3,package = "pubBonneryBreidtCoquet2017")
-```
-
-
-    
-
-```r
 demo(model4,package = "pubBonneryBreidtCoquet2017")
-```
-
-
-    
-
-```r
 demo(model5,package = "pubBonneryBreidtCoquet2017")
 ```
 
 
+## 2.2.3 Ouptputs
+
+
+![]( figure/model1/page_01.png )
+![]( figure/model1/page_02.png )
+![]( figure/model1/page_03.png )
+![]( figure/model1/page_04.png )
+![]( figure/model1/page_05.png )
+![]( figure/model1/page_06.png )
+![]( figure/model1/page_07.png )
+![]( figure/model1/page_08.png )
+![]( figure/model1/page_09.png )
+![]( figure/model1/page_10.png )
+![]( figure/model1/page_11.png )
+![]( figure/model1/page_12.png )
+![]( figure/model1/page_13.png )
+![]( figure/model1/page_14.png )
+![]( figure/model1/page_15.png )
+![]( figure/model1/page_16.png )
+![]( figure/model1/page_17.png )
+![]( figure/model1/page_18.png )
+![]( figure/model1/page_19.png )
+![]( figure/model1/page_20.png )
+![]( figure/model1/page_21.png )
+![]( figure/model1/page_22.png )
+![]( figure/model1/page_23.png )
+![]( figure/model1/page_24.png )
+![]( figure/model1/page_25.png )
+![]( figure/model1/page_26.png )
+![]( figure/model1/page_27.png )
+![]( figure/model1/page_28.png )
+![]( figure/model1/page_29.png )
+![]( figure/model1/page_30.png )
+![]( figure/model1/page_31.png )
+![]( figure/model1/page_32.png )
+![]( figure/model1/page_33.png )
+![]( figure/model1/page_34.png )
+![]( figure/model1/page_35.png )
+![]( figure/model1/page_36.png )
+![]( figure/model1/page_37.png )
+![]( figure/model1/page_38.png )
+![]( figure/model1/page_39.png )
+![]( figure/model1/page_40.png )
+![]( figure/model1/pg_0001.png )
+![]( figure/model1/pg_0002.png )
+![]( figure/model1/pg_0003.png )
+![]( figure/model1/pg_0004.png )
+![]( figure/model1/pg_0005.png )
+![]( figure/model1/pg_0006.png )
+![]( figure/model1/pg_0007.png )
+![]( figure/model1/pg_0008.png )
+![]( figure/model1/pg_0009.png )
+![]( figure/model1/pg_0010.png )
+![]( figure/model1/pg_0011.png )
+![]( figure/model1/pg_0012.png )
+![]( figure/model1/pg_0013.png )
+![]( figure/model1/pg_0014.png )
