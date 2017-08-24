@@ -62,4 +62,10 @@ model5f<-function(){
   model}
 
 
-modelf<-function(i){get(paste0("model",i,"f"))()}
+modelf<-function(i){
+  if(i==1){model=model1f()}
+  if(i==2){model=model2f()}
+  if(i==3){model=model3f()}
+  if(i==4){model=model4f()}
+  if(i==5){model=model5f()}
+  model}
