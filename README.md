@@ -6,7 +6,7 @@ Daniel Bonnéry (UMD),  F. Jay Breidt (CSU) and  François Coquet (Irmar and Ens
 ## 1. How to install the package
 
 ```r
-devtools::install_github("DanielBonnery/pubBonneryBreidtCoquet2017",force=TRUE)
+devtools::install_github("DanielBonnery/pubBonneryBreidtCoquet2017",dependencies=TRUE,force=TRUE)
 ```
 
 Note that this package depends on different R packages, including:
