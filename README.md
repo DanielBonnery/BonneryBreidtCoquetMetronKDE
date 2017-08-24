@@ -74,25 +74,6 @@ demo(model5,package = "pubBonneryBreidtCoquet2017")
 ## 2.2.3 Ouptputs
 
 
-![]( figure/model1/pg_0001.png )
-![]( figure/model1/pg_0002.png )
-![]( figure/model1/pg_0003.png )
-![]( figure/model1/pg_0003.png~ )
-![]( figure/model1/pg_0004.png )
-![]( figure/model1/pg_0005.png )
-![]( figure/model1/pg_0006.png )
-![]( figure/model1/pg_0007.png )
-![]( figure/model1/pg_0008.png )
-![]( figure/model1/pg_0009.png )
-![]( figure/model1/pg_0010.png )
-![]( figure/model1/pg_0011.png )
-![]( figure/model1/pg_0012.png )
-![]( figure/model1/pg_0013.png )
-![]( figure/model1/pg_0014.png )
-![]( figure/model1/pg_0015.png )
-![]( figure/model1/pg_0016.png )
-![]( figure/model1/pg_0017.png )
-![]( figure/model1/pg_0018.png )
 $w_graph_0
 ![plot of chunk r1_1](figure/r1_1-1.png)
 $w_graph_0.1
