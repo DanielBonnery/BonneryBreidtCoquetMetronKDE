@@ -15,9 +15,7 @@ Note that this package depends on different R packages, including:
 
 Some functions of `pubBonneryBreidtCoquet2017` produce pdf graphics and need pdflatex to be installed.
 
-## 2. Run the simulations
-
-## 2.1. Obtain the paper graphs and tables.
+## Produce the paper graphs and tables.
 
 
 
@@ -51,15 +49,13 @@ demo(MSE_Figure)
 |$\hat\omega,\rm{nonpar}                      |0.0014 (1.3)   |0.0014 (12)           |4.5e-06 (0.022)              |8.1e-07 (0.0035)             |5.4e-06 (0.01)        |
 |$\hat\omega,\rm{par}                         |0.00015 (0.14) |0.00015 (1.2)         |8e-07 (0.0039)               |3.3e-07 (0.0014)             |3.1e-07 (6e-04)       |
 
-## 2.2. Additional simulations
+## Run additional simulations
 
-## 2.2.1 Models 
 We ran simulations on different models. For each model, we produce a series of graphics and tables.
 
 ![](model.png)
 
 
-## 2.2.2 How to run
 The following R statements  will run the simulations for all the models.
 
 
@@ -73,9 +69,8 @@ demo(model5,package = "pubBonneryBreidtCoquet2017")
 ```
 
 
-## 2.2.3 Ouptputs: Graphs
 
-
+[1] "### Model 1"
 ![]( figure/model1/model1_col-figure0.png )
 ![]( figure/model1/model1_col-figure10.png )
 ![]( figure/model1/model1_col-figure11.png )
@@ -249,7 +244,7 @@ demo(model5,package = "pubBonneryBreidtCoquet2017")
 
 ## 2.2.3 Ouptputs: Tables
 
-Model 1:
+### Model 1:
 
 
 |Estimator                                    |IMSE           |IMSE $\mid Y<q_{.25}$ |IMSE $\mid q_{.25}<Y<q_{.5}$ |IMSE $\mid q_{.5}<Y<q_{.75}$ |IMSE $\mid q_{.75}<Y$ |
@@ -274,7 +269,7 @@ Model 1:
 |$\mu,\xi                                     |0 (0)          |0 (0)                 |0 (0)                        |0 (0)                        |0 (0)                 |
 |$\hat\omega,\rm{nonpar}                      |0.02 (0.24)    |4.5e-05 (0.00076)     |0.00016 (0.03)               |0.00041 (0.05)               |0.02 (1.4)            |
 |$\hat\omega,\rm{par}                         |0.003 (0.035)  |2.4e-05 (4e-04)       |3e-05 (0.0055)               |5e-05 (0.0061)               |0.0029 (0.21)         |
-Model 2:
+### Model 2:
 
 |Estimator                                    |IMSE           |IMSE $\mid Y<q_{.25}$ |IMSE $\mid q_{.25}<Y<q_{.5}$ |IMSE $\mid q_{.5}<Y<q_{.75}$ |IMSE $\mid q_{.75}<Y$ |
 |:--------------------------------------------|:--------------|:---------------------|:----------------------------|:----------------------------|:---------------------|
@@ -298,7 +293,7 @@ Model 2:
 |$\mu,\xi                                     |0 (0)          |0 (0)                 |0 (0)                        |0 (0)                        |0 (0)                 |
 |$\hat\omega,\rm{nonpar}                      |0.0046 (2)     |0.00016 (0.088)       |0.00017 (0.74)               |0.00027 (3.7)                |0.004 (27)            |
 |$\hat\omega,\rm{par}                         |2.2 (920)      |0.00091 (0.48)        |0.00048 (2)                  |0.0044 (59)                  |2.2 (14000)           |
-Model 3:
+### Model 3:
 
 |Estimator                                    |IMSE              |IMSE $\mid Y<q_{.25}$ |IMSE $\mid q_{.25}<Y<q_{.5}$ |IMSE $\mid q_{.5}<Y<q_{.75}$ |IMSE $\mid q_{.75}<Y$ |
 |:--------------------------------------------|:-----------------|:---------------------|:----------------------------|:----------------------------|:---------------------|
@@ -322,7 +317,7 @@ Model 3:
 |$\mu,\xi                                     |0 (0)             |0 (0)                 |0 (0)                        |0 (0)                        |0 (0)                 |
 |$\hat\omega,\rm{nonpar}                      |0.0037 (1.7)      |3.9e-16 (7.3e-13)     |2e-07 (0.00027)              |0.002 (3.1)                  |0.0017 (7.6)          |
 |$\hat\omega,\rm{par}                         |0.12 (54)         |5e-04 (0.94)          |8.5e-05 (0.12)               |0.0012 (1.8)                 |0.11 (520)            |
-Model 4:
+### Model 4:
 
 
 |Estimator                                    |IMSE              |IMSE $\mid Y<q_{.25}$ |IMSE $\mid q_{.25}<Y<q_{.5}$ |IMSE $\mid q_{.5}<Y<q_{.75}$ |IMSE $\mid q_{.75}<Y$ |
@@ -347,7 +342,7 @@ Model 4:
 |$\mu,\xi                                     |0 (0)             |0 (0)                 |0 (0)                        |0 (0)                        |0 (0)                 |
 |$\hat\omega,\rm{nonpar}                      |0.0012 (0.42)     |0.0012 (2.5)          |4e-06 (0.007)                |8.1e-07 (0.0014)             |6.3e-06 (0.0052)      |
 |$\hat\omega,\rm{par}                         |0.00016 (0.056)   |0.00016 (0.34)        |7.7e-07 (0.0013)             |3.2e-07 (0.00055)            |3.1e-07 (0.00026)     |
-Model 5:
+### Model 5:
 
 |Estimator                                    |IMSE           |IMSE $\mid Y<q_{.25}$ |IMSE $\mid q_{.25}<Y<q_{.5}$ |IMSE $\mid q_{.5}<Y<q_{.75}$ |IMSE $\mid q_{.75}<Y$ |
 |:--------------------------------------------|:--------------|:---------------------|:----------------------------|:----------------------------|:---------------------|
