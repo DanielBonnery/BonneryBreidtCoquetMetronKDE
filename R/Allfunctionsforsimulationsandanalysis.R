@@ -114,6 +114,7 @@ allplotscolor<-function(ee){
   attach(ee)
   sel =(1:npoints)[(1:npoints)%%(npoints%/%60)==1]
   sel2=(1:npoints)[(1:npoints)%%(npoints%/%300)==1]
+  sel3=(1:npoints)[(1:npoints)%%(npoints%/%40)==1]
   w_graph_0<-ggplot(AAA[(is.element(AAA$variable,c("f",
                                                    "f_inner_muhat",
                                                    "f_inner_nonpar",

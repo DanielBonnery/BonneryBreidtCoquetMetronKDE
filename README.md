@@ -74,49 +74,10 @@ demo(model5,package = "pubBonneryBreidtCoquet2017")
 ## 2.2.3 Ouptputs
 
 
-![]( figure/model1/page_01.png )
-![]( figure/model1/page_02.png )
-![]( figure/model1/page_03.png )
-![]( figure/model1/page_04.png )
-![]( figure/model1/page_05.png )
-![]( figure/model1/page_06.png )
-![]( figure/model1/page_07.png )
-![]( figure/model1/page_08.png )
-![]( figure/model1/page_09.png )
-![]( figure/model1/page_10.png )
-![]( figure/model1/page_11.png )
-![]( figure/model1/page_12.png )
-![]( figure/model1/page_13.png )
-![]( figure/model1/page_14.png )
-![]( figure/model1/page_15.png )
-![]( figure/model1/page_16.png )
-![]( figure/model1/page_17.png )
-![]( figure/model1/page_18.png )
-![]( figure/model1/page_19.png )
-![]( figure/model1/page_20.png )
-![]( figure/model1/page_21.png )
-![]( figure/model1/page_22.png )
-![]( figure/model1/page_23.png )
-![]( figure/model1/page_24.png )
-![]( figure/model1/page_25.png )
-![]( figure/model1/page_26.png )
-![]( figure/model1/page_27.png )
-![]( figure/model1/page_28.png )
-![]( figure/model1/page_29.png )
-![]( figure/model1/page_30.png )
-![]( figure/model1/page_31.png )
-![]( figure/model1/page_32.png )
-![]( figure/model1/page_33.png )
-![]( figure/model1/page_34.png )
-![]( figure/model1/page_35.png )
-![]( figure/model1/page_36.png )
-![]( figure/model1/page_37.png )
-![]( figure/model1/page_38.png )
-![]( figure/model1/page_39.png )
-![]( figure/model1/page_40.png )
 ![]( figure/model1/pg_0001.png )
 ![]( figure/model1/pg_0002.png )
 ![]( figure/model1/pg_0003.png )
+![]( figure/model1/pg_0003.png~ )
 ![]( figure/model1/pg_0004.png )
 ![]( figure/model1/pg_0005.png )
 ![]( figure/model1/pg_0006.png )
@@ -132,335 +93,343 @@ demo(model5,package = "pubBonneryBreidtCoquet2017")
 ![]( figure/model1/pg_0016.png )
 ![]( figure/model1/pg_0017.png )
 ![]( figure/model1/pg_0018.png )
-![]( figure/model1/pg_0019.png )
-![]( figure/model1/pg_0020.png )
-![]( figure/model1/pg_0021.png )
-![]( figure/model1/pg_0022.png )
-![]( figure/model1/pg_0023.png )
-![]( figure/model1/pg_0024.png )
-![]( figure/model1/pg_0025.png )
-![]( figure/model1/pg_0026.png )
-![]( figure/model1/pg_0027.png )
-![]( figure/model1/pg_0028.png )
-![]( figure/model1/pg_0029.png )
-![]( figure/model1/pg_0030.png )
-![]( figure/model1/pg_0031.png )
-![]( figure/model1/pg_0032.png )
-![]( figure/model1/pg_0033.png )
-![]( figure/model1/pg_0034.png )
-![]( figure/model1/pg_0035.png )
-![]( figure/model1/pg_0036.png )
-![]( figure/model1/pg_0037.png )
-![]( figure/model1/pg_0038.png )
-![]( figure/model2/page_01.png )
-![]( figure/model2/page_02.png )
-![]( figure/model2/page_03.png )
-![]( figure/model2/page_04.png )
-![]( figure/model2/page_05.png )
-![]( figure/model2/page_06.png )
-![]( figure/model2/page_07.png )
-![]( figure/model2/page_08.png )
-![]( figure/model2/page_09.png )
-![]( figure/model2/page_10.png )
-![]( figure/model2/page_11.png )
-![]( figure/model2/page_12.png )
-![]( figure/model2/page_13.png )
-![]( figure/model2/page_14.png )
-![]( figure/model2/page_15.png )
-![]( figure/model2/page_16.png )
-![]( figure/model2/page_17.png )
-![]( figure/model2/page_18.png )
-![]( figure/model2/page_19.png )
-![]( figure/model2/page_20.png )
-![]( figure/model2/page_21.png )
-![]( figure/model2/page_22.png )
-![]( figure/model2/page_23.png )
-![]( figure/model2/page_24.png )
-![]( figure/model2/page_25.png )
-![]( figure/model2/page_26.png )
-![]( figure/model2/page_27.png )
-![]( figure/model2/page_28.png )
-![]( figure/model2/page_29.png )
-![]( figure/model2/page_30.png )
-![]( figure/model2/page_31.png )
-![]( figure/model2/page_32.png )
-![]( figure/model2/page_33.png )
-![]( figure/model2/page_34.png )
-![]( figure/model2/page_35.png )
-![]( figure/model2/page_36.png )
-![]( figure/model2/page_37.png )
-![]( figure/model2/page_38.png )
-![]( figure/model2/page_39.png )
-![]( figure/model2/page_40.png )
-![]( figure/model2/pg_0001.png )
-![]( figure/model2/pg_0002.png )
-![]( figure/model2/pg_0003.png )
-![]( figure/model2/pg_0004.png )
-![]( figure/model2/pg_0005.png )
-![]( figure/model2/pg_0006.png )
-![]( figure/model2/pg_0007.png )
-![]( figure/model2/pg_0008.png )
-![]( figure/model2/pg_0009.png )
-![]( figure/model2/pg_0010.png )
-![]( figure/model2/pg_0011.png )
-![]( figure/model2/pg_0012.png )
-![]( figure/model2/pg_0013.png )
-![]( figure/model2/pg_0014.png )
-![]( figure/model2/pg_0015.png )
-![]( figure/model2/pg_0016.png )
-![]( figure/model2/pg_0017.png )
-![]( figure/model2/pg_0018.png )
-![]( figure/model2/pg_0019.png )
-![]( figure/model2/pg_0020.png )
-![]( figure/model2/pg_0021.png )
-![]( figure/model2/pg_0022.png )
-![]( figure/model2/pg_0023.png )
-![]( figure/model2/pg_0024.png )
-![]( figure/model2/pg_0025.png )
-![]( figure/model2/pg_0026.png )
-![]( figure/model2/pg_0027.png )
-![]( figure/model2/pg_0028.png )
-![]( figure/model2/pg_0029.png )
-![]( figure/model2/pg_0030.png )
-![]( figure/model2/pg_0031.png )
-![]( figure/model2/pg_0032.png )
-![]( figure/model2/pg_0033.png )
-![]( figure/model2/pg_0034.png )
-![]( figure/model2/pg_0035.png )
-![]( figure/model2/pg_0036.png )
-![]( figure/model2/pg_0037.png )
-![]( figure/model2/pg_0038.png )
-![]( figure/model3/page_01.png )
-![]( figure/model3/page_02.png )
-![]( figure/model3/page_03.png )
-![]( figure/model3/page_04.png )
-![]( figure/model3/page_05.png )
-![]( figure/model3/page_06.png )
-![]( figure/model3/page_07.png )
-![]( figure/model3/page_08.png )
-![]( figure/model3/page_09.png )
-![]( figure/model3/page_10.png )
-![]( figure/model3/page_11.png )
-![]( figure/model3/page_12.png )
-![]( figure/model3/page_13.png )
-![]( figure/model3/page_14.png )
-![]( figure/model3/page_15.png )
-![]( figure/model3/page_16.png )
-![]( figure/model3/page_17.png )
-![]( figure/model3/page_18.png )
-![]( figure/model3/page_19.png )
-![]( figure/model3/page_20.png )
-![]( figure/model3/page_21.png )
-![]( figure/model3/page_22.png )
-![]( figure/model3/page_23.png )
-![]( figure/model3/page_24.png )
-![]( figure/model3/page_25.png )
-![]( figure/model3/page_26.png )
-![]( figure/model3/page_27.png )
-![]( figure/model3/page_28.png )
-![]( figure/model3/page_29.png )
-![]( figure/model3/page_30.png )
-![]( figure/model3/page_31.png )
-![]( figure/model3/page_32.png )
-![]( figure/model3/page_33.png )
-![]( figure/model3/page_34.png )
-![]( figure/model3/page_35.png )
-![]( figure/model3/page_36.png )
-![]( figure/model3/page_37.png )
-![]( figure/model3/page_38.png )
-![]( figure/model3/page_39.png )
-![]( figure/model3/page_40.png )
-![]( figure/model3/pg_0001.png )
-![]( figure/model3/pg_0002.png )
-![]( figure/model3/pg_0003.png )
-![]( figure/model3/pg_0004.png )
-![]( figure/model3/pg_0005.png )
-![]( figure/model3/pg_0006.png )
-![]( figure/model3/pg_0007.png )
-![]( figure/model3/pg_0008.png )
-![]( figure/model3/pg_0009.png )
-![]( figure/model3/pg_0010.png )
-![]( figure/model3/pg_0011.png )
-![]( figure/model3/pg_0012.png )
-![]( figure/model3/pg_0013.png )
-![]( figure/model3/pg_0014.png )
-![]( figure/model3/pg_0015.png )
-![]( figure/model3/pg_0016.png )
-![]( figure/model3/pg_0017.png )
-![]( figure/model3/pg_0018.png )
-![]( figure/model3/pg_0019.png )
-![]( figure/model3/pg_0020.png )
-![]( figure/model3/pg_0021.png )
-![]( figure/model3/pg_0022.png )
-![]( figure/model3/pg_0023.png )
-![]( figure/model3/pg_0024.png )
-![]( figure/model3/pg_0025.png )
-![]( figure/model3/pg_0026.png )
-![]( figure/model3/pg_0027.png )
-![]( figure/model3/pg_0028.png )
-![]( figure/model3/pg_0029.png )
-![]( figure/model3/pg_0030.png )
-![]( figure/model3/pg_0031.png )
-![]( figure/model3/pg_0032.png )
-![]( figure/model3/pg_0033.png )
-![]( figure/model3/pg_0034.png )
-![]( figure/model3/pg_0035.png )
-![]( figure/model3/pg_0036.png )
-![]( figure/model3/pg_0037.png )
-![]( figure/model3/pg_0038.png )
-![]( figure/model4/page_01.png )
-![]( figure/model4/page_02.png )
-![]( figure/model4/page_03.png )
-![]( figure/model4/page_04.png )
-![]( figure/model4/page_05.png )
-![]( figure/model4/page_06.png )
-![]( figure/model4/page_07.png )
-![]( figure/model4/page_08.png )
-![]( figure/model4/page_09.png )
-![]( figure/model4/page_10.png )
-![]( figure/model4/page_11.png )
-![]( figure/model4/page_12.png )
-![]( figure/model4/page_13.png )
-![]( figure/model4/page_14.png )
-![]( figure/model4/page_15.png )
-![]( figure/model4/page_16.png )
-![]( figure/model4/page_17.png )
-![]( figure/model4/page_18.png )
-![]( figure/model4/page_19.png )
-![]( figure/model4/page_20.png )
-![]( figure/model4/page_21.png )
-![]( figure/model4/page_22.png )
-![]( figure/model4/page_23.png )
-![]( figure/model4/page_24.png )
-![]( figure/model4/page_25.png )
-![]( figure/model4/page_26.png )
-![]( figure/model4/page_27.png )
-![]( figure/model4/page_28.png )
-![]( figure/model4/page_29.png )
-![]( figure/model4/page_30.png )
-![]( figure/model4/page_31.png )
-![]( figure/model4/page_32.png )
-![]( figure/model4/page_33.png )
-![]( figure/model4/page_34.png )
-![]( figure/model4/page_35.png )
-![]( figure/model4/page_36.png )
-![]( figure/model4/page_37.png )
-![]( figure/model4/page_38.png )
-![]( figure/model4/page_39.png )
-![]( figure/model4/page_40.png )
-![]( figure/model4/pg_0001.png )
-![]( figure/model4/pg_0002.png )
-![]( figure/model4/pg_0003.png )
-![]( figure/model4/pg_0004.png )
-![]( figure/model4/pg_0005.png )
-![]( figure/model4/pg_0006.png )
-![]( figure/model4/pg_0007.png )
-![]( figure/model4/pg_0008.png )
-![]( figure/model4/pg_0009.png )
-![]( figure/model4/pg_0010.png )
-![]( figure/model4/pg_0011.png )
-![]( figure/model4/pg_0012.png )
-![]( figure/model4/pg_0013.png )
-![]( figure/model4/pg_0014.png )
-![]( figure/model4/pg_0015.png )
-![]( figure/model4/pg_0016.png )
-![]( figure/model4/pg_0017.png )
-![]( figure/model4/pg_0018.png )
-![]( figure/model4/pg_0019.png )
-![]( figure/model4/pg_0020.png )
-![]( figure/model4/pg_0021.png )
-![]( figure/model4/pg_0022.png )
-![]( figure/model4/pg_0023.png )
-![]( figure/model4/pg_0024.png )
-![]( figure/model4/pg_0025.png )
-![]( figure/model4/pg_0026.png )
-![]( figure/model4/pg_0027.png )
-![]( figure/model4/pg_0028.png )
-![]( figure/model4/pg_0029.png )
-![]( figure/model4/pg_0030.png )
-![]( figure/model4/pg_0031.png )
-![]( figure/model4/pg_0032.png )
-![]( figure/model4/pg_0033.png )
-![]( figure/model4/pg_0034.png )
-![]( figure/model4/pg_0035.png )
-![]( figure/model4/pg_0036.png )
-![]( figure/model4/pg_0037.png )
-![]( figure/model4/pg_0038.png )
-![]( figure/model5/page_01.png )
-![]( figure/model5/page_02.png )
-![]( figure/model5/page_03.png )
-![]( figure/model5/page_04.png )
-![]( figure/model5/page_05.png )
-![]( figure/model5/page_06.png )
-![]( figure/model5/page_07.png )
-![]( figure/model5/page_08.png )
-![]( figure/model5/page_09.png )
-![]( figure/model5/page_10.png )
-![]( figure/model5/page_11.png )
-![]( figure/model5/page_12.png )
-![]( figure/model5/page_13.png )
-![]( figure/model5/page_14.png )
-![]( figure/model5/page_15.png )
-![]( figure/model5/page_16.png )
-![]( figure/model5/page_17.png )
-![]( figure/model5/page_18.png )
-![]( figure/model5/page_19.png )
-![]( figure/model5/page_20.png )
-![]( figure/model5/page_21.png )
-![]( figure/model5/page_22.png )
-![]( figure/model5/page_23.png )
-![]( figure/model5/page_24.png )
-![]( figure/model5/page_25.png )
-![]( figure/model5/page_26.png )
-![]( figure/model5/page_27.png )
-![]( figure/model5/page_28.png )
-![]( figure/model5/page_29.png )
-![]( figure/model5/page_30.png )
-![]( figure/model5/page_31.png )
-![]( figure/model5/page_32.png )
-![]( figure/model5/page_33.png )
-![]( figure/model5/page_34.png )
-![]( figure/model5/page_35.png )
-![]( figure/model5/page_36.png )
-![]( figure/model5/page_37.png )
-![]( figure/model5/page_38.png )
-![]( figure/model5/page_39.png )
-![]( figure/model5/page_40.png )
-![]( figure/model5/pg_0001.png )
-![]( figure/model5/pg_0002.png )
-![]( figure/model5/pg_0003.png )
-![]( figure/model5/pg_0004.png )
-![]( figure/model5/pg_0005.png )
-![]( figure/model5/pg_0006.png )
-![]( figure/model5/pg_0007.png )
-![]( figure/model5/pg_0008.png )
-![]( figure/model5/pg_0009.png )
-![]( figure/model5/pg_0010.png )
-![]( figure/model5/pg_0011.png )
-![]( figure/model5/pg_0012.png )
-![]( figure/model5/pg_0013.png )
-![]( figure/model5/pg_0014.png )
-![]( figure/model5/pg_0015.png )
-![]( figure/model5/pg_0016.png )
-![]( figure/model5/pg_0017.png )
-![]( figure/model5/pg_0018.png )
-![]( figure/model5/pg_0019.png )
-![]( figure/model5/pg_0020.png )
-![]( figure/model5/pg_0021.png )
-![]( figure/model5/pg_0022.png )
-![]( figure/model5/pg_0023.png )
-![]( figure/model5/pg_0024.png )
-![]( figure/model5/pg_0025.png )
-![]( figure/model5/pg_0026.png )
-![]( figure/model5/pg_0027.png )
-![]( figure/model5/pg_0028.png )
-![]( figure/model5/pg_0029.png )
-![]( figure/model5/pg_0030.png )
-![]( figure/model5/pg_0031.png )
-![]( figure/model5/pg_0032.png )
-![]( figure/model5/pg_0033.png )
-![]( figure/model5/pg_0034.png )
-![]( figure/model5/pg_0035.png )
-![]( figure/model5/pg_0036.png )
-![]( figure/model5/pg_0037.png )
-![]( figure/model5/pg_0038.png )
+$w_graph_0
+![plot of chunk r1_1](figure/r1_1-1.png)
+$w_graph_0.1
+![plot of chunk r1_1](figure/r1_1-2.png)
+$w_graph2
+![plot of chunk r1_1](figure/r1_1-3.png)
+$w_graph1_f_naive
+![plot of chunk r1_1](figure/r1_1-4.png)
+$w_graph1_f_inner_nonpar
+![plot of chunk r1_1](figure/r1_1-5.png)
+$w_graph1_f_inner_parxi
+![plot of chunk r1_1](figure/r1_1-6.png)
+$w_graph1_f_inner_parxihat
+![plot of chunk r1_1](figure/r1_1-7.png)
+$w_graph1_f_inner_muhat
+![plot of chunk r1_1](figure/r1_1-8.png)
+$w_graph1_f_wnonpar
+![plot of chunk r1_1](figure/r1_1-9.png)
+$w_graph1_f_wpar
+![plot of chunk r1_1](figure/r1_1-10.png)
+$w_graph1_f_outer_nonpar
+![plot of chunk r1_1](figure/r1_1-11.png)
+$w_graph1_f_outer_parxi
+![plot of chunk r1_1](figure/r1_1-12.png)
+$w_graph1_f_outer_parxihat
+![plot of chunk r1_1](figure/r1_1-13.png)
+$w_graph1_f_outer_muhat
+![plot of chunk r1_1](figure/r1_1-14.png)
+$w_graph1_f_outer_wnonpar
+![plot of chunk r1_1](figure/r1_1-15.png)
+$w_graph1_f_outer_wpar
+![plot of chunk r1_1](figure/r1_1-16.png)
+$w_graph_mse_vsmu1
+![plot of chunk r1_1](figure/r1_1-17.png)
+$w_graph_mse_vsmu2
+![plot of chunk r1_1](figure/r1_1-18.png)
+$w_graph_mse_vsmu3
+![plot of chunk r1_1](figure/r1_1-19.png)
+$w_graph_mse_vsmu4
+![plot of chunk r1_1](figure/r1_1-20.png)
+$w_graph_mse_vsmu5
+![plot of chunk r1_1](figure/r1_1-21.png)
+$w_graph_mse_vsmu6
+![plot of chunk r1_1](figure/r1_1-22.png)
+$w_graph_mse_vsmu1
+![plot of chunk r1_1](figure/r1_1-23.png)
+$w_graph_mse_vsmu2
+![plot of chunk r1_1](figure/r1_1-24.png)
+$w_graph_mse_vsmu3
+![plot of chunk r1_1](figure/r1_1-25.png)
+$w_graph_0_vsmu1
+![plot of chunk r1_1](figure/r1_1-26.png)
+$w_graph_0_vsmu2
+![plot of chunk r1_1](figure/r1_1-27.png)
+$w_graph_0_vsmu3
+![plot of chunk r1_1](figure/r1_1-28.png)
+$w_graph_0_vsmu4
+![plot of chunk r1_1](figure/r1_1-29.png)
+$w_graph_0_vsmu5
+![plot of chunk r1_1](figure/r1_1-30.png)
+$w_graph_0_vsmu6
+![plot of chunk r1_1](figure/r1_1-31.png)
+$w_graph_0_vsmu1
+![plot of chunk r1_1](figure/r1_1-32.png)
+$w_graph_0_vsmu2
+![plot of chunk r1_1](figure/r1_1-33.png)
+$w_graph_0_vsmu3
+![plot of chunk r1_1](figure/r1_1-34.png)
+$w_graph_0
+![plot of chunk r1_1](figure/r1_1-35.png)
+$w_graph_0.1
+![plot of chunk r1_1](figure/r1_1-36.png)
+$w_graph2
+![plot of chunk r1_1](figure/r1_1-37.png)
+$w_graph1_f_naive
+![plot of chunk r1_1](figure/r1_1-38.png)
+$w_graph1_f_inner_nonpar
+![plot of chunk r1_1](figure/r1_1-39.png)
+$w_graph1_f_inner_parxi
+![plot of chunk r1_1](figure/r1_1-40.png)
+$w_graph1_f_inner_parxihat
+![plot of chunk r1_1](figure/r1_1-41.png)
+$w_graph1_f_inner_muhat
+![plot of chunk r1_1](figure/r1_1-42.png)
+$w_graph1_f_wnonpar
+![plot of chunk r1_1](figure/r1_1-43.png)
+$w_graph1_f_wpar
+![plot of chunk r1_1](figure/r1_1-44.png)
+$w_graph1_f_outer_nonpar
+![plot of chunk r1_1](figure/r1_1-45.png)
+$w_graph1_f_outer_parxi
+![plot of chunk r1_1](figure/r1_1-46.png)
+$w_graph1_f_outer_parxihat
+![plot of chunk r1_1](figure/r1_1-47.png)
+$w_graph1_f_outer_muhat
+![plot of chunk r1_1](figure/r1_1-48.png)
+$w_graph1_f_outer_wnonpar
+![plot of chunk r1_1](figure/r1_1-49.png)
+$w_graph1_f_outer_wpar
+![plot of chunk r1_1](figure/r1_1-50.png)
+$w_graph_mse_vsmu1
+![plot of chunk r1_1](figure/r1_1-51.png)
+$w_graph_mse_vsmu2
+![plot of chunk r1_1](figure/r1_1-52.png)
+$w_graph_mse_vsmu3
+![plot of chunk r1_1](figure/r1_1-53.png)
+$w_graph_mse_vsmu4
+![plot of chunk r1_1](figure/r1_1-54.png)
+$w_graph_mse_vsmu5
+![plot of chunk r1_1](figure/r1_1-55.png)
+$w_graph_mse_vsmu6
+![plot of chunk r1_1](figure/r1_1-56.png)
+$w_graph_mse_vsmu1
+![plot of chunk r1_1](figure/r1_1-57.png)
+$w_graph_mse_vsmu2
+![plot of chunk r1_1](figure/r1_1-58.png)
+$w_graph_mse_vsmu3
+![plot of chunk r1_1](figure/r1_1-59.png)
+$w_graph_0_vsmu1
+![plot of chunk r1_1](figure/r1_1-60.png)
+$w_graph_0_vsmu2
+![plot of chunk r1_1](figure/r1_1-61.png)
+$w_graph_0_vsmu3
+![plot of chunk r1_1](figure/r1_1-62.png)
+$w_graph_0_vsmu4
+![plot of chunk r1_1](figure/r1_1-63.png)
+$w_graph_0_vsmu5
+![plot of chunk r1_1](figure/r1_1-64.png)
+$w_graph_0_vsmu6
+![plot of chunk r1_1](figure/r1_1-65.png)
+$w_graph_0_vsmu1
+![plot of chunk r1_1](figure/r1_1-66.png)
+$w_graph_0_vsmu2
+![plot of chunk r1_1](figure/r1_1-67.png)
+$w_graph_0_vsmu3
+![plot of chunk r1_1](figure/r1_1-68.png)
+$w_graph_0
+![plot of chunk r1_1](figure/r1_1-69.png)
+$w_graph_0.1
+![plot of chunk r1_1](figure/r1_1-70.png)
+$w_graph2
+![plot of chunk r1_1](figure/r1_1-71.png)
+$w_graph1_f_naive
+![plot of chunk r1_1](figure/r1_1-72.png)
+$w_graph1_f_inner_nonpar
+![plot of chunk r1_1](figure/r1_1-73.png)
+$w_graph1_f_inner_parxi
+![plot of chunk r1_1](figure/r1_1-74.png)
+$w_graph1_f_inner_parxihat
+![plot of chunk r1_1](figure/r1_1-75.png)
+$w_graph1_f_inner_muhat
+![plot of chunk r1_1](figure/r1_1-76.png)
+$w_graph1_f_wnonpar
+![plot of chunk r1_1](figure/r1_1-77.png)
+$w_graph1_f_wpar
+![plot of chunk r1_1](figure/r1_1-78.png)
+$w_graph1_f_outer_nonpar
+![plot of chunk r1_1](figure/r1_1-79.png)
+$w_graph1_f_outer_parxi
+![plot of chunk r1_1](figure/r1_1-80.png)
+$w_graph1_f_outer_parxihat
+![plot of chunk r1_1](figure/r1_1-81.png)
+$w_graph1_f_outer_muhat
+![plot of chunk r1_1](figure/r1_1-82.png)
+$w_graph1_f_outer_wnonpar
+![plot of chunk r1_1](figure/r1_1-83.png)
+$w_graph1_f_outer_wpar
+![plot of chunk r1_1](figure/r1_1-84.png)
+$w_graph_mse_vsmu1
+![plot of chunk r1_1](figure/r1_1-85.png)
+$w_graph_mse_vsmu2
+![plot of chunk r1_1](figure/r1_1-86.png)
+$w_graph_mse_vsmu3
+![plot of chunk r1_1](figure/r1_1-87.png)
+$w_graph_mse_vsmu4
+![plot of chunk r1_1](figure/r1_1-88.png)
+$w_graph_mse_vsmu5
+![plot of chunk r1_1](figure/r1_1-89.png)
+$w_graph_mse_vsmu6
+![plot of chunk r1_1](figure/r1_1-90.png)
+$w_graph_mse_vsmu1
+![plot of chunk r1_1](figure/r1_1-91.png)
+$w_graph_mse_vsmu2
+![plot of chunk r1_1](figure/r1_1-92.png)
+$w_graph_mse_vsmu3
+![plot of chunk r1_1](figure/r1_1-93.png)
+$w_graph_0_vsmu1
+![plot of chunk r1_1](figure/r1_1-94.png)
+$w_graph_0_vsmu2
+![plot of chunk r1_1](figure/r1_1-95.png)
+$w_graph_0_vsmu3
+![plot of chunk r1_1](figure/r1_1-96.png)
+$w_graph_0_vsmu4
+![plot of chunk r1_1](figure/r1_1-97.png)
+$w_graph_0_vsmu5
+![plot of chunk r1_1](figure/r1_1-98.png)
+$w_graph_0_vsmu6
+![plot of chunk r1_1](figure/r1_1-99.png)
+$w_graph_0_vsmu1
+![plot of chunk r1_1](figure/r1_1-100.png)
+$w_graph_0_vsmu2
+![plot of chunk r1_1](figure/r1_1-101.png)
+$w_graph_0_vsmu3
+![plot of chunk r1_1](figure/r1_1-102.png)
+$w_graph_0
+![plot of chunk r1_1](figure/r1_1-103.png)
+$w_graph_0.1
+![plot of chunk r1_1](figure/r1_1-104.png)
+$w_graph2
+![plot of chunk r1_1](figure/r1_1-105.png)
+$w_graph1_f_naive
+![plot of chunk r1_1](figure/r1_1-106.png)
+$w_graph1_f_inner_nonpar
+![plot of chunk r1_1](figure/r1_1-107.png)
+$w_graph1_f_inner_parxi
+![plot of chunk r1_1](figure/r1_1-108.png)
+$w_graph1_f_inner_parxihat
+![plot of chunk r1_1](figure/r1_1-109.png)
+$w_graph1_f_inner_muhat
+![plot of chunk r1_1](figure/r1_1-110.png)
+$w_graph1_f_wnonpar
+![plot of chunk r1_1](figure/r1_1-111.png)
+$w_graph1_f_wpar
+![plot of chunk r1_1](figure/r1_1-112.png)
+$w_graph1_f_outer_nonpar
+![plot of chunk r1_1](figure/r1_1-113.png)
+$w_graph1_f_outer_parxi
+![plot of chunk r1_1](figure/r1_1-114.png)
+$w_graph1_f_outer_parxihat
+![plot of chunk r1_1](figure/r1_1-115.png)
+$w_graph1_f_outer_muhat
+![plot of chunk r1_1](figure/r1_1-116.png)
+$w_graph1_f_outer_wnonpar
+![plot of chunk r1_1](figure/r1_1-117.png)
+$w_graph1_f_outer_wpar
+![plot of chunk r1_1](figure/r1_1-118.png)
+$w_graph_mse_vsmu1
+![plot of chunk r1_1](figure/r1_1-119.png)
+$w_graph_mse_vsmu2
+![plot of chunk r1_1](figure/r1_1-120.png)
+$w_graph_mse_vsmu3
+![plot of chunk r1_1](figure/r1_1-121.png)
+$w_graph_mse_vsmu4
+![plot of chunk r1_1](figure/r1_1-122.png)
+$w_graph_mse_vsmu5
+![plot of chunk r1_1](figure/r1_1-123.png)
+$w_graph_mse_vsmu6
+![plot of chunk r1_1](figure/r1_1-124.png)
+$w_graph_mse_vsmu1
+![plot of chunk r1_1](figure/r1_1-125.png)
+$w_graph_mse_vsmu2
+![plot of chunk r1_1](figure/r1_1-126.png)
+$w_graph_mse_vsmu3
+![plot of chunk r1_1](figure/r1_1-127.png)
+$w_graph_0_vsmu1
+![plot of chunk r1_1](figure/r1_1-128.png)
+$w_graph_0_vsmu2
+![plot of chunk r1_1](figure/r1_1-129.png)
+$w_graph_0_vsmu3
+![plot of chunk r1_1](figure/r1_1-130.png)
+$w_graph_0_vsmu4
+![plot of chunk r1_1](figure/r1_1-131.png)
+$w_graph_0_vsmu5
+![plot of chunk r1_1](figure/r1_1-132.png)
+$w_graph_0_vsmu6
+![plot of chunk r1_1](figure/r1_1-133.png)
+$w_graph_0_vsmu1
+![plot of chunk r1_1](figure/r1_1-134.png)
+$w_graph_0_vsmu2
+![plot of chunk r1_1](figure/r1_1-135.png)
+$w_graph_0_vsmu3
+![plot of chunk r1_1](figure/r1_1-136.png)
+$w_graph_0
+![plot of chunk r1_1](figure/r1_1-137.png)
+$w_graph_0.1
+![plot of chunk r1_1](figure/r1_1-138.png)
+$w_graph2
+![plot of chunk r1_1](figure/r1_1-139.png)
+$w_graph1_f_naive
+![plot of chunk r1_1](figure/r1_1-140.png)
+$w_graph1_f_inner_nonpar
+![plot of chunk r1_1](figure/r1_1-141.png)
+$w_graph1_f_inner_parxi
+![plot of chunk r1_1](figure/r1_1-142.png)
+$w_graph1_f_inner_parxihat
+![plot of chunk r1_1](figure/r1_1-143.png)
+$w_graph1_f_inner_muhat
+![plot of chunk r1_1](figure/r1_1-144.png)
+$w_graph1_f_wnonpar
+![plot of chunk r1_1](figure/r1_1-145.png)
+$w_graph1_f_wpar
+![plot of chunk r1_1](figure/r1_1-146.png)
+$w_graph1_f_outer_nonpar
+![plot of chunk r1_1](figure/r1_1-147.png)
+$w_graph1_f_outer_parxi
+![plot of chunk r1_1](figure/r1_1-148.png)
+$w_graph1_f_outer_parxihat
+![plot of chunk r1_1](figure/r1_1-149.png)
+$w_graph1_f_outer_muhat
+![plot of chunk r1_1](figure/r1_1-150.png)
+$w_graph1_f_outer_wnonpar
+![plot of chunk r1_1](figure/r1_1-151.png)
+$w_graph1_f_outer_wpar
+![plot of chunk r1_1](figure/r1_1-152.png)
+$w_graph_mse_vsmu1
+![plot of chunk r1_1](figure/r1_1-153.png)
+$w_graph_mse_vsmu2
+![plot of chunk r1_1](figure/r1_1-154.png)
+$w_graph_mse_vsmu3
+![plot of chunk r1_1](figure/r1_1-155.png)
+$w_graph_mse_vsmu4
+![plot of chunk r1_1](figure/r1_1-156.png)
+$w_graph_mse_vsmu5
+![plot of chunk r1_1](figure/r1_1-157.png)
+$w_graph_mse_vsmu6
+![plot of chunk r1_1](figure/r1_1-158.png)
+$w_graph_mse_vsmu1
+![plot of chunk r1_1](figure/r1_1-159.png)
+$w_graph_mse_vsmu2
+![plot of chunk r1_1](figure/r1_1-160.png)
+$w_graph_mse_vsmu3
+![plot of chunk r1_1](figure/r1_1-161.png)
+$w_graph_0_vsmu1
+![plot of chunk r1_1](figure/r1_1-162.png)
+$w_graph_0_vsmu2
+![plot of chunk r1_1](figure/r1_1-163.png)
+$w_graph_0_vsmu3
+![plot of chunk r1_1](figure/r1_1-164.png)
+$w_graph_0_vsmu4
+![plot of chunk r1_1](figure/r1_1-165.png)
+$w_graph_0_vsmu5
+![plot of chunk r1_1](figure/r1_1-166.png)
+$w_graph_0_vsmu6
+![plot of chunk r1_1](figure/r1_1-167.png)
+$w_graph_0_vsmu1
+![plot of chunk r1_1](figure/r1_1-168.png)
+$w_graph_0_vsmu2
+![plot of chunk r1_1](figure/r1_1-169.png)
+$w_graph_0_vsmu3
+![plot of chunk r1_1](figure/r1_1-170.png)
