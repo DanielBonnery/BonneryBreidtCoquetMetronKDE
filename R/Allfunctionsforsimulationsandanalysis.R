@@ -219,13 +219,13 @@ allplotscolor<-function(ee){
     BB=AA[AA$rep<150 &is.element(AA$i,sel),c("y0",x,"rep")]
     names(BB)<-c("y0","est","Rep")
     joliname=aux$jolivariable2[aux$variable==x]
-    
+    jojox=paste0(joliname,", averaged on ",nrep," replications")
     ggplot(BB, aes(x=y0, y=est, group=Rep)) +
       xlab("$y_0$")+ylab("")+
       geom_line(size=0.2, alpha=0.1,aes(color=joliname,size=.2))+ 
       labs(title="", caption=paste0("Simulations for ",model$name,", ",joliname ," repeated ",min(nrep,50), " times"))+    
       geom_line(data=data.frame(y0=y0,f=empmeanA[,x]),
-                aes(x=y0,y=f,group=NULL,color=paste0(joliname,", averaged on ",nrep," replications")),size=1)  +
+                aes(x=y0,y=f,group=NULL,color=jojox),size=1)  +
       stat_function(fun = model$dloi.y,size=.4,aes(size=.4,color="$f$"))+
       scale_size_manual(values = c(0.4, .2,1))+
       scale_color_manual(values=c("black","blue","blue"))+
@@ -402,13 +402,13 @@ allplots<-function(ee){
     BB=AA[AA$rep<50 &is.element(AA$i,sel),c("y0",x,"rep")]
     names(BB)<-c("y0","est","Rep")
     joliname=aux$jolivariable2[aux$variable==x]
-    
+    jojox=paste0(joliname,", averaged on ",nrep," replications")
     ggplot(BB, aes(x=y0, y=est, group=Rep)) +
       scale_colour_grey("")+
       xlab("$y_0$")+ylab("")+
       geom_line(size=0.2, alpha=0.1,aes(linetype=joliname,size=.2))+ 
       labs(title="", caption=paste0("Simulations for ",model$name,", ",joliname ," repeated ",min(nrep,50), " times"))+    
-      geom_line(data=data.frame(y0=y0,f=empmeanA[,x]),aes(x=y0,y=f,group=NULL,linetype=paste0(joliname,", averaged on ",nrep," replications")),size=1)  +
+      geom_line(data=data.frame(y0=y0,f=empmeanA[,x]),aes(x=y0,y=f,group=NULL,linetype=jojox),size=1)  +
       stat_function(fun = model$dloi.y,size=.4,aes(size=.4,linetype="$f$"))+
       scale_linetype_manual("",values = c("solid",  "solid","dashed")) +
       scale_size_manual(values = c(0.4, .2,1))+
@@ -528,13 +528,13 @@ createallgraphs<-function(x,texfolderoutput="datanotpushed/graphs/tex/",pdffolde
   y=load(x)
   prefix<-basename(x)
   prefix<-strsplit(prefix,".",fixed = TRUE)[[1]][1]
-  tikz(paste0("texfolderoutput",prefix,".tex"),standAlone = TRUE,sanitize=FALSE)
+  tikz(paste0(texfolderoutput,prefix,".tex"),standAlone = TRUE,sanitize=FALSE)
   try(eval(parse(text=paste0("print(",y,")"))))
   dev.off()
   
-  tx  <- readLines(paste0("texfolderoutput",prefix,".tex"))
+  tx  <- readLines(paste0(texfolderoutput,prefix,".tex"))
   tx  <- c(tx[3],"\\usepackage{pgfplots}","\\usepgfplotslibrary{external}","\\tikzexternalize", tx[-(1:4)])
-  writeLines(tx, paste0("texfolderoutput",prefix,".tex"))
+  writeLines(tx, paste0(texfolderoutput,prefix,".tex"))
   
   try(system(paste0( "pdflatex -shell-escape -interaction=nonstopmode ",texfolderoutput,prefix,".tex")))
   try(system(paste0("mv ",prefix,".pdf ",pdffolderoutput)))}
