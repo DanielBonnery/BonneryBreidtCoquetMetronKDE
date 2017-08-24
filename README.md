@@ -3,7 +3,7 @@
 "Kernel Estimation for a Superpopulation Probability Density Function under Informative Selection", by 
 Daniel Bonnéry (UMD),  F. Jay Breidt (CSU) and  François Coquet (Irmar and Ensai), article under revision in Metron Journal.
 
-## 1. How to install the package
+## 1. Install the package
 
 ```r
 devtools::install_github("DanielBonnery/pubBonneryBreidtCoquet2017",dependencies=TRUE)
@@ -15,7 +15,7 @@ Note that this package depends on different R packages, including:
 
 Some functions of `pubBonneryBreidtCoquet2017` produce pdf graphics and need pdflatex to be installed.
 
-## Produce the paper graphs and tables.
+## 2. Produce the paper graphs and tables.
 
 
 
@@ -49,7 +49,7 @@ demo(MSE_Figure)
 |$\hat\omega,\rm{nonpar}                      |0.0014 (1.3)   |0.0014 (12)           |4.5e-06 (0.022)              |8.1e-07 (0.0035)             |5.4e-06 (0.01)        |
 |$\hat\omega,\rm{par}                         |0.00015 (0.14) |0.00015 (1.2)         |8e-07 (0.0039)               |3.3e-07 (0.0014)             |3.1e-07 (6e-04)       |
 
-## Run additional simulations
+## 3. Run additional simulations
 
 We ran simulations on different models. For each model, we produce a series of graphics and tables.
 
