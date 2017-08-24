@@ -1,15 +1,5 @@
-graphics.off();rm(list=ls());gc(reset=TRUE);
-setwd(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017"))
-unloadNamespace("pubBonneryBreidtCoquet2017")
-remove.packages("pubBonneryBreidtCoquet2017")
-devtools::install(".")
-library(pubBonneryBreidtCoquet2017)
-library(tikzDevice)
-library(ggplot2)
-
 model=modelf(5)
 
-setwd(file.path(Mydirectories::Dropbox.directory(),"Travail/Recherche/Travaux/Estimation non paramétrique de la densité/pubBonneryBreidtCoquet2017"))
 set.seed(1)#NB: the seed was not set for the table in the publication
 dd=Simuletout(model,3000)
 ee=analysetout(dd)
