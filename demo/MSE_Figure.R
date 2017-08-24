@@ -1,3 +1,4 @@
+library(pubBonneryBreidtCoquet2017)
 model=modelf(5)
 
 set.seed(1)#NB: the seed was not set for the table in the publication
