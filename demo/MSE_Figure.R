@@ -1,7 +1,6 @@
-library(pubBonneryBreidtCoquet2017)
 model=modelf(5)
 
-set.seed(1)#NB: the seed was not set for the table in the publication
+set.seed(1)
 dd=Simuletout(model,3000)
 ee=analysetout(dd)
 rm(dd)

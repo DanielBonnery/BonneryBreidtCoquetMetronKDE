@@ -22,7 +22,8 @@ Some functions of `pubBonneryBreidtCoquet2017` produce pdf graphics and need pdf
 
 
 ```r
-demo(MSE_Figure,package = "pubBonneryBreidtCoquet2017")
+library(pubBonneryBreidtCoquet2017)
+demo(MSE_Figure)
 ```
 
 ![plot of chunk r0_1](figure/r0_1-1.png)![plot of chunk r0_1](figure/r0_1-2.png)
@@ -63,6 +64,7 @@ The following R statements  will run the simulations for all the models.
 
 
 ```r
+library(pubBonneryBreidtCoquet2017)
 demo(model1,package = "pubBonneryBreidtCoquet2017")
 demo(model2,package = "pubBonneryBreidtCoquet2017")
 demo(model3,package = "pubBonneryBreidtCoquet2017")
