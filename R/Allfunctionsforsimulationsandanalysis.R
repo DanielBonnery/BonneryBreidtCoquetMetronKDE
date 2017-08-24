@@ -536,7 +536,8 @@ createallgraphs<-function(x,texfolderoutput="datanotpushed/graphs/tex/",pdffolde
   writeLines(tx, paste0(texfolderoutput,prefix,".tex"))
   
   try(system(paste0( "pdflatex -shell-escape -interaction=nonstopmode ",texfolderoutput,prefix,".tex")))
-  try(system(paste0("mv ",prefix,".pdf ",pdffolderoutput)))}
+  try(system(paste0("mv *.pdf ",pdffolderoutput)))
+  try(system("rm *.log *.md5 *.dpth"))}
 
 createalltables<-function(ee,dest.folder="datanotpushed/table"){
   ddd=ee$meanempMSE[-nrow(ee$meanempMSE),]

@@ -1,3 +1,7 @@
+#' generate observations according to a population and design model
+#' @param model: a model object, as defined by modelf
+#' @example
+#' generate.observations(modelf(1))
 
 generate.observations<-
 function (model) 
@@ -8,7 +12,7 @@ function (model)
   Pik <- model$Scheme$Pik(Z)
   list(y = as.matrix(Y)[S, ], z = as.matrix(Z)[S, ], pik = Pik[S],m=mean(model$yfun(list(y=as.matrix(Y)))),N=model$conditionalto$N,n=length(S))
 }
-# model0 a default object of class model
+#' model0 a default object of class model
 model0<-list(yfun=function(obs){obs$y},
              pifun=function(obs){obs$pik},
              xi=NULL,
@@ -18,46 +22,39 @@ model0<-list(yfun=function(obs){obs$y},
 append(class(model0),"Model")
 ##4.1. Definitions
 # Kernels
+
+#' Gaussian kernel
 kergaus<-list(K=dnorm,intK2=(1/(2*sqrt(pi))));
 ker<-kergaus
 
 #' Compute an estimate of E[I\mid Y=y0] 
-#' @param y0: Point of vector of points where the conditional expected value is needed
-#' @param Obs: Observations
+#' @param model: a model
 #' @param ker: kernel function
 #' @param yfun: Function that takes Obs as argument and returns the list of $y$s
 #' @param afun: Function that takes Obs as an argument and returns inverses of weights for units on the sample 
-#' @param h: Bandwidth
 #' @example
 #' model=modelf(1)
 #' y0<-grid1f(model,100)
 #' plot(y0,mf(model)(y0,generate.observations(model)),type='l')
   mf<-function(model=model0,ker=kergaus,yfun=model$yfun,afun=model$pifun){
   function(y0,Obs,h=ks::hpi(x=yfun(Obs))){apply(ker$K(outer(yfun(Obs),y0,"-")/h),2,sum)/apply(ker$K(outer(yfun(Obs),y0,"-")/h)/afun(Obs),2,sum)}}
+
 #' Compute an estimate of E[I\mid Y=y0] of the form $m(y,\hat{\xi})$ 
-#' @param y0: Point of vector of points where the conditional expected value is needed
-#' @param Obs: Observations
-#' @param ker: kernel function
-#' @param yfun: Function that takes Obs as argument and returns the list of $y$s
-#' @param afun: Function that takes Obs as an argument and returns the weights on the sample 
-#' @param h: Bandwidth
+#' @param model: a model
+#' @param xi: a value for the xi parameter of the model
 #' @example
 #' model=modelf(1)
 #' y0<-grid1f(model,100)
 #' plot(y0,mftheo(model)(y0,generate.observations(model)),type='l')
 mftheo   <-function(model=model0,xi=model$xi){function(y0,Obs){model$eta(model$obsifyf(y0),.xi=xi)}}
 #' Compute an estimate of E[I\mid Y=y0] of the form $m(y,\hat{\xi})$ 
-#' @param y0: Point of vector of points where the conditional expected value is needed
-#' @param Obs: Observations
-#' @param ker: kernel function
-#' @param yfun: Function that takes Obs as argument and returns the list of $y$s
-#' @param afun: Function that takes Obs as an argument and returns the weights on the sample 
-#' @param h: Bandwidth
+#' @param model: a model
+#' @param xihatfun: an estimator of xi (a function of Obs)
 #' @example
-#' model<-modelf(1)
-#' Obs<-generate.observations(model);
-#' plot(y0,mftheo(model)(y0,generate.observations(model)),type='l')
-#' lines(y0,mfhattheo(model)(y0,generate.observations(model)),col='blue')
+#' model=modelf(1)
+#' y0<-grid1f(model,100)
+#' plot(y0,mfhattheo(model)(y0,generate.observations(model)),type='l')
+
 mfhattheo<-function(model=model0,
                     xihatfun=model$xihat){
   function(y0,Obs){mftheo(model,xihatfun(Obs))(y0,Obs)}}
@@ -70,12 +67,9 @@ mfhattheo<-function(model=model0,
 #' @param afun: Function that takes Obs as an argument and returns the weights on the sample 
 #' @param h: Bandwidth
 #' @example
-#' popmodelfunction = model.Pareto.bernstrat
-#' theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
-#' model<-popmodelfunction(theta,xi,conditionalto);y0=c(.5,1,1.5)
+#' model<-modelf(1)
 #' Obs<-generate.observations(model);
-#' kde.outer(y0,Obs)
-#' kde.outer(1,Obs)
+#' kde.outer(grid1f(model,10),Obs,model)
 kde.outer<-function(y0,
                     Obs,
                     model,
@@ -85,12 +79,32 @@ kde.outer<-function(y0,
                     h=ks::hpi(x=yfun(Obs))){
   apply(ker$K(outer(yfun(Obs),y0,"-")/h)/afun(Obs),2,sum)/(h*sum(1/afun(Obs)))}
 
+#' Compute outer  kernel density estimates from Kernels applied to all differences between observed values and grid points, and values of mu on the sample 
+#' @param K0: a matrix
+#' @param mu: a vector of length dim(K0)[1]
+#' @example
+#' model<-modelf(1)
+#' Obs<-generate.observations(model);
+#' h=ks::hpi(x=model$yfun(Obs))
+#' K0=ker$K(outer(model$yfun(Obs),y0,"-")/h)/h
+#' mus=mftheo(model)(model$yfun(Obs),Obs)
+#' kde.outerK0mus(K0,mus)
 kde.outerK0mus<-function(K0,mus){apply(K0/mus,2,sum)/(sum(1/mus))}
 
-
-Trapeze<-function(y0,f_naive,mu){f_naive/(mu*caTools::trapz(y0,f_naive/mu))}
-
-
+#' Method to normalise $f/\mu$ so that the trapeze approximation of  $\int f(y) d(y)$ is equal to 1.
+#' @param y0: Point of vector of points where the density estimate is needed
+#' @param f0: a vector of same length than y0
+#' @param mu0: a vector of same length than y0
+#' @example
+#' model<-modelf(1)
+#' Obs<-generate.observations(model);
+#' h=ks::hpi(x=model$yfun(Obs))
+#' y0=grid1f(model)
+#' SK0=apply(ker$K(outer(model$yfun(Obs),y0,"-")/h)/h,2,sum)
+#' f_naive=SK0/length(model$yfun(Obs))
+#' mu0=mftheo(model)(y0,Obs)
+#' caTools::trapz(y0,Trapeze(y0,f_naive,mu0))
+Trapeze<-function(y0,f0,mu0){f0/(mu0*caTools::trapz(y0,f0/mu0))}
 #' Compute Pfeffermann like kernel density estimators 
 #' @param y0: Point of vector of points where the density estimate is needed
 #' @param Obs: Observations
