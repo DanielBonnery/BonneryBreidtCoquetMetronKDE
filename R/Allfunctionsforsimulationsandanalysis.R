@@ -228,7 +228,7 @@ allplotscolor<-function(ee){
                 aes(x=y0,y=f,group=NULL,color=jojox),size=1)  +
       stat_function(fun = model$dloi.y,size=.4,aes(size=.4,color="$f$"))+
       scale_size_manual(values = c(0.4, .2,1))+
-      scale_color_manual(values=c("black","blue","blue"))+
+      scale_color_manual("",values=c("black","blue","blue"))+
       theme(legend.position = "bottom")+ 
       theme(legend.key.size = unit(2,"line"))+
       guides(size=FALSE, color=guide_legend(override.aes=list(size=c(1,.4,1),alpha=c(1,.1,1))))}
@@ -241,7 +241,7 @@ allplotscolor<-function(ee){
     labs(title="", caption=paste0("Empirical variance and variance estimates, simulations for ",model$name,", repeated ",min(50,nrep), " times"))+  
     geom_line(data=empvar[empvar$variable=="f_inner_nonpar",],aes(x=y0,y=value,group=NULL,color="Empirical variance"), size=.8)+
     geom_line(data=avgvarest,aes(x=y0,y=Vf,group=NULL,color=paste0("$\\hat{V}$, averaged on ",ee$nrep," replications")),size=.8)+
-    scale_color_manual(values=c("black","blue","blue"))+
+    scale_color_manual("",values=c("black","blue","blue"))+
     scale_size_manual(values = c(1, .2,1))+
     theme(legend.position = "bottom")+ 
     theme(legend.key.size = unit(2,"line"))+
@@ -264,8 +264,9 @@ allplotscolor<-function(ee){
     theme(legend.key.size = unit(2,"line"))+ 
     guides(linetype=guide_legend(""),color=guide_legend(""))
   
-  w_graph_mse_vsf <- function(x,variab="mu",variab2="jolitype"){
-    tab=empmse[(!is.element(empmse$variable,c("f_naive","f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad","Vf"))),]
+  w_graph_mse_vsf <- function(x,variab="mu",variab2="jolitype",
+                              sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_wnonpar","f_wpar")){
+    tab=empmse[is.element(empmse$variable,sell),]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
     try(tab$value[is.na(tab$value)]<-1e-10)
@@ -282,20 +283,17 @@ allplotscolor<-function(ee){
       theme(legend.key.size = unit(2,"line"))+ 
       guides(color=guide_legend(""))
   }
-  w_graph_mse_vsmus<-plyr::alply(levels(empmse$mu)[levels(empmse$mu)!="$\\hat\\mu,\\rm{par(rough)}$"],1,w_graph_mse_vsf)
-  names(w_graph_mse_vsmus)<-paste0("w_graph_mse_vsmu",1:(nlevels(empmse$mu)-1))
-  w_graph_mse_vstypes<-plyr::alply(levels(empmse$jolitype),1,w_graph_mse_vsf,variab="jolitype",variab2="mu")
-  names(w_graph_mse_vstypes)<-paste0("w_graph_mse_vsmu",1:nlevels(empmse$jolitype))
+  w_graph_mse_vsmus<-plyr::alply(c("$\\hat\\mu,\\rm{nonpar}$",    "$\\hat\\mu,\\rm{par}$"      ,
+                                    "$\\hat\\omega,\\rm{nonpar}$", "$\\hat\\omega,\\rm{par}$",    
+                                    "$\\mu,\\hat\\xi$",            "$\\mu,\\xi$"),1,w_graph_mse_vsf)
+  names(w_graph_mse_vsmus)<-paste0("w_graph_mse_vsmu",1:6)
+  w_graph_mse_vstypes<-plyr::alply(c("$\\hat\\mu$","$\\hat{f}$" ,"$f^\\dagger$"),1,w_graph_mse_vsf,variab="jolitype",variab2="mu",sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_wnonpar","f_wpar","mu0_muhat","mu0_nonpar","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
+  names(w_graph_mse_vstypes)<-paste0("w_graph_mse_vsmu",1:3))
   
   
   
   
-  w_graph_mse_final <- ggplot(empmse[is.element(empvar$C,c("NA","tilde")),], 
-                              aes(x=y0, y=value, linetype=mu,color=jolitype)) +
-    theme_bw()+
-    geom_line()+ 
-    ggtitle(paste0("Empirical MSE for ",nrep, " replications"))+
-    theme(legend.justification = c(1, 1), legend.position = c(1, 1))+scale_y_log10()
+
   pp=c(list(w_graph_0=w_graph_0,
             w_graph_0.1=w_graph_0.1,
             w_graph2=w_graph2),
