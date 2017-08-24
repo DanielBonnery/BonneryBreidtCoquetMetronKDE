@@ -288,7 +288,7 @@ allplotscolor<-function(ee){
                                     "$\\mu,\\hat\\xi$",            "$\\mu,\\xi$"),1,w_graph_mse_vsf)
   names(w_graph_mse_vsmus)<-paste0("w_graph_mse_vsmu",1:6)
   w_graph_mse_vstypes<-plyr::alply(c("$\\hat\\mu$","$\\hat{f}$" ,"$f^\\dagger$"),1,w_graph_mse_vsf,variab="jolitype",variab2="mu",sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_wnonpar","f_wpar","mu0_muhat","mu0_nonpar","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
-  names(w_graph_mse_vstypes)<-paste0("w_graph_mse_vsmu",1:3))
+  names(w_graph_mse_vstypes)<-paste0("w_graph_mse_vsmu",1:3)
   
   
   
