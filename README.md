@@ -4,6 +4,8 @@
 Daniel Bonnéry (UMD),  F. Jay Breidt (CSU) and  François Coquet (Irmar and Ensai), article under revision in Metron Journal.
 
 ## 1. Install the package
+You will need to have Rtools installed, as well as the devtools package.
+
 
 ```r
 devtools::install_github("DanielBonnery/pubBonneryBreidtCoquet2017",dependencies=TRUE)
