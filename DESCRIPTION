@@ -1,25 +1,29 @@
 Package: pubBonneryBreidtCoquet2017
 Type: Package
 Title: X
-Version: 1.0 
+Version: 1.0
 Date: 2017-08-25
 Author: D. Bonnery
 Maintainer: D. Bonnery  <dbonnery@umd.edu>
-Imports: ggplot2,
-	abind,
-	optimx,
-	Matrix,
-	Hmisc,
-	MASS,
-	filehash,
-	plyr,
-	caTools,
-	reshape2,
-	ks
-Suggests: 
+Imports:
+    ggplot2,
+    abind,
+    optimx,
+    Matrix,
+    Hmisc,
+    MASS,
+    filehash,
+    plyr,
+    caTools,
+    reshape2,
+    ks
+Suggests:
+    
 Description: Data
 Remotes: DanielBonnery/pubBonneryBreidtCoquet2016
-Depends: pubBonneryBreidtCoquet2016
+Depends:
+    pubBonneryBreidtCoquet2016
 License: GPL (>= 2)
 LazyLoad: yes
 LazyData: true
+RoxygenNote: 5.0.1

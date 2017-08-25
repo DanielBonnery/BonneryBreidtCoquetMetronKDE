@@ -55,7 +55,7 @@ demo(MSE_Figure)
 
 We ran simulations on different models. For each model, we produce a series of graphics and tables.
 
-![](model.png)
+![](figure/model.png)
 
 
 The following R statements  will run the simulations for all the models.

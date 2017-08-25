@@ -2,7 +2,6 @@
 #' @param model: a model object, as defined by modelf
 #' @example
 #' generate.observations(modelf(1))
-
 generate.observations<-
 function (model) 
 {
