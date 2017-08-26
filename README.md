@@ -247,11 +247,8 @@ demo(model5,package = "BonneryBreidtCoquetMetronKDE")
 ![]( figure/model5/model5_col-figure7.png )
 ![]( figure/model5/model5_col-figure8.png )
 ![]( figure/model5/model5_col-figure9.png )
-
 ## 2.2.3 Ouptputs: Tables
-
 ### Model 1:
-
 
 |Estimator                                    |IMSE           |IMSE $\mid Y<q_{.25}$ |IMSE $\mid q_{.25}<Y<q_{.5}$ |IMSE $\mid q_{.5}<Y<q_{.75}$ |IMSE $\mid q_{.75}<Y$ |
 |:--------------------------------------------|:--------------|:---------------------|:----------------------------|:----------------------------|:---------------------|

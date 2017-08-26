@@ -209,7 +209,7 @@ Allkdeestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(mod
   f_inner_parxihat   =if(is.null(model$nc)){Trapeze(y0,f_naive,mu0_parxihat)}else{f_naive/(mu0_parxihat*model$nc(ys,xihat,h))}
   f_inner_muhat      =Trapeze(y0,f_naive,mu0_muhat)
   f_wnonpar          =Trapeze(y0,f_naive,mu0_wnonpar)
-  f_wpar             =Trapeze(y0,f_naive,mu0_wpar)
+  f_inner_wpar             =Trapeze(y0,f_naive,mu0_wpar)
   
 
     Vf=varkde.outer(model,y0,Obs)
@@ -221,7 +221,7 @@ Allkdeestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(mod
         f_inner_parxihat=f_inner_parxihat,
         f_inner_muhat=f_inner_muhat,
         f_wnonpar          =f_wnonpar,
-        f_wpar          =f_wpar,
+        f_inner_wpar          =f_inner_wpar,
         f_outer_nonpar  =f_outer_nonpar,
         f_outer_parxi   =f_outer_parxi,
         f_outer_parxihat=f_outer_parxihat,
@@ -256,13 +256,13 @@ Allkdeestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(mod
 #' Simuletout(model,Obs,model)
 
 quoi=c("f","f_naive",
-       "f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar",  "f_wpar",
-       "f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar",
-       "mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_muhat","mu0_wnonpar","mu0_wpar",
+       c(outer(c( "nonpar","parxi","parxihat","muhat","wnonpar","wpar"),
+               c("f_outer","f_inner","mu0"),
+               function(x,y){paste(y,x,sep="_")})),
        "Vf")
 equationnumber=c("","(4)",
-                "(12)","(13)","(14)","(15)","(wnonpar)",  "(wpar)",
-                "(20)","(21)","(22)","(23)","(25)",     "(26)",
+                "(11)","(12)","(13)","(14)","(17)",     "(18)",
+                "(22)","(23)","(24)","(25)","(26)",  "(27)",
                 rep("",7))
 joliquoi=c("$f$","$p$",paste0("$",
   rep(c("\\hat{f}","f^\\dagger",""),each=6),
