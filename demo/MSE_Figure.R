@@ -1,4 +1,4 @@
-model=modelf(5)
+model=modelf(1)
 
 set.seed(1)
 dd=Simuletout(model,3000)
