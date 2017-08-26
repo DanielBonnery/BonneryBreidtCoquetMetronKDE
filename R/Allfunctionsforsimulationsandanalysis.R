@@ -541,7 +541,8 @@ createallgraphs<-function(x,texfolderoutput="datanotpushed/graphs/tex/",pdffolde
 
 createalltables<-function(ee,dest.folder="datanotpushed/table"){
   ddd=ee$meanempMSE[-nrow(ee$meanempMSE),]
-  ddd[!is.element(ddd$variable,c("f_inner_muhatbad","f_inner_19bad","f_outer_muhatbad")),]
+  ddd[unlist(sapply(c("f_outer_nonpar","f_outer_wnonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wpar","f_inner_nonpar","f_inner_wnonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_inner_wpar","f_naive"),
+               function(x){which(ddd$variable==x)})),]
   names(ddd)<-gsub("IntegratedMSE","IMSE",names(ddd),fixed=TRUE)
   ccoo<-function(x,y){paste0(signif(ddd[[x]],2)," (",signif(ddd[[y]],2),")")}
   ddd[[5]]=ccoo(5,10)
