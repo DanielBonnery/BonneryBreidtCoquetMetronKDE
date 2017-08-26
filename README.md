@@ -72,7 +72,7 @@ demo(model5,package = "BonneryBreidtCoquetMetronKDE")
 
 
 
-### Model  6 
+### Model  1 
 ![]( figure/model1/model1_col-figure0.png )
 ![]( figure/model1/model1_col-figure10.png )
 ![]( figure/model1/model1_col-figure11.png )
@@ -107,7 +107,7 @@ demo(model5,package = "BonneryBreidtCoquetMetronKDE")
 ![]( figure/model1/model1_col-figure7.png )
 ![]( figure/model1/model1_col-figure8.png )
 ![]( figure/model1/model1_col-figure9.png )
-### Model  model1_col-figure9.png 
+### Model  2 
 ![]( figure/model2/model2_col-figure0.png )
 ![]( figure/model2/model2_col-figure10.png )
 ![]( figure/model2/model2_col-figure11.png )
@@ -142,7 +142,7 @@ demo(model5,package = "BonneryBreidtCoquetMetronKDE")
 ![]( figure/model2/model2_col-figure7.png )
 ![]( figure/model2/model2_col-figure8.png )
 ![]( figure/model2/model2_col-figure9.png )
-### Model  model2_col-figure9.png 
+### Model  3 
 ![]( figure/model3/model3_col-figure0.png )
 ![]( figure/model3/model3_col-figure10.png )
 ![]( figure/model3/model3_col-figure11.png )
@@ -177,7 +177,7 @@ demo(model5,package = "BonneryBreidtCoquetMetronKDE")
 ![]( figure/model3/model3_col-figure7.png )
 ![]( figure/model3/model3_col-figure8.png )
 ![]( figure/model3/model3_col-figure9.png )
-### Model  model3_col-figure9.png 
+### Model  4 
 ![]( figure/model4/model4_col-figure0.png )
 ![]( figure/model4/model4_col-figure10.png )
 ![]( figure/model4/model4_col-figure11.png )
@@ -212,7 +212,7 @@ demo(model5,package = "BonneryBreidtCoquetMetronKDE")
 ![]( figure/model4/model4_col-figure7.png )
 ![]( figure/model4/model4_col-figure8.png )
 ![]( figure/model4/model4_col-figure9.png )
-### Model  model4_col-figure9.png 
+### Model  5 
 ![]( figure/model5/model5_col-figure0.png )
 ![]( figure/model5/model5_col-figure10.png )
 ![]( figure/model5/model5_col-figure11.png )
