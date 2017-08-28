@@ -1,5 +1,5 @@
 #model 4
-model1f<-function(){
+model4f<-function(){
   popmodelfunction = model.Pareto.bernstrat
   theta=4;xi=1;conditionalto=list(N=10000,sampleparam=list(tauh=c(0.01,0.1)))
   model<-popmodelfunction(theta,xi,conditionalto)
@@ -8,7 +8,7 @@ model1f<-function(){
   model$id=id
   model}
 #model 5
-model2f<-function(){popmodelfunction = model.proptosize
+model5f<-function(){popmodelfunction = model.proptosize
 set.seed(1)#NB: the seed was not set for the table in the publication
 conditionalto=list(N=15000,sampleparam=list(tau=.2))
 theta=c(3)

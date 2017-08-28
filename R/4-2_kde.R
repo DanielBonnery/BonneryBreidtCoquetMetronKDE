@@ -208,28 +208,28 @@ Allkdeestimates<-function(model,  Obs=generate.observations(model),y0=grid1f(mod
   f_inner_parxi      =if(is.null(model$nc)){Trapeze(y0,f_naive,mu0_parxi)}else{f_naive/(mu0_parxi*model$nc(ys,model$xi,h))}
   f_inner_parxihat   =if(is.null(model$nc)){Trapeze(y0,f_naive,mu0_parxihat)}else{f_naive/(mu0_parxihat*model$nc(ys,xihat,h))}
   f_inner_muhat      =Trapeze(y0,f_naive,mu0_muhat)
-  f_wnonpar          =Trapeze(y0,f_naive,mu0_wnonpar)
+  f_inner_wnonpar          =Trapeze(y0,f_naive,mu0_wnonpar)
   f_inner_wpar             =Trapeze(y0,f_naive,mu0_wpar)
   
 
     Vf=varkde.outer(model,y0,Obs)
   
   cbind(f=f,
-        f_naive=f_naive,
-        f_inner_nonpar=f_inner_nonpar,
-        f_inner_parxi=f_inner_parxi,
+        f_naive         =f_naive,
+        f_inner_nonpar  =f_inner_nonpar,
+        f_inner_parxi   =f_inner_parxi,
         f_inner_parxihat=f_inner_parxihat,
-        f_inner_muhat=f_inner_muhat,
-        f_wnonpar          =f_wnonpar,
-        f_inner_wpar          =f_inner_wpar,
+        f_inner_muhat   =f_inner_muhat,
+        f_inner_wnonpar =f_inner_wnonpar,
+        f_inner_wpar    =f_inner_wpar,
         f_outer_nonpar  =f_outer_nonpar,
         f_outer_parxi   =f_outer_parxi,
         f_outer_parxihat=f_outer_parxihat,
-        f_outer_muhat  =f_outer_muhat,
-        f_outer_wnonpar=f_outer_wnonpar,
-        f_outer_wpar   =f_outer_wpar,
-        Vf=Vf,
-        mu0_nonpar     =mu0_nonpar,
+        f_outer_muhat   =f_outer_muhat,
+        f_outer_wnonpar =f_outer_wnonpar,
+        f_outer_wpar    =f_outer_wpar,
+        Vf              =Vf,
+        mu0_nonpar      =mu0_nonpar,
         mu0_parxi      =mu0_parxi,
         mu0_parxihat   =mu0_parxihat,
         mu0_muhat      =mu0_muhat,

@@ -14,15 +14,16 @@ Simuletout<-function(model,npoints=300,y0=grid1f(model,npoints),nrep=1000){
   dimnames(ff)[1:2]<-list(1:nrep,1:length(y0))
   names(dimnames(ff))<-c("rep","i","variable")
   gg<-plyr::laply(OO,function(Obs){
-    pik=model$pifun(Obs);ys=model$yfun(Obs);ht=sum(ys/pik); c(yS=sum(ys),t=N*Obs$m,m=Obs$m,ht=ht,hayek=ht/sum(1/pik),htm=ht/Obs$N,n=Obs$n,N=Obs$N)},.progress="text")
+    pik=model$pifun(Obs);ys=model$yfun(Obs);ht=sum(ys/pik); 
+    c(yS=sum(ys),t=N*Obs$m,m=Obs$m,ht=ht,hayek=ht/sum(1/pik),htm=ht/Obs$N,n=Obs$n,N=Obs$N)},.progress="text")
   gg1<-cbind(gg,plyr::aaply(ff[,,c("f",
                                   "f_naive",
                                   "f_inner_nonpar",
                                   "f_inner_parxi",
                                   "f_inner_parxihat",
                                   "f_inner_muhat",
-                                  "f_wnonpar",
-                                  "f_wpar",
+                                  "f_inner_wnonpar",
+                                  "f_inner_wpar",
                                   "f_outer_nonpar",
                                   "f_outer_parxi",
                                   "f_outer_parxihat",
@@ -35,8 +36,8 @@ Simuletout<-function(model,npoints=300,y0=grid1f(model,npoints),nrep=1000){
                                   "f_inner_parxi",
                                   "f_inner_parxihat",
                                   "f_inner_muhat",
-                                  "f_wnonpar",
-                                  "f_wpar",
+                                  "f_inner_wnonpar",
+                                  "f_inner_wpar",
                                   "f_outer_nonpar",
                                   "f_outer_parxi",
                                   "f_outer_parxihat",
@@ -127,8 +128,8 @@ allplotscolor<-function(ee){
                                                    "f_outer_parxihat",
                                                    "f_outer_wnonpar",
                                                    "f_outer_wpar",
-                                                   "f_wnonpar",
-                                                   "f_wpar")))&AAA$rep==2&is.element(AAA$i,sel),], 
+                                                   "f_inner_wnonpar",
+                                                   "f_inner_wpar")))&AAA$rep==2&is.element(AAA$i,sel),], 
                     aes(x=y0, y=value, linetype=mu,color=jolitype)) +
     xlab("$y_0$")+ylab("")+
     geom_line()+ 
@@ -166,8 +167,8 @@ allplotscolor<-function(ee){
                                                                     "f_outer_parxihat",
                                                                     "f_outer_wnonpar",
                                                                     "f_outer_wpar",
-                                                                    "f_wnonpar",
-                                                                    "f_wpar")){
+                                                                    "f_inner_wnonpar",
+                                                                    "f_inner_wpar")){
     tab=AAA[(is.element(AAA$variable,sell))&AAA$rep==2,]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
@@ -189,7 +190,7 @@ allplotscolor<-function(ee){
                                  "$\\hat\\omega,\\rm{par}$","$\\mu,\\hat\\xi$", "$\\mu,\\xi$"),1,w_graph_0_vsf)
   names(w_graph_0_vsmus)<-paste0("w_graph_0_vsmu",1:6)
   w_graph_0_vstypes<-plyr::alply(c("$\\hat\\mu$","$\\hat{f}$","$f^\\dagger$"),1,w_graph_0_vsf,variab="jolitype",variab2="mu",sell=
-                                   c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_wnonpar","f_wpar","mu0_muhat","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
+                                   c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar","mu0_muhat","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
   names(w_graph_0_vstypes)<-paste0("w_graph_0_vsmu",1:3)
   
   
@@ -233,8 +234,8 @@ allplotscolor<-function(ee){
       theme(legend.position = "bottom")+ 
       theme(legend.key.size = unit(2,"line"))+
       guides(size=FALSE, color=guide_legend(override.aes=list(size=c(1,.4,1),alpha=c(1,.1,1))))}
-  w_graph_1s<-plyr::alply(c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar","f_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"),1,w_graph1f)
-  names(w_graph_1s)<-paste0("w_graph1_",c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar","f_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"))
+  w_graph_1s<-plyr::alply(c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_inner_wnonpar","f_inner_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"),1,w_graph1f)
+  names(w_graph_1s)<-paste0("w_graph1_",c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_inner_wnonpar","f_inner_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"))
   
   w_graph2 <- ggplot(AA[AA$rep<50 &(is.element(AA$i,sel)),], aes(x=y0, y=Vf, group=rep)) +
     xlab("$y_0$")+ylab("")+
@@ -266,7 +267,7 @@ allplotscolor<-function(ee){
     guides(linetype=guide_legend(""),color=guide_legend(""))
   
   w_graph_mse_vsf <- function(x,variab="mu",variab2="jolitype",
-                              sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_wnonpar","f_wpar")){
+                              sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar")){
     tab=empmse[is.element(empmse$variable,sell),]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
@@ -288,7 +289,7 @@ allplotscolor<-function(ee){
                                     "$\\hat\\omega,\\rm{nonpar}$", "$\\hat\\omega,\\rm{par}$",    
                                     "$\\mu,\\hat\\xi$",            "$\\mu,\\xi$"),1,w_graph_mse_vsf)
   names(w_graph_mse_vsmus)<-paste0("w_graph_mse_vsmu",1:6)
-  w_graph_mse_vstypes<-plyr::alply(c("$\\hat\\mu$","$\\hat{f}$" ,"$f^\\dagger$"),1,w_graph_mse_vsf,variab="jolitype",variab2="mu",sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_wnonpar","f_wpar","mu0_muhat","mu0_nonpar","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
+  w_graph_mse_vstypes<-plyr::alply(c("$\\hat\\mu$","$\\hat{f}$" ,"$f^\\dagger$"),1,w_graph_mse_vsf,variab="jolitype",variab2="mu",sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar","mu0_muhat","mu0_nonpar","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
   names(w_graph_mse_vstypes)<-paste0("w_graph_mse_vsmu",1:3)
   
   
@@ -414,8 +415,8 @@ allplots<-function(ee){
       theme(legend.position = "bottom")+ 
       theme(legend.key.size = unit(2,"line"))+
       guides(size=FALSE, linetype=guide_legend(override.aes=list(size=c(.4,.2,1),alpha=c(1,.1,1))))}
-  w_graph_1s<-plyr::alply(c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar","f_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"),1,w_graph1f)
-  names(w_graph_1s)<-paste0("w_graph1_",c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_wnonpar","f_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"))
+  w_graph_1s<-plyr::alply(c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_inner_wnonpar","f_inner_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"),1,w_graph1f)
+  names(w_graph_1s)<-paste0("w_graph1_",c("f_naive","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_inner_wnonpar","f_inner_wpar","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wnonpar","f_outer_wpar"))
   
   w_graph2 <- ggplot(AA[AA$rep<50 &(is.element(AA$i,sel)),], aes(x=y0, y=Vf, group=rep)) +
     xlab("$y_0$")+ylab("")+
@@ -447,8 +448,8 @@ allplots<-function(ee){
                                                             "f_outer_parxihat",
                                                             "f_outer_wnonpar",
                                                             "f_outer_wpar",
-                                                            "f_wnonpar",
-                                                            "f_wpar"))&is.element(empvar$i,sel),], 
+                                                            "f_inner_wnonpar",
+                                                            "f_inner_wpar"))&is.element(empvar$i,sel),], 
                         aes(x=y0, y=value, linetype=mu,color=jolitype)) +
     xlab("$y_0$")+ylab("")+
     geom_line()+ 
@@ -468,8 +469,8 @@ allplots<-function(ee){
                                                                       "f_outer_parxihat",
                                                                       "f_outer_wnonpar",
                                                                       "f_outer_wpar",
-                                                                      "f_wnonpar",
-                                                                      "f_wpar")){
+                                                                      "f_inner_wnonpar",
+                                                                      "f_inner_wpar")){
     tab=empmse[(is.element(empmse$variable,sell)),]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
@@ -499,7 +500,7 @@ allplots<-function(ee){
                                                         "$\\mu,\\hat\\xi$",
                                                         "$\\mu,\\xi$"))
   w_graph_mse_vstypes<-plyr::alply(c("$\\hat{f}$","$f^\\dagger$","$\\hat\\mu$"),1,w_graph_mse_vsf,variab="jolitype",variab2="mu",
-                                   sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_wnonpar","f_wpar","mu0_muhat","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
+                                   sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar","mu0_muhat","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
   names(w_graph_mse_vstypes)<-paste0("w_graph_mse_vsmu",1:3)
   
   
