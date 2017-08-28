@@ -17,33 +17,33 @@ Simuletout<-function(model,npoints=300,y0=grid1f(model,npoints),nrep=1000){
     pik=model$pifun(Obs);ys=model$yfun(Obs);ht=sum(ys/pik); 
     c(yS=sum(ys),t=N*Obs$m,m=Obs$m,ht=ht,hayek=ht/sum(1/pik),htm=ht/Obs$N,n=Obs$n,N=Obs$N)},.progress="text")
   gg1<-cbind(gg,plyr::aaply(ff[,,c("f",
-                                  "f_naive",
-                                  "f_inner_nonpar",
-                                  "f_inner_parxi",
-                                  "f_inner_parxihat",
-                                  "f_inner_muhat",
-                                  "f_inner_wnonpar",
-                                  "f_inner_wpar",
-                                  "f_outer_nonpar",
-                                  "f_outer_parxi",
-                                  "f_outer_parxihat",
-                                  "f_outer_muhat",
-                                  "f_outer_wnonpar",
-                                  "f_outer_wpar")],c(1,3),function(d){caTools::trapz(y0,d*y0)}))
+                                   "f_naive",
+                                   "f_inner_nonpar",
+                                   "f_inner_parxi",
+                                   "f_inner_parxihat",
+                                   "f_inner_muhat",
+                                   "f_inner_wnonpar",
+                                   "f_inner_wpar",
+                                   "f_outer_nonpar",
+                                   "f_outer_parxi",
+                                   "f_outer_parxihat",
+                                   "f_outer_muhat",
+                                   "f_outer_wnonpar",
+                                   "f_outer_wpar")],c(1,3),function(d){caTools::trapz(y0,d*y0)}))
   gg2=cbind(gg,gg[,"yS"]+(gg[,"N"]-gg[,"n"])*gg1[,c("f",
-                                  "f_naive",
-                                  "f_inner_nonpar",
-                                  "f_inner_parxi",
-                                  "f_inner_parxihat",
-                                  "f_inner_muhat",
-                                  "f_inner_wnonpar",
-                                  "f_inner_wpar",
-                                  "f_outer_nonpar",
-                                  "f_outer_parxi",
-                                  "f_outer_parxihat",
-                                  "f_outer_muhat",
-                                  "f_outer_wnonpar",
-                                  "f_outer_wpar")])
+                                                    "f_naive",
+                                                    "f_inner_nonpar",
+                                                    "f_inner_parxi",
+                                                    "f_inner_parxihat",
+                                                    "f_inner_muhat",
+                                                    "f_inner_wnonpar",
+                                                    "f_inner_wpar",
+                                                    "f_outer_nonpar",
+                                                    "f_outer_parxi",
+                                                    "f_outer_parxihat",
+                                                    "f_outer_muhat",
+                                                    "f_outer_wnonpar",
+                                                    "f_outer_wpar")])
   list(ff=ff,model=model,y0=y0,nrep=nrep,gg1=gg1,gg2=gg2)
 }
 
@@ -155,20 +155,20 @@ allplotscolor<-function(ee){
   
   
   
-  w_graph_0_vsf <- function(x,variab="mu",variab2="jolitype",sell=c("f",
-                                                                    "f_inner_muhat",
-                                                                    "f_inner_nonpar",
-                                                                    "f_inner_parxi",
-                                                                    "f_inner_parxihat",
-                                                                    "f_naive",
-                                                                    "f_outer_muhat",
-                                                                    "f_outer_nonpar",
-                                                                    "f_outer_parxi",
-                                                                    "f_outer_parxihat",
-                                                                    "f_outer_wnonpar",
-                                                                    "f_outer_wpar",
-                                                                    "f_inner_wnonpar",
-                                                                    "f_inner_wpar")){
+  w_graph_0_vsf <- function(x,variab="mu",variab2="jolitype",what="$f$",funf=model$dloi.y,sell=c("f",
+                                                                                                 "f_inner_muhat",
+                                                                                                 "f_inner_nonpar",
+                                                                                                 "f_inner_parxi",
+                                                                                                 "f_inner_parxihat",
+                                                                                                 "f_naive",
+                                                                                                 "f_outer_muhat",
+                                                                                                 "f_outer_nonpar",
+                                                                                                 "f_outer_parxi",
+                                                                                                 "f_outer_parxihat",
+                                                                                                 "f_outer_wnonpar",
+                                                                                                 "f_outer_wpar",
+                                                                                                 "f_inner_wnonpar",
+                                                                                                 "f_inner_wpar")){
     tab=AAA[(is.element(AAA$variable,sell))&AAA$rep==2,]
     tab$tretre=tab[[variab]]
     tab$trotro=tab[[variab2]]
@@ -179,18 +179,20 @@ allplotscolor<-function(ee){
     ggplot(tab[levels(tab$tretre)[tab$tretre]==x,], aes(x=y0, y=value,color=trotro)) +
       xlab("$y_0$")+ylab("")+
       geom_line()+ 
-      stat_function(fun = model$dloi.y,size=.8,aes(size=.8,color="$f$"),colour="black")+
-      labs(title="", caption=paste0(model$name,': "',x,'"-type estimators of $f$'))+
+      stat_function(fun = funf,size=.8,aes(size=.8,color=what),colour="black")+
+      labs(title="", caption=paste0(model$name,': "',x,'"-type estimators of ', what))+
       theme(legend.position = "right",legend.box = "vertical") + 
       theme(legend.key.size = unit(2,"line"))+ 
       guides(color=guide_legend(""))+
-    theme(legend.position = "bottom")
+      theme(legend.position = "bottom")
   }
   w_graph_0_vsmus<-plyr::alply(c("$\\hat\\mu,\\rm{nonpar}$","$\\hat\\mu,\\rm{par}$","$\\hat\\omega,\\rm{nonpar}$",
                                  "$\\hat\\omega,\\rm{par}$","$\\mu,\\hat\\xi$", "$\\mu,\\xi$"),1,w_graph_0_vsf)
   names(w_graph_0_vsmus)<-paste0("w_graph_0_vsmu",1:6)
-  w_graph_0_vstypes<-plyr::alply(c("$\\hat\\mu$","$\\hat{f}$","$f^\\dagger$"),1,w_graph_0_vsf,variab="jolitype",variab2="mu",sell=
-                                   c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar","mu0_muhat","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
+  w_graph_0_vstypes<-c(list(w_graph_0_vsf("$\\hat\\mu$",variab="jolitype",variab2="mu",what="$\\mu$",funf=model$eta,sell=
+                                            c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar","mu0_muhat","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_wnonpar","mu0_wpar"))),
+                       plyr::alply(c("$\\hat{f}$","$f^\\dagger$"),1,w_graph_0_vsf,variab="jolitype",variab2="mu",sell=
+                                     c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar","mu0_muhat","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_wnonpar","mu0_wpar")))
   names(w_graph_0_vstypes)<-paste0("w_graph_0_vsmu",1:3)
   
   
@@ -286,16 +288,19 @@ allplotscolor<-function(ee){
       guides(color=guide_legend(""))
   }
   w_graph_mse_vsmus<-plyr::alply(c("$\\hat\\mu,\\rm{nonpar}$",    "$\\hat\\mu,\\rm{par}$"      ,
-                                    "$\\hat\\omega,\\rm{nonpar}$", "$\\hat\\omega,\\rm{par}$",    
-                                    "$\\mu,\\hat\\xi$",            "$\\mu,\\xi$"),1,w_graph_mse_vsf)
+                                   "$\\hat\\omega,\\rm{nonpar}$", "$\\hat\\omega,\\rm{par}$",    
+                                   "$\\mu,\\hat\\xi$",            "$\\mu,\\xi$"),1,w_graph_mse_vsf)
   names(w_graph_mse_vsmus)<-paste0("w_graph_mse_vsmu",1:6)
-  w_graph_mse_vstypes<-plyr::alply(c("$\\hat\\mu$","$\\hat{f}$" ,"$f^\\dagger$"),1,w_graph_mse_vsf,variab="jolitype",variab2="mu",sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar","mu0_muhat","mu0_nonpar","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
+  w_graph_mse_vstypes<-c(list(
+    w_graph_mse_vsf("$\\hat\\mu$",variab="jolitype",variab2="mu",what="$\\mu$",funf=model$eta,sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar","mu0_muhat","mu0_nonpar","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
+  ),
+                         plyr::alply(c("$\\hat{f}$" ,"$f^\\dagger$"),1,w_graph_mse_vsf,variab="jolitype",variab2="mu",sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar","mu0_muhat","mu0_nonpar","mu0_parxihat","mu0_wnonpar","mu0_wpar")))
   names(w_graph_mse_vstypes)<-paste0("w_graph_mse_vsmu",1:3)
   
   
   
   
-
+  
   pp=c(list(w_graph_0=w_graph_0,
             w_graph_0.1=w_graph_0.1,
             w_graph2=w_graph2),
@@ -499,15 +504,14 @@ allplots<-function(ee){
                                                         "$\\hat\\omega,\\rm{par}$",
                                                         "$\\mu,\\hat\\xi$",
                                                         "$\\mu,\\xi$"))
-  w_graph_mse_vstypes<-plyr::alply(c("$\\hat{f}$","$f^\\dagger$","$\\hat\\mu$"),1,w_graph_mse_vsf,variab="jolitype",variab2="mu",
-                                   sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar","mu0_muhat","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_wnonpar","mu0_wpar"))
+  w_graph_mse_vstypes<-c(list(
+    
+  ),
+    plyr::alply(c("$\\hat{f}$","$f^\\dagger$","$\\hat\\mu$"),1,w_graph_mse_vsf,variab="jolitype",variab2="mu",
+                                   sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar","mu0_muhat","mu0_nonpar","mu0_parxi","mu0_parxihat","mu0_wnonpar","mu0_wpar")))
   names(w_graph_mse_vstypes)<-paste0("w_graph_mse_vsmu",1:3)
-  
-  
-  
-  
 
-  pp=c(list(w_graph_0=w_graph_0,
+    pp=c(list(w_graph_0=w_graph_0,
             w_graph_0.1=w_graph_0.1,
             w_graph2=w_graph2),
        w_graph_1s,
@@ -543,7 +547,7 @@ createallgraphs<-function(x,texfolderoutput="datanotpushed/graphs/tex/",pdffolde
 createalltables<-function(ee,dest.folder="datanotpushed/table"){
   ddd=ee$meanempMSE[-nrow(ee$meanempMSE),]
   ddd[unlist(sapply(c("f_outer_nonpar","f_outer_wnonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wpar","f_inner_nonpar","f_inner_wnonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_inner_wpar","f_naive"),
-               function(x){which(ddd$variable==x)})),]
+                    function(x){which(ddd$variable==x)})),]
   names(ddd)<-gsub("IntegratedMSE","IMSE",names(ddd),fixed=TRUE)
   ccoo<-function(x,y){paste0(signif(ddd[[x]],2)," (",signif(ddd[[y]],2),")")}
   ddd[[5]]=ccoo(5,10)
@@ -553,10 +557,10 @@ createalltables<-function(ee,dest.folder="datanotpushed/table"){
   names(ddd)<-gsub("jolivariable2","Estimator",names(ddd),fixed=TRUE)
   
   if(!is.null(dest.folder)){
-  y=SweaveLst::stargazer2(ddd,summary=FALSE,style="aer",title=ee$model$name,label=paste0("tab",ee$model$name),rownames=FALSE)
-  y=gsub("\\\\","\\",y,fixed=TRUE);cat(y)
-  cat(capture.output(cat(y)),file=file.path(dest.folder,paste0(tolower(gsub(" ", "",ee$model$name, fixed = TRUE)),".tex")),append=FALSE)
-  try(system(paste0("cd ",dest.folder,";pdflatex -shell-escape -interaction=nonstopmode tables.tex")))}
+    y=SweaveLst::stargazer2(ddd,summary=FALSE,style="aer",title=ee$model$name,label=paste0("tab",ee$model$name),rownames=FALSE)
+    y=gsub("\\\\","\\",y,fixed=TRUE);cat(y)
+    cat(capture.output(cat(y)),file=file.path(dest.folder,paste0(tolower(gsub(" ", "",ee$model$name, fixed = TRUE)),".tex")),append=FALSE)
+    try(system(paste0("cd ",dest.folder,";pdflatex -shell-escape -interaction=nonstopmode tables.tex")))}
   return(ddd)
 }
 

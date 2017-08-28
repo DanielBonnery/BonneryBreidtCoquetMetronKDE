@@ -1,84 +1,40 @@
-model.dep.strat2<-function(
-  theta=c(beta0=.5,beta1=1,sigma=1),
-  xi=2,
-  conditionalto=list(N=1000,sigma=1,EX=1,SX=1,sampleparam=list(proph=c(.7,.3),tauh=c(1/70,2/15)))){
+model.proptosize<-function(
+  theta=c(theta.p=1),
+  xi=.5,
+  conditionalto=list(N=1000,sampleparam=list(tau=.2))){
   #for simplicity of notation
   suppressMessages(attach(conditionalto))
   suppressMessages(attach(sampleparam))
-  ## objects related to population generation
-  rloiy <- function(.conditionalto=conditionalto){
-    x=qnorm((1:.conditionalto$N)/(.conditionalto$N+1),.conditionalto$EX,.conditionalto$SX);
-      cbind(x,rnorm(x,mean=theta[1]+theta[2]*x,sd=theta[3]))}
-   rloiz=function(y){rnorm(y[,2],mean=xi*y[,2],sd=sigma)}
+  rloiy <- function(.conditionalto=conditionalto,.theta=theta){
+    rchisq(conditionalto$N,.theta)}
+  rloiz=function(y,.xi=xi){y+rchisq(y,.xi)}
   ## objects related to sampling frame and sample
-  Scheme<- StratS(sampleparam)
-  tau   <-sum(proph*tauh);
-  Zetah <- qnorm(cumsum(proph),0,1)
-  zetah <- sqrt(xi^2*theta[2]^2*conditionalto$SX^2+ xi^2*theta[3]^2+sigma^2)*Zetah+xi*theta[1]+xi*theta[2]*conditionalto$EX
+  Scheme<- SWRPPS(sampleparam)
   En    <- function(N){tau*N}#Global sampling rate (will be returned)
   # objects related to population and sample distribution
-  dloitheta=function(y,.theta=theta,.conditionalto=conditionalto){dnorm(as.matrix(y)[,2],mean=theta[1]+theta[2]*as.matrix(y)[,1],sd=theta[3])}
-  dloi.y=function(y,.theta=theta,.conditionalto=conditionalto){dnorm(y,mean=.theta[1]+.theta[2]*.conditionalto$EX,sd=sqrt(.theta[3]^2+.conditionalto$SX^2))}
-  qloi.y=function(y,.theta=theta,.conditionalto=conditionalto){qnorm(y,mean=.theta[1]+.theta[2]*.conditionalto$EX,sd=sqrt(.theta[3]^2+.conditionalto$SX^2))}
-  dloi=function(y,.theta=theta,.conditionalto=conditionalto){dnorm(y,mean=.theta[1]+.theta[2]*.conditionalto$EX,sd=sqrt(.theta[3]^2+.conditionalto$SX^2))}
+  dloitheta=function(y,.theta=theta){dchisq(y,.theta)}
+  qloi.y=function(y){qchisq(y,theta)}
   #Population generation function
   #Computation of rho function (function of y,theta,xi)
-  rhothetaxi=function(y,theta,xi,.conditionalto=conditionalto){
-      #Initialisation of numerator and deniminator
-      rhorho1<-tauh[length(tauh)];
-      rhorho2<-tauh[length(tauh)]; 
-      #Computation of limits of strata
-      Zetah=qnorm(cumsum(proph),0,1)
-      zetah=sqrt(xi^2*theta[2]^2*.conditionalto$SX^2+ xi^2*theta[3]^2+sigma^2)*Zetah+xi*theta[1]+xi*theta[2]*.conditionalto$EX
-      #Computation of numerator and deniminator
-      for(h in 1:(length(tauh)-1)){
-        rhorho1<-rhorho1+(tauh[h]-tauh[h+1])*pnorm((zetah[h]-xi*as.matrix(y)[,2]                    )/ sigma);
-        rhorho2<-rhorho2+(tauh[h]-tauh[h+1])*pnorm((zetah[h]-xi*(theta[1]+theta[2]*as.matrix(y)[,1]))/sqrt(sigma^2+xi^2*theta[3]^2));}
-      return(rhorho1/rhorho2)}
-  eta=function(Obs,.xi=xi,.conditionalto=conditionalto, .theta=theta){
-    #Initialisation of numerator and deniminator
-    rhorho1<-.conditionalto$sampleparam$tauh[length(.conditionalto$sampleparam$tauh)];
-    #Computation of limits of strata
-    Zetah=qnorm(cumsum(.conditionalto$sampleparam$proph),0,1)
-    zetah=sqrt(.xi^2*.theta[2]^2*.conditionalto$SX^2+ .xi^2*.theta[3]^2+.conditionalto$sigma^2)*Zetah+.xi*.theta[1]+.xi*.theta[2]*.conditionalto$EX
-    #Computation of numerator and deniminator
-    for(h in 1:(length(.conditionalto$sampleparam$tauh)-1)){
-      rhorho1<-rhorho1+(.conditionalto$sampleparam$tauh[h]-.conditionalto$sampleparam$tauh[h+1])*pnorm((zetah[h]-.xi*Obs$y[,2])/ .conditionalto$sigma);}
-    return(rhorho1)
-  }
+  rhothetaxi=function(y,theta,xi){(y+xi)/(theta+xi)}
   #Computation of rho function (function of y)
   rho=function(y){return(rhothetaxi(y,theta,xi))}
-  rhoxthetaxi=function(y,theta,xi,.conditionalto=conditionalto){
-      H<-length(tauh)
-      #Computation of limits of strata
-      Zetah=qnorm(cumsum(proph),0,1)
-      zetah=sqrt(xi^2*theta[2]^2*.conditionalto$SX^2+ xi^2*theta[3]^2+sigma^2)*Zetah+xi*theta[1]+xi*theta[2]*.conditionalto$EX
-      #for(h in 1:(H-1)){rhorho1<-rhorho1+(tauh[h]-tauh[h+1])*pnorm((zetah[h]-xi*(theta[1]+theta[2]*as.matrix(y)[,1])))}
-      cumsum(c(tauh[H],sapply(1:(H-1),function(h){(tauh[h]-tauh[h+1])*pnorm((zetah[h]-xi*(theta[1]+theta[2]*as.matrix(y)[,1])))})))/
-               sum(tauh*proph)}
+  rhoxthetaxi=function(...){1};
   #Computation of rho function (function of y)
   # objects related to estimation
-   xihat=function(Obs){(sum((Obs$z*Obs$y[,2]/Obs$pik)))/(sum((Obs$y[,2]^2/Obs$pik)))}
-   xihatfunc1 <-function(y,z,pik){cbind(z*y[,2]/pik,y[,2]^2/pik)}
-   xihatfunc2 <-function(u){u[1]/u[2]}
-    thetaht=function(Obs){
-        lmm<-lm(Obs$y[,2]~cbind(Obs$y[,1]),weights=1/Obs$pik);
-        sigmahat<-sqrt(sum(lmm$residuals^2/Obs$pik)/sum(1/Obs$pik))
-        return(c(as.vector(lmm$coefficients),sigmahat))}
-    thetaniais=function(Obs){
-        lmm<-lm(Obs$y[,2]~cbind(Obs$y[,1]));
-        return(c(as.vector(lmm$coefficients),summary(lmm)$sigma))}
+  xihat=function(Obs){sum((Obs$z-Obs$y)^2/Obs$pik)/(sum(1/Obs$pik))}
+  thetaht=function(Obs){sum(Obs$y/Obs$pik)/sum(1/Obs$pik)}
+  thetaniais=function(Obs){mean(Obs$y)}
   # Final result
-    model=
-list(
+  return(list(
     theta=theta,xi=xi,conditionalto=conditionalto,
     rloiy=rloiy,
-    ploi=function(y){pnorm(y[,2],mean=theta[1]+theta[2]*y[,1],sd=theta[3])},
+    ploi=function(y){pchisq(y,theta)},
     dloitheta=dloitheta,
-    dloi.y=dloi.y,
+    dloi.y=dloitheta,
     qloi.y=qloi.y,
     rloiz=rloiz,
-    dloilim=function(y){return(rho(y)*dnorm(y[,2],theta[1]+theta[2]*y[,1],theta[3]))},
+    dloilim=function(y){rho(y)*dchisq(y,theta)},
     Scheme=Scheme,
     rho=rho,
     rhothetaxi=rhothetaxi,
@@ -86,17 +42,11 @@ list(
     vinf=function(y){tau*rho(y)-(tau*rho(y))^2},
     En=En,
     tau=tau,
-    zetah=zetah,
     xihat=xihat,
-    xihatfunc1=xihatfunc1,
-    xihatfunc2=xihatfunc2,
-    xihatfuncdim=2,
-    thetaht=thetaht,
-    eta=eta,
-    yfun=function(obs){obs$y[,2]},
-    pifun=function(obs){obs$pik},
-    obsifyf=function(y,.conditionalto=conditionalto){list(y=cbind(NA,y))},
-    thetaniais=thetaniais)
-    append(class(model),"Model")
-    return(model)}
-
+    thetaht=thetaht,  
+    yfun=function(obs){obs$y},  
+    pifun=function(obs){obs$pik},  
+    obsifyf=function(y,.conditionalto=conditionalto){list(y=y)},
+    thetaniais=thetaniais,
+    eta=function(Obs,.xi=xi,.conditionalto=conditionalto, .theta=theta){
+      (1-(1-(Obs$y+.xi^2)/(.conditionalto$N*(.theta+.xi^2)))^(tau*.conditionalto$N))}))}
