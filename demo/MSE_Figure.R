@@ -7,6 +7,7 @@ rm(dd)
 jj<-JayRtablef(ee)
 par(mfrow=c(2,1))
 tmp<-gray.colors(3, start = 0.3, end = 0.9, gamma = 2.2, alpha = NULL)
+par(mfrow=c(2,1))
 plot(range(jj[,1]),log10(range(jj[,4:15])),type="n",xlab=expression(y[0]),
      ylab=expression(paste(plain(log)[10],"(Mean Square Error)")),
      main="Outer estimators")
