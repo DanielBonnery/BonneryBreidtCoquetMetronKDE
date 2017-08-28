@@ -224,16 +224,16 @@ demo(model5,package = "BonneryBreidtCoquetMetronKDE")
 ![]( figure/model5/model5_col-figure9.png )
 ## 2.2.3 Ouptputs: Tables
 ### Model  1 
-![](figure/tables-1.png)
+![](figure/tables-0.png)
 
 ### Model  2 
 ![](figure/tables-1.png)
 
 ### Model  3 
-![](figure/tables-1.png)
+![](figure/tables-2.png)
 
 ### Model  4 
-![](figure/tables-1.png)
+![](figure/tables-3.png)
 
 ### Model  5 
-![](figure/tables-1.png)
+![](figure/tables-4.png)
