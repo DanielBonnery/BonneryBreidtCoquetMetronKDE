@@ -268,7 +268,7 @@ allplotscolor<-function(ee){
     theme(legend.key.size = unit(2,"line"))+ 
     guides(linetype=guide_legend(""),color=guide_legend(""))
   
-  w_graph_mse_vsf <- function(x,variab="mu",variab2="jolitype",
+  w_graph_mse_vsf <- function(x,variab="mu",variab2="jolitype",what="$f$",funf=model$dloi.y,
                               sell=c("f_inner_muhat","f_inner_nonpar","f_inner_parxi","f_inner_parxihat","f_naive","f_outer_muhat","f_outer_nonpar","f_outer_parxi","f_outer_parxihat","f_outer_wnonpar","f_outer_wpar","f_inner_wnonpar","f_inner_wpar")){
     tab=empmse[is.element(empmse$variable,sell),]
     tab$tretre=tab[[variab]]
