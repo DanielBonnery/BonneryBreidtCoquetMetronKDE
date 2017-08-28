@@ -20,7 +20,7 @@ LWD=rep(2,6)
 for(i in 1:6){
   lines(jj[,1],log10(jj[,i+3]),col=COL[i],lty=LTY[i],lwd=LWD[i])
 }
-plot(range(jj[,1]),log10(range(jj[,4:15])),type="n",xlab=expression(y[0]),ylab=expression(paste(plain(log)[10],"(Mean Square Error)")))
+plot(range(jj[,1]),log10(range(jj[,4:15])),main="Inner Estimators",type="n",xlab=expression(y[0]),ylab=expression(paste(plain(log)[10],"(Mean Square Error)")))
 for(i in 1:6){
   lines(jj[,1],log10(jj[,i+9]),col=COL[i],lty=LTY[i],lwd=LWD[i])
 }
