@@ -55,11 +55,7 @@ demo(MSE_Figure)
 
 We ran simulations on different models. For each model, we produce a series of graphics and tables.
 
-![](figure/model.png)
-nb
-$$X^2+1$$
-a
-$x^2+1$
+![](figure/model1.png)
 The following R statements  will run the simulations for all the models.
 
 
