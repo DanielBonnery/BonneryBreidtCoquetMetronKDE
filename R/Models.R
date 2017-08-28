@@ -23,7 +23,7 @@ model2f<-function(){
   id=tolower(gsub(".", "",gsub(" ", "",model$name, fixed = TRUE), fixed = TRUE))
   model$id=id
   model$nc<-function(ys,xi,h){
-    exp(xi[1]-xi[3]/2)/(length(ys)*h)*sum(exp((sqrt(h/2)*xi[2]+ys/sqrt(2*h))^2-ys^2/(2*h)))
+    exp(xi[2]-xi[3]/2)/(length(ys)*h)*sum(exp((sqrt(h/2)*xi[1]+ys/sqrt(2*h))^2-ys^2/(2*h)))
   }
   model}
 #model 3
