@@ -544,7 +544,7 @@ createallgraphs<-function(x,texfolderoutput="datanotpushed/graphs/tex/",pdffolde
   try(system(paste0("mv *.pdf ",pdffolderoutput)))
   try(system("rm *.log *.md5 *.dpth"))}
 
-createalltables<-function(ee,dest.folder="datanotpushed/table"){
+createalltables<-function(ee,dest.folder=NULL){
   ddd=ee$meanempMSE[-nrow(ee$meanempMSE),]
   ddd[unlist(sapply(c("f_outer_nonpar","f_outer_wnonpar","f_outer_parxi","f_outer_parxihat","f_outer_muhat","f_outer_wpar","f_inner_nonpar","f_inner_wnonpar","f_inner_parxi","f_inner_parxihat","f_inner_muhat","f_inner_wpar","f_naive"),
                     function(x){which(ddd$variable==x)})),]
